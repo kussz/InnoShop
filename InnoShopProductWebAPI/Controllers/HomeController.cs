@@ -2,7 +2,7 @@ using InnoShopProductWebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace InnoShopProductWebAPI.Controllers
+namespace InnoShop.ProductWebAPI.Controllers
 {
     public class HomeController : Controller
     {
