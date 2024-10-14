@@ -9,5 +9,10 @@ namespace InnoShop.Contracts.Service
     public interface IServiceManager
     {
         IUserService UserService { get; }
+        IUserTypeService UserTypeService { get; }
+        IProductService ProductService { get; }
+        ILocalityService LocalityService { get; }
+        IProdTypeService ProdTypeService { get; }
+        IProdAttribService ProdAttribService { get; }
     }
 }
