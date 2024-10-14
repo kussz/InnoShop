@@ -7,11 +7,13 @@ using System.Linq.Expressions;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace InnoShop.Infrastructure.Repositories
 {
-    public abstract class RepositoryBase<T>(InnoShopContext context) : IRepositoryBase<T> where T : class
+    public abstract class RepositoryBase<T>(InnoShopContext context, IMemoryCache cache) : IRepositoryBase<T> where T : class
     {
+        protected IMemoryCache _cache = cache;
         protected InnoShopContext Context = context;
         public IQueryable<T> FindAll(bool trackChanges = false) =>
         !trackChanges ? Context.Set<T>()

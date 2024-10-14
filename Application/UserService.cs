@@ -4,16 +4,16 @@ using InnoShop.Domain.Models;
 
 namespace InnoShop.Application
 {
-    public class UserService(IUserRepository repo) : IUserService
+    public class UserService(IRepositoryManager repo) : IUserService
     {
-        private readonly IUserRepository userRepository = repo;
+        private readonly IRepositoryManager Repository = repo;
         public List<User> GetAllUsers(bool trackChanges = false)
         {
-            return this.userRepository.GetAllUsers(trackChanges);
+            return this.Repository.UserRepository.GetAllUsers(trackChanges);
         }
         public User GetUser(int id)
         {
-            return userRepository.GetUser(id);
+            return Repository.UserRepository.GetUser(id);
         }
     }   
 }

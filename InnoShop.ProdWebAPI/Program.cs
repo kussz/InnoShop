@@ -6,6 +6,7 @@ using InnoShop.Application;
 using InnoShop.Contracts.Service;
 using InnoShop.Contracts.Repository;
 using InnoShop.Infrastructure.Repositories;
+using InnoShop.Infrastructure;
 
 namespace InnoShop.ProdWebAPI
 {
@@ -19,13 +20,14 @@ namespace InnoShop.ProdWebAPI
                 options.UseSqlServer(connectionString));
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
+            builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.AddMemoryCache();
             var app = builder.Build();
 
-            app.MapGet("/user/{id}", async (int id) =>
+            app.MapGet("/user/{id}", async (int id, IServiceManager service) =>
             {
-                UserService service = new(new UserRepository(new InnoShopContext()));
-                User? user = service.GetUser(id);
+                User? user = service.UserService.GetUser(id);
                 if (user != null) return $"User {user.Login}  Id={user.Id}  Mail={user.Email}";
                 return "User not found";
             });
