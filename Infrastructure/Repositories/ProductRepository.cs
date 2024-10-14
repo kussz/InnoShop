@@ -2,6 +2,7 @@
 using InnoShop.Domain.Data;
 using InnoShop.Domain.Models;
 using Microsoft.Extensions.Caching.Memory;
+using System.Linq.Expressions;
 
 namespace InnoShop.Infrastructure.Repositories
 {
@@ -22,6 +23,22 @@ namespace InnoShop.Infrastructure.Repositories
             else
                 Console.WriteLine("Product извлечен из кэша");
             return product;
+        }
+        public List<Product> GetProductByCondition(Expression<Func<Product,bool>> expression, bool trackChanges)
+        {
+            var products = FindByCondition(expression,trackChanges).ToList();
+            return products;
+        }
+        public List<Product> GetCachedProducts()
+        {
+            var products = Context.Products;
+            List<Product> cachedProds = new List<Product>();
+            foreach(var product in products)
+            {
+                if(_cache.TryGetValue(product.Id, out Product adding))
+                    cachedProds.Add(adding);
+            }
+            return cachedProds;
         }
     }
 }
