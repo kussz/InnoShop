@@ -31,6 +31,12 @@ namespace InnoShop.ProdWebAPI
                 if (user != null) return $"User {user.Login}  Id={user.Id}  Mail={user.Email}";
                 return "User not found";
             });
+            app.MapGet("/product/{id}", async (int id, IServiceManager service) =>
+            {
+                Product? product = service.ProductService.GetProduct(id);
+                if (product != null) return $"Product {product.Name}  Id={product.Id}  Cost={product.Cost}";
+                return "User not found";
+            });
             app.Run();
         }
 

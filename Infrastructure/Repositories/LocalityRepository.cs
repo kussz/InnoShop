@@ -5,23 +5,23 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace InnoShop.Infrastructure.Repositories
 {
-    public class UserRepository : RepositoryBase<User>, IUserRepository
+    public class LocalityRepository : RepositoryBase<Locality>, ILocalityRepository
     {
-        public UserRepository(InnoShopContext context,IMemoryCache cache) : base(context, cache)
+        public LocalityRepository(InnoShopContext context,IMemoryCache cache) : base(context, cache)
         { }
-        public List<User> GetAllUsers(bool trackChanges = false) => FindAll(trackChanges).ToList();
-        public User GetUser(int id)
+        public List<Locality> GetAllLocalities(bool trackChanges = false) => FindAll(trackChanges).ToList();
+        public Locality GetLocalityById(int id)
         {
-            _cache.TryGetValue(id, out User user);
-            if (user == null)
+            _cache.TryGetValue(id, out Locality locality);
+            if (locality == null)
             {
-                user = FindByCondition(u => u.Id == id).Single();
-                _cache.Set(user.Id, user, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(294)));
+                locality = FindByCondition(u => u.Id == id).Single();
+                _cache.Set(locality.Id, locality, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(294)));
                 Console.WriteLine("User извлечен из базы");
             }
             else
                 Console.WriteLine("User извлечен из кэша");
-            return user;
+            return locality;
         }
     }
 }

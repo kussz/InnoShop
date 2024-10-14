@@ -7,17 +7,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{58FEF6E5-A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnoShop.Domain", "Domain\InnoShop.Domain.csproj", "{ACBA8D64-BB0E-4DEF-8E57-133DAC1AE546}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnoShop.ProductWebAPI", "InnoShopProductWebAPI\InnoShop.ProductWebAPI.csproj", "{288EA5FE-F554-4144-8553-2CD0AA505BE0}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{A39354A4-35F6-426D-A209-C733AAFE5DBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.ProdWebAPI", "InnoShop.ProdWebAPI\InnoShop.ProdWebAPI.csproj", "{2EDD33E2-ABFE-4330-961F-7EA5C9BB9D32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnoShop.ProdWebAPI", "InnoShop.ProdWebAPI\InnoShop.ProdWebAPI.csproj", "{2EDD33E2-ABFE-4330-961F-7EA5C9BB9D32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.Contracts", "Contracts\InnoShop.Contracts.csproj", "{D11874EB-F414-4745-A4E2-14F0E38575F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnoShop.Contracts", "Contracts\InnoShop.Contracts.csproj", "{D11874EB-F414-4745-A4E2-14F0E38575F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.Application", "Application\InnoShop.Application.csproj", "{44DB4E1D-A87A-404E-B42F-50EFABD370C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnoShop.Application", "Application\InnoShop.Application.csproj", "{44DB4E1D-A87A-404E-B42F-50EFABD370C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.Infrastructure", "Infrastructure\InnoShop.Infrastructure.csproj", "{1D70ED8B-B187-4DF8-8854-61F3406B05A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnoShop.Infrastructure", "Infrastructure\InnoShop.Infrastructure.csproj", "{1D70ED8B-B187-4DF8-8854-61F3406B05A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{ACBA8D64-BB0E-4DEF-8E57-133DAC1AE546}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACBA8D64-BB0E-4DEF-8E57-133DAC1AE546}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACBA8D64-BB0E-4DEF-8E57-133DAC1AE546}.Release|Any CPU.Build.0 = Release|Any CPU
-		{288EA5FE-F554-4144-8553-2CD0AA505BE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{288EA5FE-F554-4144-8553-2CD0AA505BE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{288EA5FE-F554-4144-8553-2CD0AA505BE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{288EA5FE-F554-4144-8553-2CD0AA505BE0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2EDD33E2-ABFE-4330-961F-7EA5C9BB9D32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2EDD33E2-ABFE-4330-961F-7EA5C9BB9D32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EDD33E2-ABFE-4330-961F-7EA5C9BB9D32}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -55,7 +49,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ACBA8D64-BB0E-4DEF-8E57-133DAC1AE546} = {58FEF6E5-AAF6-43B5-90A8-B5D787240068}
-		{288EA5FE-F554-4144-8553-2CD0AA505BE0} = {A39354A4-35F6-426D-A209-C733AAFE5DBF}
 		{2EDD33E2-ABFE-4330-961F-7EA5C9BB9D32} = {A39354A4-35F6-426D-A209-C733AAFE5DBF}
 		{D11874EB-F414-4745-A4E2-14F0E38575F8} = {58FEF6E5-AAF6-43B5-90A8-B5D787240068}
 		{44DB4E1D-A87A-404E-B42F-50EFABD370C7} = {58FEF6E5-AAF6-43B5-90A8-B5D787240068}
