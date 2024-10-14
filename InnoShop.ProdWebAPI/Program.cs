@@ -38,9 +38,10 @@ namespace InnoShop.ProdWebAPI
 
             app.Map("/info", async (context) =>
             {
-                await context.Response.WriteAsync( "IP: "+context.Connection.RemoteIpAddress.ToString()+"\nUser:"+context.User.ToString());
+                string info = $"Host: {context.Request.Host}\nPath: {context.Request.Path}\nProtocol: {context.Request.Protocol}";
+                await context.Response.WriteAsync(info);
             });
-            app.MapGet("/table", async (context) =>
+            app.MapGet("/products", async (context) =>
             {
                     var mng = context.RequestServices.GetService<IServiceManager>();
                     var prods = mng.ProductService.GetCachedProducts();
@@ -80,6 +81,11 @@ namespace InnoShop.ProdWebAPI
                     next.Invoke();
 
                 });
+            });
+            app.Map("/products/{id}", (int id, IServiceManager service) =>
+            {
+                var product = service.ProductService.GetProduct(id);
+                return $"Id: {product.Id}\nName: {product.Name}\nUser: {product.User.Login}\nCost: {product.Cost}";
             });
             app.Map("/searchform1", FormHandlerCookies);
             app.Map("/searchform2", FormHandlerSession);
@@ -139,7 +145,7 @@ namespace InnoShop.ProdWebAPI
                 $"<br>Product type: <select name='prodType'";
                 foreach (var type in service.ProdTypeService.GetAllProdTypes())
                     response += $"<option {(type.Id==prodTypeId?"selected":"")} value='{type.Id}'>{type.Name}</option>";
-                response+="</select><br><br><input type = 'submit' value = 'Submit ' ></form></body></html>";
+                response+="</select><br><br><input type = 'submit' value = 'Сохранить +куки' ></form></body></html>";
 
                 await context.Response.WriteAsync(response);
             });
@@ -175,7 +181,7 @@ namespace InnoShop.ProdWebAPI
                 "<br>Product type: <select name='prodType'";
                 foreach (var type in service.ProdTypeService.GetAllProdTypes())
                     response += $"<option {(type.Id == prodTypeId ? "selected" : "")} value='{type.Id}'>{type.Name}</option>";
-                response += "</select><br><br><input type = 'submit' value = 'Submit ' ></form></body></html>";
+                response += "</select><br><br><input type = 'submit' value = 'Сохранить +сессия' ></form></body></html>";
 
                 await context.Response.WriteAsync(response);
             });
