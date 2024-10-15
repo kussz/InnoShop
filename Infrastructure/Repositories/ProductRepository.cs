@@ -27,18 +27,16 @@ namespace InnoShop.Infrastructure.Repositories
         public List<Product> GetProductByCondition(Expression<Func<Product,bool>> expression, bool trackChanges)
         {
             var products = FindByCondition(expression,trackChanges).ToList();
+            _cache.Set("prods", products, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(294)));
             return products;
         }
         public List<Product> GetCachedProducts()
         {
             var products = Context.Products;
-            List<Product> cachedProds = new List<Product>();
-            foreach(var product in products)
-            {
-                if(_cache.TryGetValue(product.Id, out Product adding))
-                    cachedProds.Add(adding);
-            }
-            return cachedProds;
+            if (_cache.TryGetValue("prods", out List<Product> cachedProds))
+                 return cachedProds;
+            else
+                return new List<Product>();
         }
     }
 }
