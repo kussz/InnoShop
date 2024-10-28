@@ -5,10 +5,16 @@ namespace InnoShop.ProdWebAPI.Controllers
     public class HomeController : Controller
     {
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Index()
         {
-            var ip = HttpContext.Connection.RemoteIpAddress.ToString();
-            return Ok(ip);
+            var ip = HttpContext.Request.Host.ToString();
+            return View();
+        }
+        [HttpGet]
+        public IActionResult Index1()
+        {
+            var ip = HttpContext.Request.Host.ToString();
+            return View();
         }
     }
 }

@@ -14,5 +14,6 @@ namespace InnoShop.Contracts.Service
         public Product GetProduct(int id);
         public List<Product> GetCachedProducts();
         public List<Product> GetProductsByCondition(Expression<Func<Product,bool>> expression, bool trackChanges = false);
+        List<Product> GetPage(int quantity, int page);
     }
 }

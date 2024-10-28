@@ -24,5 +24,9 @@ namespace InnoShop.Application
         {
             return Repository.ProductRepository.GetCachedProducts();
         }
+        public List<Product> GetPage(int quantity, int page)
+        {
+            return Repository.ProductRepository.GetPage(quantity, page);
+        }
     }   
 }

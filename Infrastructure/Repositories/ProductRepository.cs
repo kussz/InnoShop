@@ -38,5 +38,10 @@ namespace InnoShop.Infrastructure.Repositories
             else
                 return new List<Product>();
         }
+        public List<Product> GetPage(int quantity, int page)
+        {
+            var products = Paginate(quantity, page).ToList();
+            return products;
+        }
     }
 }

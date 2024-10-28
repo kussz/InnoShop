@@ -1,0 +1,95 @@
+﻿﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+.info
+{
+    text-align:justify;
+}
+.form-input
+{
+    background-color:black;
+}
+a:hover
+{
+    cursor:pointer;
+}
+.logo
+{
+    width:25px;
+}
+.navbar-inverse {
+    background: #121212;
+}
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 75px;
+    background: #9c2f2f;
+    color: white;
+    border: 1px black solid;
+    min-height: 100vh;
+}
+
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+}
+.pagination {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.page-select {
+    margin-right: 10px;
+}
+
+    .page-select select {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+.page-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.page-button {
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    .page-button:hover {
+        background-color: #0056b3;
+    }

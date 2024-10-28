@@ -1,0 +1,63 @@
+﻿@model IEnumerable<InnoShop.Domain.Models.Product>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Products";
+}
+
+<h2>Продукты</h2>
+
+<p>
+</p>
+<div class="pagination">
+
+    <div class="page-buttons">
+        <a class="page-button" asp-controller="Product" asp-action="Index" asp-route-page=1>Первая</a>
+        @if((int)ViewData["page"] > 1)
+        {
+            <a class="page-button" asp-controller="Product" asp-action="Index" asp-route-page=@((int)ViewData["page"] - 1)> &lt;&lt;</a>
+        }
+        <a class="page-button" asp-controller="Product" asp-action="Index" asp-route-page=@((int)ViewData["page"] + 1)>
+            &gt;&gt;</a>
+        <a class="page-button" asp-controller="Product" asp-action="Index" asp-route-page=100>Последняя</a>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cost)
+            </th>
+            <th>
+                Category
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cost)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProdType.Name)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
