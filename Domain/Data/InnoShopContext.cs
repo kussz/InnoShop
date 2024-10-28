@@ -37,7 +37,7 @@ public partial class InnoShopContext : DbContext
     {
         string getStringFrom = "DBConnection";
         string connectionString = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build().GetConnectionString(getStringFrom);
-        optionsBuilder.UseLazyLoadingProxies().UseSqlServer(connectionString);
+        //optionsBuilder.UseLazyLoadingProxies().UseSqlServer(connectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

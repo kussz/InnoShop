@@ -12,13 +12,9 @@
 
     <div class="page-buttons">
         <a class="page-button" asp-controller="Product" asp-action="Index" asp-route-page=1>Первая</a>
-        @if((int)ViewData["page"] > 1)
-        {
-            <a class="page-button" asp-controller="Product" asp-action="Index" asp-route-page=@((int)ViewData["page"] - 1)> &lt;&lt;</a>
-        }
-        <a class="page-button" asp-controller="Product" asp-action="Index" asp-route-page=@((int)ViewData["page"] + 1)>
+            <a class="page-button" asp-controller="Product" asp-action="Index" asp-route-page=@((int)ViewData["page"] - 1) style=@((int)ViewData["page"] > 1?null:"visibility:hidden")> &lt;&lt;</a>
+            <a class="page-button" asp-controller="Product" asp-action="Index" asp-route-page=@((int)ViewData["page"] + 1) style=@(Model.Count()!=0?null:"visibility:hidden"))>
             &gt;&gt;</a>
-        <a class="page-button" asp-controller="Product" asp-action="Index" asp-route-page=100>Последняя</a>
     </div>
 </div>
 <table class="table">

@@ -17,15 +17,12 @@ namespace InnoShop.ProdWebAPI
                 options.UseSqlServer(connectionString));
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.AddDistributedMemoryCache();
-            builder.Services.AddSession();
             builder.Services.AddMemoryCache();
             builder.WebHost.UseStaticWebAssets();
             var app = builder.Build();
-            app.UseSession();
             app.UseStaticFiles();
             app.UseRouting();
             app.MapControllerRoute(

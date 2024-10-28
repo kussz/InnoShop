@@ -1,6 +1,7 @@
 ﻿using InnoShop.Contracts.Repository;
 using InnoShop.Domain.Data;
 using InnoShop.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System.Linq.Expressions;
 
@@ -40,7 +41,14 @@ namespace InnoShop.Infrastructure.Repositories
         }
         public List<Product> GetPage(int quantity, int page)
         {
-            var products = Paginate(quantity, page).ToList();
+            if (_cache.TryGetValue(quantity + "p" + page, out List<Product> products))
+            {
+                Console.WriteLine("From cache");
+                return products;
+            }
+            products = Paginate(quantity, page).Include(p => p.User).ToList();
+            Console.WriteLine("From db");
+            _cache.Set(quantity + "p" + page, products, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(294)));
             return products;
         }
     }
