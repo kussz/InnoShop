@@ -46,7 +46,7 @@ namespace InnoShop.Infrastructure.Repositories
                 Console.WriteLine("From cache");
                 return products;
             }
-            products = Paginate(quantity, page).Include(p => p.User).ToList();
+            products = Paginate(quantity, page).Include(p => p.ProdType).ToList();
             Console.WriteLine("From db");
             _cache.Set(quantity + "p" + page, products, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(294)));
             return products;
