@@ -10,8 +10,15 @@ namespace InnoShop.ProdWebAPI.Controllers
         [HttpGet]
         public IActionResult Index(int page = 1)
         {
-            ViewData["page"] = page;              
-            return View(_service.ProductService.GetPage(500,page));
+            try
+            {
+                ViewData["page"] = page;              
+                return View(_service.ProductService.GetPage(15,page));
+            }
+            catch (Exception ex)
+            {
+                return View("~/Views/Shared/_Error.cshtml", ex);
+            }
         }
     }
 }

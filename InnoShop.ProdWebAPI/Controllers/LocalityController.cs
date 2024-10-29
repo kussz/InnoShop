@@ -10,7 +10,15 @@ namespace InnoShop.ProdWebAPI.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            try
+            {
+
             return View(_service.LocalityService.GetAllLocalities());
+            }
+            catch (Exception ex)
+            {
+                return View("~/Views/Shared/_Error.cshtml", ex);
+            }
         }
     }
 }

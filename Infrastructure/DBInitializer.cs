@@ -13,11 +13,12 @@ using InnoShop.Domain.Models;
 public class DBInitializer (InnoShopContext context)
 {
     InnoShopContext _context = context;
-    public void DeleteFromTable(string tableName)
+    public string DeleteFromTable(string tableName)
     {
-        _context.Database.ExecuteSqlRaw("TRUNCATE TABLE " + tableName+ "\nDBCC CHECKIDENT ('" + tableName + "', RESEED, 0);");
+        var n = _context.Database.ExecuteSqlRaw("DELETE FROM " + tableName+ "\nDBCC CHECKIDENT ('" + tableName + "', RESEED, 0);");
+        return ($"Удалено записей из таблицы {tableName}: {n}\n");
     }
-    public void FillUserTypes()
+    public string FillUserTypes()
     {
         string[] types = { "Частное лицо", "Компания", "Индивидуальный предприниматель" };
         List<UserType> userTypes = new List<UserType>();
@@ -27,9 +28,10 @@ public class DBInitializer (InnoShopContext context)
             
         }
         _context.UserTypes.AddRange(userTypes);
-        Console.WriteLine("Добавлено записей: " + userTypes.Count);
+        _context.SaveChanges();
+        return("Добавлено записей в таблицу UserTypes: " + userTypes.Count+"\n");
     }
-    public void FillLocalities(int size)
+    public string FillLocalities(int size)
     {
         string[] strings = GetStrings("D:\\work\\Course 3\\Term 1\\РПБДИС\\lab1\\localities.txt");
         if (size > strings.Length)
@@ -42,9 +44,10 @@ public class DBInitializer (InnoShopContext context)
 
         }
         _context.Localities.AddRange(localities);
-        Console.WriteLine("Добавлено записей: " + localities.Count);
+        _context.SaveChanges();
+        return("Добавлено записей в таблицу Localities: " + localities.Count+"\n");
     }
-    public void FillUsers(int quantity)
+    public string FillUsers(int quantity)
     {
         string[] emails = GenEmails(quantity);
         int added = 0;
@@ -64,9 +67,10 @@ public class DBInitializer (InnoShopContext context)
             });
         }
         _context.Users.AddRange(users);
-        Console.WriteLine("Добавлено записей: " + users.Count);
+        _context.SaveChanges();
+        return("Добавлено записей в таблицу Users: " + users.Count+"\n");
     }
-    public void FillProductTypes()
+    public string FillProductTypes()
     {
         string[] types = GetStrings("D:\\work\\Course 3\\Term 1\\РПБДИС\\lab1\\producttypes.txt");
         List<ProdType> prodTypes = new List<ProdType>();
@@ -76,16 +80,17 @@ public class DBInitializer (InnoShopContext context)
 
         }
         _context.ProdTypes.AddRange(prodTypes);
-        Console.WriteLine("Добавлено записей: " + prodTypes.Count);
+        _context.SaveChanges();
+        return("Добавлено записей в таблицу ProdTypes: " + prodTypes.Count+"\n");
 
     }
-    public void FillProducts(int quantity, int userQuantity, int typesQuantity)
+    public string FillProducts(int quantity, int userQuantity, int typesQuantity)
     {
         Random rnd = new Random(DateTime.Now.Millisecond);
         List<Product> products = new List<Product>();
         for (int i = 0; i < quantity; i++)
         {
-            int sold = rnd.Next(2);
+            bool sold = Convert.ToBoolean(rnd.Next(2));
             DateTime dt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day - rnd.Next(10), DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
             products.Add(new Product()
             {
@@ -93,14 +98,15 @@ public class DBInitializer (InnoShopContext context)
                 Description = "Описание"+(i+1),
                 Cost = (decimal)(rnd.NextDouble()* 100000 / 100.0),
                 ProdTypeId = rnd.Next(typesQuantity)+1,
-                Sold = Convert.ToBoolean(rnd.Next(2)),
+                Sold = sold,
                 UserId = rnd.Next(userQuantity) + 1,
-                BuyerId = rnd.Next(userQuantity) + 1,
+                BuyerId = (sold?rnd.Next(userQuantity) + 1:null),
                 CreationDate = dt,
             });
         }
         _context.Products.AddRange(products);
-        Console.WriteLine("Добавлено записей: " + products.Count);
+        _context.SaveChanges();
+        return("Добавлено записей в таблицу Products: " + products.Count+"\n");
 
     }
     private static string[] GetStrings(string filePath)

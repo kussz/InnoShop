@@ -23,18 +23,14 @@ namespace InnoShop.ProdWebAPI
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddMemoryCache();
             builder.WebHost.UseStaticWebAssets();
+
             var app = builder.Build();
             app.UseStaticFiles();
             app.UseRouting();
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-            app.Use((DBInitializer initializer)=>
-            {
-
-            })
             app.Run();
         }
-
     }
 }
