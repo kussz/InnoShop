@@ -19,6 +19,7 @@ namespace InnoShop.ProdWebAPI
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
+            builder.Services.AddScoped<DBInitializer>();
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddMemoryCache();
             builder.WebHost.UseStaticWebAssets();
@@ -28,7 +29,10 @@ namespace InnoShop.ProdWebAPI
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.Use((DBInitializer initializer)=>
+            {
 
+            })
             app.Run();
         }
 

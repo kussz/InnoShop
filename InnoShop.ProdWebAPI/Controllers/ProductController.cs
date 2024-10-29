@@ -11,7 +11,7 @@ namespace InnoShop.ProdWebAPI.Controllers
         public IActionResult Index(int page = 1)
         {
             ViewData["page"] = page;              
-            return View(_service.ProductService.GetPage(15,page));
+            return View(_service.ProductService.GetPage(500,page));
         }
     }
 }
