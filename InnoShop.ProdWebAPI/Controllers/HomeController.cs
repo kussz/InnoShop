@@ -1,4 +1,4 @@
-﻿using InnoShop.Infrastructure;
+﻿using InnoShop.Infrastructure.Initialize;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InnoShop.ProdWebAPI.Controllers

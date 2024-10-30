@@ -3,6 +3,7 @@ using InnoShop.Contracts.Repository;
 using InnoShop.Contracts.Service;
 using InnoShop.Domain.Data;
 using InnoShop.Infrastructure;
+using InnoShop.Infrastructure.Initialize;
 using Microsoft.EntityFrameworkCore;
 
 namespace InnoShop.ProdWebAPI

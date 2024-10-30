@@ -1,4 +1,4 @@
-﻿namespace InnoShop.Infrastructure;
+﻿namespace InnoShop.Infrastructure.Initialize;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
@@ -10,13 +10,13 @@ using InnoShop.Domain.Data;
 using Microsoft.EntityFrameworkCore;
 using InnoShop.Domain.Models;
 
-public class DBInitializer (InnoShopContext context)
+public class DBInitializer(InnoShopContext context)
 {
     InnoShopContext _context = context;
     public string DeleteFromTable(string tableName)
     {
-        var n = _context.Database.ExecuteSqlRaw("DELETE FROM " + tableName+ "\nDBCC CHECKIDENT ('" + tableName + "', RESEED, 0);");
-        return ($"Удалено записей из таблицы {tableName}: {n}\n");
+        var n = _context.Database.ExecuteSqlRaw("DELETE FROM " + tableName + "\nDBCC CHECKIDENT ('" + tableName + "', RESEED, 0);");
+        return $"Удалено записей из таблицы {tableName}: {n}\n";
     }
     public string FillUserTypes()
     {
@@ -24,35 +24,35 @@ public class DBInitializer (InnoShopContext context)
         List<UserType> userTypes = new List<UserType>();
         foreach (string type in types)
         {
-            userTypes.Add(new UserType() {Name=type });
-            
+            userTypes.Add(new UserType() { Name = type });
+
         }
         _context.UserTypes.AddRange(userTypes);
         _context.SaveChanges();
-        return("Добавлено записей в таблицу UserTypes: " + userTypes.Count+"\n");
+        return "Добавлено записей в таблицу UserTypes: " + userTypes.Count + "\n";
     }
     public string FillLocalities(int size)
     {
-        string[] strings = GetStrings("D:\\work\\Course 3\\Term 1\\РПБДИС\\lab1\\localities.txt");
+        string[] strings = GetStrings("../Infrastructure/Initialize/localities.txt");
         if (size > strings.Length)
             size = strings.Length;
         int[] indexes = GetRandomIndexes(size);
         List<Locality> localities = new List<Locality>();
-        foreach(var i in indexes)
+        foreach (var i in indexes)
         {
             localities.Add(new Locality() { Name = strings[i] });
 
         }
         _context.Localities.AddRange(localities);
         _context.SaveChanges();
-        return("Добавлено записей в таблицу Localities: " + localities.Count+"\n");
+        return "Добавлено записей в таблицу Localities: " + localities.Count + "\n";
     }
     public string FillUsers(int quantity)
     {
         string[] emails = GenEmails(quantity);
         int added = 0;
         int[] indexes = GetRandomIndexes(quantity);
-        string[] logins = GetStrings("D:\\work\\Course 3\\Term 1\\РПБДИС\\lab1\\nicknamesfixed.txt");
+        string[] logins = GetStrings("../Infrastructure/Initialize/nicknamesfixed.txt");
         Random rnd = new Random(DateTime.Now.Millisecond);
         List<User> users = new List<User>();
         foreach (var i in indexes)
@@ -68,11 +68,11 @@ public class DBInitializer (InnoShopContext context)
         }
         _context.Users.AddRange(users);
         _context.SaveChanges();
-        return("Добавлено записей в таблицу Users: " + users.Count+"\n");
+        return "Добавлено записей в таблицу Users: " + users.Count + "\n";
     }
     public string FillProductTypes()
     {
-        string[] types = GetStrings("D:\\work\\Course 3\\Term 1\\РПБДИС\\lab1\\producttypes.txt");
+        string[] types = GetStrings("../Infrastructure/Initialize/producttypes.txt");
         List<ProdType> prodTypes = new List<ProdType>();
         foreach (string type in types)
         {
@@ -81,7 +81,7 @@ public class DBInitializer (InnoShopContext context)
         }
         _context.ProdTypes.AddRange(prodTypes);
         _context.SaveChanges();
-        return("Добавлено записей в таблицу ProdTypes: " + prodTypes.Count+"\n");
+        return "Добавлено записей в таблицу ProdTypes: " + prodTypes.Count + "\n";
 
     }
     public string FillProducts(int quantity, int userQuantity, int typesQuantity)
@@ -94,19 +94,19 @@ public class DBInitializer (InnoShopContext context)
             DateTime dt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day - rnd.Next(10), DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
             products.Add(new Product()
             {
-                Name = "Продукт №"+(i+1),
-                Description = "Описание"+(i+1),
-                Cost = (decimal)(rnd.NextDouble()* 100000 / 100.0),
-                ProdTypeId = rnd.Next(typesQuantity)+1,
+                Name = "Продукт №" + (i + 1),
+                Description = "Описание" + (i + 1),
+                Cost = (decimal)(rnd.NextDouble() * 100000 / 100.0),
+                ProdTypeId = rnd.Next(typesQuantity) + 1,
                 Sold = sold,
                 UserId = rnd.Next(userQuantity) + 1,
-                BuyerId = (sold?rnd.Next(userQuantity) + 1:null),
+                BuyerId = sold ? rnd.Next(userQuantity) + 1 : null,
                 CreationDate = dt,
             });
         }
         _context.Products.AddRange(products);
         _context.SaveChanges();
-        return("Добавлено записей в таблицу Products: " + products.Count+"\n");
+        return "Добавлено записей в таблицу Products: " + products.Count + "\n";
 
     }
     private static string[] GetStrings(string filePath)
@@ -121,14 +121,14 @@ public class DBInitializer (InnoShopContext context)
     }
     public static void FillFile()
     {
-        string bad = GetStrings("D:\\work\\Course 3\\Term 1\\РПБДИС\\lab1\\nicknames.txt")[0];
-        StreamWriter streamWriter = new StreamWriter("D:\\work\\Course 3\\Term 1\\РПБДИС\\lab1\\nicknamesfixed.txt");
+        string bad = GetStrings("../Infrastructure/Initialize/nicknames.txt")[0];
+        StreamWriter streamWriter = new StreamWriter("../Infrastructure/Initialize/nicknamesfixed.txt");
         int end = 1;
         int start = 0;
         int i = 0;
         while (end < bad.Length)
         {
-            if (bad[end] == Char.ToUpper(bad[end]))
+            if (bad[end] == char.ToUpper(bad[end]))
             {
                 streamWriter.WriteLine(bad.Substring(start, end - start));
                 start = end;
