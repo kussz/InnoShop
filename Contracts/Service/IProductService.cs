@@ -10,10 +10,12 @@ namespace InnoShop.Contracts.Service
 {
     public interface IProductService
     {
+        public void Add(Product product);
+        public void Edit(Product product);
         public List<Product> GetAllProducts(bool trackChanges = false);
         public Product GetProduct(int id);
         public List<Product> GetCachedProducts();
         public List<Product> GetProductsByCondition(Expression<Func<Product,bool>> expression, bool trackChanges = false);
-        List<Product> GetPage(int quantity, int page);
+        public List<Product> GetPage(int quantity, int page);
     }
 }

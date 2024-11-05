@@ -22,7 +22,7 @@ namespace InnoShop.Infrastructure.Repositories
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges = false) =>
             !trackChanges ? Context.Set<T>().Where(expression)
             .AsNoTracking() : Context.Set<T>().Where(expression);
-
+        protected void Save() => Context.SaveChanges();
         public void Create(T entity) => Context.Set<T>().Add(entity);
         public void Update(T entity) => Context.Set<T>().Update(entity);
         public void Delete(T entity) => Context.Set<T>().Remove(entity);

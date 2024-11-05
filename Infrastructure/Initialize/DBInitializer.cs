@@ -91,7 +91,8 @@ public class DBInitializer(InnoShopContext context)
         for (int i = 0; i < quantity; i++)
         {
             bool sold = Convert.ToBoolean(rnd.Next(2));
-            DateTime dt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day - rnd.Next(10), DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+            DateTime dt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+            dt.AddDays(-rnd.Next(10));
             products.Add(new Product()
             {
                 Name = "Продукт №" + (i + 1),

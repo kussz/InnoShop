@@ -10,6 +10,8 @@ namespace InnoShop.Contracts.Repository
 {
     public interface IProductRepository
     {
+        void Add(Product product);
+        void Edit(Product product);
         List<Product> GetAllProducts(bool trackChanges = false);
         Product GetProductById(int id);
         List<Product> GetCachedProducts();

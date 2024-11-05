@@ -28,5 +28,7 @@ namespace InnoShop.Application
         {
             return Repository.ProductRepository.GetPage(quantity, page);
         }
+        public void Add(Product product) => Repository.ProductRepository.Add(product);
+        public void Edit(Product product) => Repository.ProductRepository.Edit(product);
     }   
 }
