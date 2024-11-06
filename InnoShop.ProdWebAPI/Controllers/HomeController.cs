@@ -15,8 +15,8 @@ namespace InnoShop.ProdWebAPI.Controllers
         [HttpGet]
         public IActionResult FillDb()
         {
-            try
-            {
+            //try
+            //{
                 string s = _initializer.DeleteFromTable("Products");
                 s += _initializer.DeleteFromTable("ProdTypes");
                 s += _initializer.DeleteFromTable("Users");
@@ -29,11 +29,11 @@ namespace InnoShop.ProdWebAPI.Controllers
                 s += _initializer.FillProducts(1000, 1920, 21);
                 ViewData["log"] = s;
                 return View();
-            }
-            catch (Exception ex)
-            {
-                return View("~/Views/Shared/_Error.cshtml", ex);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return View("~/Views/Shared/_Error.cshtml", ex);
+            //}
         }
     }
 }

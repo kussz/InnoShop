@@ -35,9 +35,9 @@ public partial class InnoShopContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
     {
-        string getStringFrom = "DBConnection";
+        string getStringFrom = "newDBConnection";
         string connectionString = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build().GetConnectionString(getStringFrom);
-        //optionsBuilder.UseLazyLoadingProxies().UseSqlServer(connectionString);
+        optionsBuilder.UseSqlServer(connectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -76,7 +76,7 @@ public partial class InnoShopContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(1000);
             entity.Property(e => e.Name).HasMaxLength(40);
 
-            entity.HasOne(d => d.Buyer).WithMany(p => p.ProductBuyers)
+            entity.HasOne(d => d.Buyer).WithMany(p => p.ProductsBuyer)
                 .HasForeignKey(d => d.BuyerId)
                 .HasConstraintName("FK_Users_Buyers");
 
@@ -85,7 +85,7 @@ public partial class InnoShopContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Products__ProdTy__084B3915");
 
-            entity.HasOne(d => d.User).WithMany(p => p.ProductUsers)
+            entity.HasOne(d => d.User).WithMany(p => p.ProductsUser)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_Products_Users");
         });
@@ -94,12 +94,12 @@ public partial class InnoShopContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Users__3214EC072D6A52E8");
 
-            entity.HasIndex(e => e.Login, "UQ__Users__5E55825B2B853D4C").IsUnique();
+            entity.HasIndex(e => e.UserName, "UQ__Users__5E55825B2B853D4C").IsUnique();
 
             entity.Property(e => e.Email)
                 .HasMaxLength(256)
                 .IsUnicode(false);
-            entity.Property(e => e.Login)
+            entity.Property(e => e.UserName)
                 .HasMaxLength(30)
                 .IsUnicode(false);
             entity.Property(e => e.PasswordHash)

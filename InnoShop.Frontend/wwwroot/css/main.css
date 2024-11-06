@@ -1,0 +1,172 @@
+﻿﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+.info
+{
+    text-align:justify;
+}
+.form-input
+{
+    background-color:black;
+}
+a:hover
+{
+    cursor:pointer;
+}
+.logo
+{
+    width:25px;
+    transition:0.8s;
+}
+    .logo:hover {
+        transform: scale(2,2) rotate(2turn);
+    }
+.navbar-inverse {
+    background: #9c2f2f;
+}
+.nav.navbar-nav li a
+{
+    color:white;
+    margin:5px;
+    border-radius:5px;
+    transition:0.2s;
+}
+.nav.navbar-nav li a:hover {
+    background: #691f1f;
+}
+    .nav.navbar-nav li a:active {
+        background: #350f0f;
+        transform: scale(1.1,1.1)
+    }
+    
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 75px;
+    background: #121212;
+    color: white;
+    border: 1px black solid;
+    min-height: 100vh;
+}
+
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+}
+.pagination {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.page-select {
+    margin-right: 10px;
+}
+
+    .page-select select {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+.page-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.page-button {
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #222222;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+}
+    .page-button:active {
+        text-decoration: none;
+        color: white;
+    }
+    .page-button:focus {
+        text-decoration: none;
+        color: #9c2f2f;
+    }
+
+    .page-button:hover {
+        background-color: white;
+        color: black;
+        text-decoration:none;
+    }
+.blobparent {
+    width: 100%;
+    padding-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.blob {
+    background: #222;
+    border-radius: 10px;
+    flex: 200px;
+    flex: 1;
+    max-width: 400px;
+    flex-basis: 300px;
+    height: 170px;
+    margin: 20px;
+    align-items: center;
+    justify-content: space-around;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+}
+.blobtext {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    
+    
+    
+}
+.blobdesc {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+.blob:focus {
+    text-decoration: none;
+    color: #9c2f2f;
+}
+
+.blob:hover {
+    background-color: #333;
+    color:white;
+    text-decoration: none;
+}

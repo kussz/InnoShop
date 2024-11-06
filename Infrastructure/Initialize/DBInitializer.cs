@@ -59,7 +59,7 @@ public class DBInitializer(InnoShopContext context)
         {
             users.Add(new User()
             {
-                Login = logins[i],
+                UserName = logins[i],
                 PasswordHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(logins[i]))),
                 Email = emails[i],
                 UserTypeId = rnd.Next(1, 4),

@@ -2,8 +2,10 @@ using InnoShop.Application;
 using InnoShop.Contracts.Repository;
 using InnoShop.Contracts.Service;
 using InnoShop.Domain.Data;
+using InnoShop.Domain.Models;
 using InnoShop.Infrastructure;
 using InnoShop.Infrastructure.Initialize;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace InnoShop.ProdWebAPI
@@ -13,9 +15,12 @@ namespace InnoShop.ProdWebAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            var connectionString = builder.Configuration.GetConnectionString("DBConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("newDBConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<InnoShopContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseSqlServer(connectionString,b => b.MigrationsAssembly("InnoShop.Domain")));
+            builder.Services.AddIdentity<User, IdentityRole<int>>()
+            .AddEntityFrameworkStores<InnoShopContext>()
+            .AddDefaultTokenProviders();
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();

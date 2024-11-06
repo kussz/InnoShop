@@ -19,6 +19,7 @@
     <ProjectReference Include="..\Application\InnoShop.Application.csproj" />
     <ProjectReference Include="..\Domain\InnoShop.Domain.csproj" />
     <ProjectReference Include="..\Infrastructure\InnoShop.Infrastructure.csproj" />
+    <ProjectReference Include="..\InnoShop.DTO\InnoShop.DTO.csproj" />
   </ItemGroup>
 
   <ItemGroup>

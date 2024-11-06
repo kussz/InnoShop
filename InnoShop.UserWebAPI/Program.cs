@@ -19,12 +19,21 @@ namespace InnoShop.UserWebAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("newDBConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<InnoShopContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            builder.Services.AddIdentity<User, IdentityRole>()
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
+            });
+            builder.Services.AddIdentity<User, IdentityRole<int>>()
             .AddEntityFrameworkStores<InnoShopContext>()
             .AddDefaultTokenProviders();
             builder.Services.Configure<IdentityOptions>(options =>
@@ -51,7 +60,7 @@ namespace InnoShop.UserWebAPI
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.AddScoped<DBInitializer>();
-
+            builder.WebHost.UseStaticWebAssets();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -66,14 +75,13 @@ namespace InnoShop.UserWebAPI
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-            app.MapRazorPages();
 
             app.Run();
         }

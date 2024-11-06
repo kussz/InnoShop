@@ -1,6 +1,7 @@
 ﻿using InnoShop.Contracts.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InnoShop.ProdWebAPI.Controllers
 {
@@ -19,6 +20,10 @@ namespace InnoShop.ProdWebAPI.Controllers
             {
                 return View("~/Views/Shared/_Error.cshtml", ex);
             }
+        }
+        public IActionResult ForSelect()
+        {
+            return Ok(_service.ProdTypeService.GetAllProdTypes().Select(pt => new SelectListItem { Value = pt.Id.ToString(), Text = pt.Name }));
         }
     }
 }

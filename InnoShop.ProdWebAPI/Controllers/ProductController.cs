@@ -3,6 +3,7 @@ using InnoShop.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.IdentityModel.Tokens;
+using InnoShop.DTO.Models;
 
 namespace InnoShop.ProdWebAPI.Controllers
 {
@@ -13,46 +14,53 @@ namespace InnoShop.ProdWebAPI.Controllers
         public IActionResult Index(int page = 1)
         {
             try
-            {            
-                return View(_service.ProductService.GetPage(15,page));
+            {
+                var products = _service.ProductService.GetPage(15, page);
+                return Ok(products);
             }
             catch (Exception ex)
             {
-                return View("~/Views/Shared/_Error.cshtml", ex);
+                return BadRequest(ex.Message);
             }
         }
         [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.Categories = _service.ProdTypeService.GetAllProdTypes().Select(pt=>new SelectListItem { Value = pt.Id.ToString(), Text = pt.Name });
-            ViewBag.Users = _service.UserService.GetAllUsers().Select(pt => new SelectListItem { Value = pt.Id.ToString(), Text = pt.Login });
-            return View();
+            ProductEditData data = new ProductEditData()
+            {
+                Categories = _service.ProdTypeService.GetAllProdTypes().Select(pt => new SelectListItem { Value = pt.Id.ToString(), Text = pt.Name }),
+                Users = _service.UserService.GetAllUsers().Select(pt => new SelectListItem { Value = pt.Id.ToString(), Text = pt.UserName })
+            };
+            return Ok(data);
         }
         [HttpPost]
-        public IActionResult Create(Product product)
+        public IActionResult Create([FromBody]Product product)
         {
             _service.ProductService.Add(product);
-            return RedirectToAction("Detail",new { id = product.Id });
+            return Ok(product);
         }
         [HttpGet]
-        public IActionResult Detail(int id)
+        public IActionResult GetProduct(int id)
         {
             Product product = _service.ProductService.GetProduct(id);
-            return View(product);
+            return Ok(product);
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            Product product = _service.ProductService.GetProduct(id);
-            ViewBag.Categories = _service.ProdTypeService.GetAllProdTypes().Select(pt => new SelectListItem { Value = pt.Id.ToString(), Text = pt.Name });
-            ViewBag.Users = _service.UserService.GetAllUsers().Select(pt => new SelectListItem { Value = pt.Id.ToString(), Text = pt.Login });
-            return View(product);
+            ProductEditData data= new ProductEditData()
+            {
+                Product = _service.ProductService.GetProduct(id),
+                Categories = _service.ProdTypeService.GetAllProdTypes().Select(pt => new SelectListItem { Value = pt.Id.ToString(), Text = pt.Name }),
+                Users = _service.UserService.GetAllUsers().Select(pt => new SelectListItem { Value = pt.Id.ToString(), Text = pt.UserName})
+            };
+            return Ok(data);
         }
         [HttpPost]
-        public IActionResult Edit(Product product)
+        public IActionResult Edit([FromBody]Product product)
         {
             _service.ProductService.Edit(product);
-            return RedirectToAction("Detail", new { id = product.Id });
+            return Ok();
         }
     }
 }
