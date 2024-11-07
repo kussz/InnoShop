@@ -1,18 +1,26 @@
 ﻿using InnoShop.Contracts.Service;
+using InnoShop.Domain.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
+using InnoShop.DTO.Models;
+using System.Text;
+using System.Security.Cryptography;
+using System.Net;
 
 namespace InnoShop.UserWebAPI.Controllers
 {
-    public class UserController(IServiceManager service) : Controller
+    public class UserController(UserManager<User> userManager, SignInManager<User> signInManager) : Controller
     {
-        IServiceManager _service = service;
+        UserManager<User> _userManager = userManager;
+        SignInManager<User> _signInManager = signInManager;
         // GET: UserController
-        public ActionResult ForSelect()
+        public ActionResult GetCurrentUser()
         {
-
-            return Ok(_service.UserService.GetAllUsers().Select(pt => new SelectListItem { Value = pt.Id.ToString(), Text = pt.UserName }));
+            var userId= User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Ok(userId);
         }
 
         // GET: UserController/Details/5
@@ -27,19 +35,31 @@ namespace InnoShop.UserWebAPI.Controllers
             return View();
         }
 
-        // POST: UserController/Create
+        // POST: UserController/Register
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register([FromBody]UserRegisterDTO model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                User user = new User { Email = model.Email, UserName = model.Email, UserTypeId = model.UserTypeId, LocalityId = model.LocalityId, PasswordHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(model.PasswordConfirm))), };
+                // добавляем пользователя
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    // установка куки
+                    await _signInManager.SignInAsync(user, false);
+                    return Ok(user);
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return Ok(model);
         }
 
         // GET: UserController/Edit/5

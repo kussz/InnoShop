@@ -63,6 +63,13 @@ namespace InnoShop.UserWebAPI
             builder.WebHost.UseStaticWebAssets();
             var app = builder.Build();
 
+            
+            app.UseStaticFiles();
+
+            app.UseRouting();
+            app.UseCors("AllowAll");
+            app.UseAuthentication();
+            app.UseAuthorization();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -72,13 +79,6 @@ namespace InnoShop.UserWebAPI
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseStaticFiles();
-
-            app.UseRouting();
-            app.UseCors("AllowAll");
-            app.UseAuthentication();
-            app.UseAuthorization();
-
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");

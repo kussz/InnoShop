@@ -4,11 +4,13 @@ using InnoShop.Domain.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Microsoft.AspNetCore.Identity;
 
 namespace InnoShop.Domain.Data;
 
-public partial class InnoShopContext : DbContext
+public partial class InnoShopContext : IdentityDbContext<User,IdentityRole<int>,int>
 {
     public InnoShopContext()
     {
@@ -27,8 +29,6 @@ public partial class InnoShopContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
-
     public virtual DbSet<UserType> UserTypes { get; set; }
 
 
@@ -42,6 +42,7 @@ public partial class InnoShopContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Locality>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Localiti__3214EC07601BC24A");
