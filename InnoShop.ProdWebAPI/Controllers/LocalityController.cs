@@ -1,6 +1,7 @@
 ﻿using InnoShop.Contracts.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InnoShop.ProdWebAPI.Controllers
 {
@@ -13,12 +14,16 @@ namespace InnoShop.ProdWebAPI.Controllers
             try
             {
 
-            return View(_service.LocalityService.GetAllLocalities());
+            return Ok(_service.LocalityService.GetAllLocalities());
             }
             catch (Exception ex)
             {
-                return View("~/Views/Shared/_Error.cshtml", ex);
+                return BadRequest(ex);
             }
+        }
+        public IActionResult ForSelect()
+        {
+            return Ok(new SelectList(_service.LocalityService.GetAllLocalities(), "Id", "Name"));
         }
     }
 }

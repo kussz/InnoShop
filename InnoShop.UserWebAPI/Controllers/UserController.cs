@@ -42,7 +42,7 @@ namespace InnoShop.UserWebAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email, UserTypeId = model.UserTypeId, LocalityId = model.LocalityId, PasswordHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(model.PasswordConfirm))), };
+                User user = new User { Email = model.Email, UserName = model.UserName, UserTypeId = model.UserTypeId, LocalityId = model.LocalityId, PasswordHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(model.PasswordConfirm))), };
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -59,7 +59,7 @@ namespace InnoShop.UserWebAPI.Controllers
                     }
                 }
             }
-            return Ok(model);
+            return Unauthorized(model);
         }
 
         // GET: UserController/Edit/5

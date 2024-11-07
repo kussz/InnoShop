@@ -1,3 +1,4 @@
+using InnoShop.Contracts.Service;
 using InnoShop.Domain.Data;
 using InnoShop.Domain.Models;
 using InnoShop.Frontend.Data;
@@ -14,6 +15,8 @@ namespace InnoShop.Frontend
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddHttpClient();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpContextAccessor();
+            builder.WebHost.UseStaticWebAssets();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

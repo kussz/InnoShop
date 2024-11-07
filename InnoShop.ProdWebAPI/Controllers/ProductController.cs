@@ -28,8 +28,8 @@ namespace InnoShop.ProdWebAPI.Controllers
         {
             ProductEditData data = new ProductEditData()
             {
-                Categories = _service.ProdTypeService.GetAllProdTypes().Select(pt => new SelectListItem { Value = pt.Id.ToString(), Text = pt.Name }),
-                Users = _service.UserService.GetAllUsers().Select(pt => new SelectListItem { Value = pt.Id.ToString(), Text = pt.UserName })
+                Categories = _service.ProdTypeService.GetAllProdTypes().Select(p => new SelectListItem(p.Name, p.Id.ToString())),
+                Users = _service.UserService.GetAllUsers().Select(p => new SelectListItem(p.UserName, p.Id.ToString()))
             };
             return Ok(data);
         }
@@ -48,11 +48,11 @@ namespace InnoShop.ProdWebAPI.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            ProductEditData data= new ProductEditData()
+            ProductEditData data = new ProductEditData()
             {
                 Product = _service.ProductService.GetProduct(id),
-                Categories = _service.ProdTypeService.GetAllProdTypes().Select(pt => new SelectListItem { Value = pt.Id.ToString(), Text = pt.Name }),
-                Users = _service.UserService.GetAllUsers().Select(pt => new SelectListItem { Value = pt.Id.ToString(), Text = pt.UserName})
+                Categories = new SelectList(_service.ProdTypeService.GetAllProdTypes(),"Id","Name"),
+                Users = new SelectList(_service.UserService.GetAllUsers(),"Id","UserName")
             };
             return Ok(data);
         }

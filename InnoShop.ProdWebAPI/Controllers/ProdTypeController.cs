@@ -14,16 +14,16 @@ namespace InnoShop.ProdWebAPI.Controllers
             try
             {
 
-            return View(_service.ProdTypeService.GetAllProdTypes());
+            return Ok(_service.ProdTypeService.GetAllProdTypes());
             }
             catch (Exception ex)
             {
-                return View("~/Views/Shared/_Error.cshtml", ex);
+                return BadRequest(ex);
             }
         }
         public IActionResult ForSelect()
         {
-            return Ok(_service.ProdTypeService.GetAllProdTypes().Select(pt => new SelectListItem { Value = pt.Id.ToString(), Text = pt.Name }));
+            return Ok(new SelectList(_service.ProdTypeService.GetAllProdTypes(), "Id", "Name"));
         }
     }
 }
