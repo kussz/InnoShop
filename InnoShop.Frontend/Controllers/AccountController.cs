@@ -1,6 +1,7 @@
 ﻿using Azure;
 using InnoShop.Domain.Models;
 using InnoShop.DTO.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -26,6 +27,22 @@ namespace InnoShop.Frontend.Controllers
             response.Result.EnsureSuccessStatusCode();
             var user = response.Result.Content.ReadFromJsonAsync<User>().Result;
             return View(user);
+        }
+        //[HttpPost]
+        //public ActionResult Login(UserLoginDTO userLogin)
+        //{
+        //    //var userString = JsonSerializer.Serialize(userLogin);
+        //    //var content = new StringContent(userString, Encoding.UTF8, "application/json");
+        //    //var response = _httpClient.PostAsync($"http://localhost:5069/User/Login", content).Result;
+        //    //response.EnsureSuccessStatusCode();
+        //    //string resultString = response.Content.ReadAsStringAsync().Result;
+        //    //Response.Cookies.Append("AspNetCore.Identity.Application", resultString);
+        //    return RedirectToAction("Index", "Home");
+        //}
+        
+        public ActionResult Login()
+        {
+            return View();
         }
 
         // GET: Account/Register
@@ -105,6 +122,11 @@ namespace InnoShop.Frontend.Controllers
             {
                 return View();
             }
+        }
+        public IActionResult ProtectedAction()
+        {
+            var userName = User.Identity.Name; // Это имя авторизованного пользователя
+            return View(userName);
         }
     }
 }

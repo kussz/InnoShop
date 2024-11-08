@@ -25,14 +25,32 @@ namespace InnoShop.UserWebAPI
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll",
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin()
-                               .AllowAnyMethod()
-                               .AllowAnyHeader();
-                    });
+                options.AddPolicy("AllowLocalhost5030", builder =>
+                {
+                    builder
+                        .WithOrigins("http://localhost:5030")  // Укажите источник фронтенда
+                        .AllowCredentials()                    // Разрешить передачу учетных данных
+                        .AllowAnyHeader()                      // Разрешить любые заголовки
+                        .AllowAnyMethod();                     // Разрешить любые методы (GET, POST, PUT, и т.д.)
+                });
             });
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            });
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "AspNetCore.Identity.Application";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.None; // Для кросс-доменного использования
+                options.Cookie.SecurePolicy = CookieSecurePolicy.None; // Для localhost можно использовать HTTP
+                options.LoginPath = "/User/Login";
+            });
+
+
+            builder.Services.AddAuthorization();
             builder.Services.AddIdentity<User, IdentityRole<int>>()
             .AddEntityFrameworkStores<InnoShopContext>()
             .AddDefaultTokenProviders();
@@ -44,17 +62,7 @@ namespace InnoShop.UserWebAPI
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
             });
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            })
-           .AddCookie(options =>
-           {
-               options.LoginPath = "/Account/Login"; // Путь к странице входа
-               options.LogoutPath = "/Account/Logout"; // Путь к выходу
-           });
+            
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
@@ -65,9 +73,8 @@ namespace InnoShop.UserWebAPI
 
             
             app.UseStaticFiles();
-
             app.UseRouting();
-            app.UseCors("AllowAll");
+            app.UseCors("AllowLocalhost5030");
             app.UseAuthentication();
             app.UseAuthorization();
             // Configure the HTTP request pipeline.

@@ -2,6 +2,7 @@
 using InnoShop.Domain.Data;
 using InnoShop.Domain.Models;
 using Microsoft.Extensions.Caching.Memory;
+using System.Linq.Expressions;
 
 namespace InnoShop.Infrastructure.Repositories
 {
@@ -22,6 +23,11 @@ namespace InnoShop.Infrastructure.Repositories
             else
                 Console.WriteLine("User извлечен из кэша");
             return user;
+        }
+        public List<User> GetUsersByCondition(Expression<Func<User, bool>> expression, bool trackChanges)
+        {
+            var users = FindByCondition(expression, trackChanges).ToList();
+            return users;
         }
     }
 }

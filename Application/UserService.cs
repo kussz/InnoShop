@@ -1,6 +1,7 @@
 ﻿using InnoShop.Contracts.Repository;
 using InnoShop.Contracts.Service;
 using InnoShop.Domain.Models;
+using System.Linq.Expressions;
 
 namespace InnoShop.Application
 {
@@ -14,6 +15,10 @@ namespace InnoShop.Application
         public User GetUser(int id)
         {
             return Repository.UserRepository.GetUser(id);
+        }
+        public List<User> GetUsersByCondition(Expression<Func<User, bool>> expression, bool trackChanges)
+        {
+            return Repository.UserRepository.GetUsersByCondition(expression, trackChanges);
         }
     }   
 }

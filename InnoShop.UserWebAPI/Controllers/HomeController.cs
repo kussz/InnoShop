@@ -21,6 +21,5 @@ namespace InnoShop.UserWebAPI.Controllers
         {
             return View();
         }
-
     }
 }

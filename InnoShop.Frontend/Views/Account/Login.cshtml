@@ -1,0 +1,55 @@
+﻿@model InnoShop.DTO.Models.UserLoginDTO
+@{
+    ViewData["Title"] = "Login";
+}
+<h1>Вход</h1>
+<form id="loginForm">
+    <div>
+        <label for="UserName">Имя пользователя:</label>
+        <input type="text" id="UserName" name="UserName" required />
+    </div>
+    <div>
+        <label for="Password">Пароль:</label>
+        <input type="password" id="Password" name="Password" required />
+    </div>
+    <button type="submit">Войти</button>
+</form>
+<div id="result"></div>
+@section Scripts
+{
+    <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Предотвращаем стандартное поведение формы
+
+    const username = document.getElementById('UserName').value;
+    const password = document.getElementById('Password').value;
+
+    // Выполняем POST-запрос
+    fetch('http://localhost:5069/User/Login', {
+        method: 'POST',
+        credentials: 'include', // Включаем куки, если это необходимо
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Credentials': 'true'
+        },
+        body: JSON.stringify({
+            UserName: username,
+            Password: password
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка входа: ' + response.statusText);
+        }
+        return response.text(); // Или response.json(), если ожидается JSON
+    })
+    .then(data => {
+        document.getElementById('result').textContent = data; // Обработка успешного ответа
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        document.getElementById('result').textContent = 'Ошибка: ' + error.message; // Отображение ошибки
+    });
+});
+    </script>
+}

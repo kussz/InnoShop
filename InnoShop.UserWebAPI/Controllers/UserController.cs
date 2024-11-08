@@ -12,10 +12,11 @@ using System.Net;
 
 namespace InnoShop.UserWebAPI.Controllers
 {
-    public class UserController(UserManager<User> userManager, SignInManager<User> signInManager) : Controller
+    public class UserController(UserManager<User> userManager, SignInManager<User> signInManager, IServiceManager service) : Controller
     {
         UserManager<User> _userManager = userManager;
         SignInManager<User> _signInManager = signInManager;
+        IServiceManager _service = service;
         // GET: UserController
         public ActionResult GetCurrentUser()
         {
@@ -34,7 +35,30 @@ namespace InnoShop.UserWebAPI.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> Login([FromBody]UserLoginDTO userLogin)
+        {
+            var result = await _signInManager.PasswordSignInAsync(userLogin.UserName, userLogin.Password,true,false);
 
+            if (result.Succeeded)
+            {
+                return Ok();
+                //return RedirectToAction(nameof(ReturnUser));
+                
+            }
+            else
+                return Unauthorized(userLogin);
+        }
+        [HttpGet]
+        public ActionResult ReturnUser()
+        {
+            var cookieValue = HttpContext.Request.Cookies["AspNetCore.Identity.Application"];
+            HttpContext.Response.Headers.Add("Set-Cookie", cookieValue);
+            return Ok(cookieValue);
+        }
+        public async Task<IActionResult> Logout()
+        {
+            throw new NotImplementedException();
+        }
         // POST: UserController/Register
         [HttpPost]
         //[ValidateAntiForgeryToken]
@@ -103,5 +127,11 @@ namespace InnoShop.UserWebAPI.Controllers
                 return View();
             }
         }
+        [HttpGet]
+        public ActionResult GetUs()
+        {
+            return Ok(User.Identity.Name);
+        }
+        
     }
 }
