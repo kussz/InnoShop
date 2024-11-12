@@ -28,18 +28,18 @@ namespace InnoShop.Frontend.Controllers
             var user = response.Result.Content.ReadFromJsonAsync<User>().Result;
             return View(user);
         }
-        //[HttpPost]
-        //public ActionResult Login(UserLoginDTO userLogin)
-        //{
-        //    //var userString = JsonSerializer.Serialize(userLogin);
-        //    //var content = new StringContent(userString, Encoding.UTF8, "application/json");
-        //    //var response = _httpClient.PostAsync($"http://localhost:5069/User/Login", content).Result;
-        //    //response.EnsureSuccessStatusCode();
-        //    //string resultString = response.Content.ReadAsStringAsync().Result;
-        //    //Response.Cookies.Append("AspNetCore.Identity.Application", resultString);
-        //    return RedirectToAction("Index", "Home");
-        //}
-        
+        [HttpPost]
+        public ActionResult Login(UserLoginDTO userLogin)
+        {
+            var userString = JsonSerializer.Serialize(userLogin);
+            var content = new StringContent(userString, Encoding.UTF8, "application/json");
+            var response = _httpClient.PostAsync($"http://localhost:5069/User/Login", content).Result;
+            response.EnsureSuccessStatusCode();
+            //string resultString = response.Content.ReadAsStringAsync().Result;
+            //Response.Cookies.Append("AspNetCore.Identity.Application", resultString);
+            return RedirectToAction("Index", "Home");
+        }
+
         public ActionResult Login()
         {
             return View();
