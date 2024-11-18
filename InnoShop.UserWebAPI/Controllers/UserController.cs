@@ -16,6 +16,7 @@ using System.Security.Principal;
 using System;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InnoShop.UserWebAPI.Controllers
 {
@@ -26,11 +27,6 @@ namespace InnoShop.UserWebAPI.Controllers
         IServiceManager _service = service;
         JwtSettings _jwtSettings = jwtSettings.Value;
         // GET: UserController
-        public ActionResult GetCurrentUser()
-        {
-            var userId= User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return Ok(userId);
-        }
 
         // GET: UserController/Details/5
         public ActionResult Details(int id)
@@ -65,7 +61,7 @@ namespace InnoShop.UserWebAPI.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim("Id", user.Id.ToString())
             };
 
             var token = new JwtSecurityToken(
@@ -75,15 +71,20 @@ namespace InnoShop.UserWebAPI.Controllers
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds
             );
+            foreach (var claim in claims)
+            {
+                Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+            }
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        [HttpGet("Profile")]
+        //[Authorize]
         public IActionResult GetProfile()
         {
             // Получаем токен из заголовка Authorization
             var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-
+            if(token!="null")
+            {
             // Проверяем, что токен не пустой
             if (string.IsNullOrEmpty(token))
             {
@@ -94,16 +95,10 @@ namespace InnoShop.UserWebAPI.Controllers
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadToken(token) as JwtSecurityToken;
 
-            var id = int.Parse(jwtToken?.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value);
-            return Ok(_service.UserService.GetUser(id));
-        }
-
-        [HttpGet]
-        public ActionResult ReturnUser()
-        {
-            var cookieValue = HttpContext.Request.Cookies["AspNetCore.Identity.Application"];
-            HttpContext.Response.Headers.Add("Set-Cookie", cookieValue);
-            return Ok(cookieValue);
+            var userId = int.Parse(jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Id")?.Value);
+            return Ok(_service.UserService.GetUser(userId));
+            }
+            return Unauthorized();
         }
         public async Task<IActionResult> Logout()
         {
@@ -123,7 +118,8 @@ namespace InnoShop.UserWebAPI.Controllers
                 {
                     // установка куки
                     await _signInManager.SignInAsync(user, false);
-                    return Ok(user);
+                    var token = GenerateToken(user);
+                    return Ok(token);
                 }
                 else
                 {

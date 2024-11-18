@@ -42,7 +42,7 @@
             // Сохраняем токен в localStorage или sessionStorage
             localStorage.setItem('jwtToken', token);
             updateAuthButtons();
-            window.location.href = '/User';
+            window.location.href = '/Account';
         } catch (error) {
                 console.error('Ошибка:', error);
                 document.getElementById("result").textContent = 'Ошибка: ' + error.message; // Отображение ошибки

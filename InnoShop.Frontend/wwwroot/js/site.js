@@ -17,6 +17,7 @@ async function updateAuthButtons() {
     //await loadNavigation();
     if (localStorage.getItem("jwtToken") != null)
     {
+        appendButtonWithIcon("fas fa-user",getUsernameFromToken(localStorage.getItem('jwtToken')), redirectToProfile)
         appendButton('Выйти',logout)
     } else {
         // Если токена нет, показываем кнопки "Зарегистрироваться" и "Войти"
@@ -29,16 +30,18 @@ async function updateAuthButtons() {
 // Функция для выхода пользователя
 function logout() {
     localStorage.removeItem('jwtToken'); // Удаляем токен
-    updateAuthButtons(); // Обновляем кнопки
+    location.reload(); // Обновляем кнопки
 }
 
 // Пример функций для перехода на страницы регистрации и входа
 function redirectToRegister() {
-    window.location.href = 'Account/Register'; // Замените на правильный URL
+    window.location.href = '/Account/Register'; // Замените на правильный URL
 }
-
+function redirectToProfile() {
+    window.location.href = '/Account';
+}
 function redirectToLogin() {
-    window.location.href = 'Account/Login'; // Замените на правильный URL
+    window.location.href = '/Account/Login'; // Замените на правильный URL
 }
 function getLi() {
     li = document.createElement("li");
@@ -53,6 +56,20 @@ function getA() {
 function appendButton(text,func) {
     a = getA();
     a.innerText = text;
+    a.onclick = func;
+    li = getLi();
+    li.appendChild(a);
+    authButtons.appendChild(li);
+}
+
+function appendButtonWithIcon(icon,text, func) {
+    a = getA();
+    i = document.createElement("i");
+    i.setAttribute("class", icon);
+    a.appendChild(i);
+    var textNode = document.createTextNode(` `+text);
+    a.appendChild(textNode);
+    //a.innerText += text;
     a.onclick = func;
     li = getLi();
     li.appendChild(a);

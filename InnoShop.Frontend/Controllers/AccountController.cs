@@ -17,15 +17,22 @@ namespace InnoShop.Frontend.Controllers
     {
         private readonly HttpClient _httpClient = httpClient;
         // GET: Account
-        // GET: Account/Detail/5
-        [HttpGet("Profile")]
+        
         public ActionResult Index()
         {
             return View();
+            //var response = _httpClient.GetAsync($"http://localhost:5069/User/GetProfile/");
+            //var user = response.Result.Content.ReadFromJsonAsync<User>().Result;
+            //return View(user);
             //var response = _httpClient.GetAsync($"http://localhost:5069/User/GetUser/{id}");
             //response.Result.EnsureSuccessStatusCode();
             //var user = response.Result.Content.ReadFromJsonAsync<User>().Result;
             //return View(user);
+        }
+        [HttpGet]
+        public ActionResult Unauthorized()
+        {
+            return View();
         }
         [HttpPost]
         public ActionResult Login(UserLoginDTO userLogin)
@@ -57,29 +64,30 @@ namespace InnoShop.Frontend.Controllers
         }
 
         // POST: Account/Register
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Register(UserRegisterDTO user)
-        {
-            var userString = JsonSerializer.Serialize(user);
-            var content = new StringContent(userString, Encoding.UTF8, "application/json");
-            var response = _httpClient.PostAsync($"http://localhost:5069/User/Register", content);
-            User createdUser = response.Result.Content.ReadFromJsonAsync<User>().Result;
-            if (response.Result.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index", "Product"); // Перенаправление после успешного редактирования
-            }
-            else
-            {
-                response = _httpClient.GetAsync($"http://localhost:5036/Locality/ForSelect");
-                SelectList localities = response.Result.Content.ReadFromJsonAsync<SelectList>().Result;
-                response = _httpClient.GetAsync($"http://localhost:5036/UserType/ForSelect");
-                SelectList userTypes = response.Result.Content.ReadFromJsonAsync<SelectList>().Result;
-                ViewBag.Localities = localities;
-                ViewBag.Types = userTypes;
-                return View();
-            }
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Register(UserRegisterDTO user)
+        //{
+        //    var userString = JsonSerializer.Serialize(user);
+        //    var content = new StringContent(userString, Encoding.UTF8, "application/json");
+        //    var response = _httpClient.PostAsync($"http://localhost:5069/User/Register", content);
+        //    User createdUser = response.Result.Content.ReadFromJsonAsync<User>().Result;
+        //    if (response.Result.IsSuccessStatusCode)
+        //    {
+
+        //        return RedirectToAction("Index", "Product"); // Перенаправление после успешного редактирования
+        //    }
+        //    else
+        //    {
+        //        response = _httpClient.GetAsync($"http://localhost:5036/Locality/ForSelect");
+        //        SelectList localities = response.Result.Content.ReadFromJsonAsync<SelectList>().Result;
+        //        response = _httpClient.GetAsync($"http://localhost:5036/UserType/ForSelect");
+        //        SelectList userTypes = response.Result.Content.ReadFromJsonAsync<SelectList>().Result;
+        //        ViewBag.Localities = localities;
+        //        ViewBag.Types = userTypes;
+        //        return View();
+        //    }
+        //}
 
         // GET: Account/Edit/5
         public ActionResult Edit(int id)
