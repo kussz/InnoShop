@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
@@ -15,18 +17,15 @@ namespace InnoShop.Frontend.Controllers
     {
         private readonly HttpClient _httpClient = httpClient;
         // GET: Account
+        // GET: Account/Detail/5
+        [HttpGet("Profile")]
         public ActionResult Index()
         {
             return View();
-        }
-
-        // GET: Account/Detail/5
-        public ActionResult Detail(int id)
-        {
-            var response = _httpClient.GetAsync($"http://localhost:5069/User/GetUser/{id}");
-            response.Result.EnsureSuccessStatusCode();
-            var user = response.Result.Content.ReadFromJsonAsync<User>().Result;
-            return View(user);
+            //var response = _httpClient.GetAsync($"http://localhost:5069/User/GetUser/{id}");
+            //response.Result.EnsureSuccessStatusCode();
+            //var user = response.Result.Content.ReadFromJsonAsync<User>().Result;
+            //return View(user);
         }
         [HttpPost]
         public ActionResult Login(UserLoginDTO userLogin)
@@ -122,11 +121,6 @@ namespace InnoShop.Frontend.Controllers
             {
                 return View();
             }
-        }
-        public IActionResult ProtectedAction()
-        {
-            var userName = User.Identity.Name; // Это имя авторизованного пользователя
-            return View(userName);
         }
     }
 }

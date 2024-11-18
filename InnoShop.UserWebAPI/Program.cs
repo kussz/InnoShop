@@ -1,14 +1,17 @@
 
-using Microsoft.AspNetCore.Identity;
-using InnoShop.Domain.Models;
-using Microsoft.EntityFrameworkCore;
-using InnoShop.Domain.Data;
 using InnoShop.Application;
 using InnoShop.Contracts.Repository;
 using InnoShop.Contracts.Service;
-using InnoShop.Infrastructure.Initialize;
+using InnoShop.Domain.Data;
+using InnoShop.Domain.Models;
+using InnoShop.DTO.Models;
 using InnoShop.Infrastructure;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using InnoShop.Infrastructure.Initialize;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace InnoShop.UserWebAPI
 {
@@ -34,20 +37,32 @@ namespace InnoShop.UserWebAPI
                         .AllowAnyMethod();                     // Разрешить любые методы (GET, POST, PUT, и т.д.)
                 });
             });
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            });
-            builder.Services.ConfigureApplicationCookie(options =>
-            {
-                options.Cookie.Name = "AspNetCore.Identity.Application";
-                options.Cookie.HttpOnly = true;
-                options.Cookie.SameSite = SameSiteMode.None; // Для кросс-доменного использования
-                options.Cookie.SecurePolicy = CookieSecurePolicy.None; // Для localhost можно использовать HTTP
-                options.LoginPath = "/User/Login";
-            });
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.RequireHttpsMetadata = false;
+                        options.SaveToken = true;
+                        var JWTSettings = builder.Configuration.GetSection("JWTSettings");
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            // укзывает, будет ли валидироваться издатель при валидации токена
+                            ValidateIssuer = true,
+                            // строка, представляющая издателя
+                            ValidIssuer = JWTSettings["Issuer"],
+
+                            // будет ли валидироваться потребитель токена
+                            ValidateAudience = true,
+                            // установка потребителя токена
+                            ValidAudience = JWTSettings["Audience"],
+                            // будет ли валидироваться время существования
+                            ValidateLifetime = true,
+
+                            // установка ключа безопасности
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JWTSettings["SecretKey"])),
+                            // валидация ключа безопасности
+                            ValidateIssuerSigningKey = true,
+                        };
+                    });
 
 
             builder.Services.AddAuthorization();
@@ -62,16 +77,17 @@ namespace InnoShop.UserWebAPI
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
             });
-            
+
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWTSettings"));
             builder.Services.AddScoped<DBInitializer>();
             builder.WebHost.UseStaticWebAssets();
             var app = builder.Build();
 
-            
+
             app.UseStaticFiles();
             app.UseRouting();
             app.UseCors("AllowLocalhost5030");

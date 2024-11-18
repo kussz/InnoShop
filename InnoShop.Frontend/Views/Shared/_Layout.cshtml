@@ -23,9 +23,10 @@
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand"><img class="logo" src="/img/innoshop.png" /></a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <partial name="_NavPartial" />
-                    @* <li><partial name="_LoginPartial" /></li> *@
+                <ul class="nav navbar-nav ml-auto">
+                    <partial name ="_NavPartial" />
+                    </ul>
+                <ul class="nav navbar-nav navbar-right" id="authButtons">
                 </ul>
             </div>
         </div>

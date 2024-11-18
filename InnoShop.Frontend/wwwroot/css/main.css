@@ -170,3 +170,8 @@ a:hover
     color:white;
     text-decoration: none;
 }
+
+.rightli
+{
+    float:right;
+}

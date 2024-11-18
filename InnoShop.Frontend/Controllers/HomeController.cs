@@ -10,7 +10,10 @@ namespace InnoShop.Frontend.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly HttpClient _httpClient;
-
+        public IActionResult NavPartial()
+        {
+            return PartialView("~/Views/Shared/_NavPartial.cshtml");
+        }
         public HomeController(ILogger<HomeController> logger, HttpClient httpClient)
         {
             _logger = logger;
