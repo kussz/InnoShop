@@ -20,12 +20,14 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace InnoShop.UserWebAPI.Controllers
 {
-    public class UserController(UserManager<User> userManager, SignInManager<User> signInManager, IServiceManager service,IOptions<JwtSettings> jwtSettings, IConfiguration configuration) : Controller
+    public class UserController(UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, SignInManager<User> signInManager, IServiceManager service,IOptions<JwtSettings> jwtSettings, IConfiguration configuration) : Controller
     {
         UserManager<User> _userManager = userManager;
         SignInManager<User> _signInManager = signInManager;
+        RoleManager<IdentityRole<int>> _roleManager = roleManager;
         IServiceManager _service = service;
         JwtSettings _jwtSettings = jwtSettings.Value;
+
         // GET: UserController
 
         // GET: UserController/Details/5
@@ -61,13 +63,15 @@ namespace InnoShop.UserWebAPI.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("Id", user.Id.ToString())
+                new Claim("Id", user.Id.ToString()),
+                new Claim("role", _userManager.GetRolesAsync(user).Result[0])
             };
 
             var token = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
+                notBefore: DateTime.Now,
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds
             );
@@ -78,27 +82,53 @@ namespace InnoShop.UserWebAPI.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        //[Authorize]
+        [HttpPost]
+        public async Task<IActionResult> CreateRole([FromBody]string roleName)
+        {
+            var roleExists = await _roleManager.RoleExistsAsync(roleName);
+            if(!roleExists)
+                await _roleManager.CreateAsync(new IdentityRole<int>(roleName));
+            return Ok(!roleExists);
+        }
+        [HttpPost]
+        public async Task<IActionResult> SetRole([FromBody] UserAddRoleDTO userAddRole)
+        {
+            var roleExists = await _roleManager.RoleExistsAsync(userAddRole.RoleName);
+            var user = _service.UserService.GetUser(userAddRole.Id);
+            if (roleExists)
+                await _userManager.AddToRoleAsync(user, userAddRole.RoleName);
+            return Ok(user);
+        }
+        //[Authorize(Roles ="User, Admin")]
         public IActionResult GetProfile()
         {
+            var user = Authorize(Request.Headers["Authorization"]);
             // Получаем токен из заголовка Authorization
-            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            if(token!="null")
+            if(user!=null)
             {
-            // Проверяем, что токен не пустой
-            if (string.IsNullOrEmpty(token))
-            {
+                return Ok(user);
+            }
                 return Unauthorized();
-            }
+        }
 
-            // Декодируем токен
-            var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadToken(token) as JwtSecurityToken;
+        private User? Authorize(string? fullToken)
+        {
+            var token = fullToken.ToString().Replace("Bearer ", "");
+            if (token != "null")
+            {
+                // Проверяем, что токен не пустой
+                if (string.IsNullOrEmpty(token))
+                {
+                    return null;
+                }
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadToken(token) as JwtSecurityToken;
 
-            var userId = int.Parse(jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Id")?.Value);
-            return Ok(_service.UserService.GetUser(userId));
+                var userId = int.Parse(jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Id")?.Value);
+                return _service.UserService.GetUser(userId);
             }
-            return Unauthorized();
+            else
+                return null;
         }
         public async Task<IActionResult> Logout()
         {
@@ -118,6 +148,7 @@ namespace InnoShop.UserWebAPI.Controllers
                 {
                     // установка куки
                     await _signInManager.SignInAsync(user, false);
+                    await SetRole(new UserAddRoleDTO() { Id = user.Id, RoleName = "User" });
                     var token = GenerateToken(user);
                     return Ok(token);
                 }
@@ -127,6 +158,7 @@ namespace InnoShop.UserWebAPI.Controllers
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
+                    return Unauthorized(new { Errors = result.Errors.Select(e => e.Description) });
                 }
             }
             return Unauthorized(model);

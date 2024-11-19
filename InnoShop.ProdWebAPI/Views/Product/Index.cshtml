@@ -21,7 +21,7 @@
 <div class="blobparent">
         @foreach (var item in Model)
         {
-        <a class="blob" href="@Url.Action("Detail", "Product", new { id = item.Id })">
+        <a class="blob" href="@Url.Action("Detail", new { id = item.Id })">
             <h1 class="blobtext">@Html.DisplayFor(modelItem => item.Name)</h1>
             <h5 class="blobdesc">@Html.DisplayFor(model=>item.Description)</h5>
         </a>

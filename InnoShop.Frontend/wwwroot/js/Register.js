@@ -32,16 +32,18 @@ async function registerUser(user) {
             // Перенаправление после успешного редактирования
             window.location.href = "/Product"; // Или используйте подходящий метод для вашего фреймворка
         } else {
+            const errorResponse = await response.json();
+            displayErrors(errorResponse.errors);
             // Обработка ошибок
-            const localitiesResponse = await fetch("http://localhost:5036/Locality/ForSelect");
-            const localities = await localitiesResponse.json();
+            //const localitiesResponse = await fetch("http://localhost:5036/Locality/ForSelect");
+            //const localities = await localitiesResponse.json();
 
-            const userTypesResponse = await fetch("http://localhost:5036/UserType/ForSelect");
-            const userTypes = await userTypesResponse.json();
+            //const userTypesResponse = await fetch("http://localhost:5036/UserType/ForSelect");
+            //const userTypes = await userTypesResponse.json();
 
             // Передайте данные о локалях и типах пользователей в ваше представление
             // Возможно, вам нужно будет вызвать функцию для обновления UI
-            updateUIWithLocalitiesAndTypes(localities, userTypes);
+            //updateUIWithLocalitiesAndTypes(localities, userTypes);
         }
     } catch (error) {
         console.error("Ошибка при регистрации:", error);
@@ -53,4 +55,14 @@ function updateUIWithLocalitiesAndTypes(localities, userTypes) {
     // Обновите ваш интерфейс с полученными данными
     console.log(localities, userTypes);
     // Например, можно заполнить выпадающие списки или другие элементы
+}
+function displayErrors(errors) {
+    // Логика для отображения ошибок пользователю
+    const errorContainer = document.getElementById("errors");
+    errorContainer.innerHTML = ""; // Очищаем предыдущие ошибки
+    errors.forEach(error => {
+        const errorElement = document.createElement("div");
+        errorElement.textContent = error; // Добавляем текст ошибки
+        errorContainer.appendChild(errorElement); // Добавляем ошибку в контейнер
+    });
 }

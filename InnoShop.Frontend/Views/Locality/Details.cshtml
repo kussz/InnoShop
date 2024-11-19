@@ -1,0 +1,43 @@
+﻿@model int;
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+    <div>
+        <h4>Населённый пункт</h4>
+        <hr />
+<div id="loading" style="display: block;">Загрузка...</div>
+<div id="loadedItems" style="display: none;">
+        <dl class="row">
+            <dd class = "col-sm-10" id="nameContainer">
+                <form id="nameForm" method="post">
+                    <div class="form-group">
+                        <label for="name" class="control-label">Населённый пункт:</label>
+                        <input type="text" id="name" name="name" class="form-control" value="N/A" required />
+                    </div>
+                </form>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div>
+    <a asp-action="Index" id="formButton" class="blober">Подтвердить изменения</a> |
+    <a asp-action="Index" class="blober">Вернуться</a>
+</div>
+@section Scripts
+{
+    <script src="~/js/Post.js" asp-append-version="true"></script>
+    <script src="~/js/Detail.js" asp-append-version="true"></script>
+    <script>
+        async function func(item)
+        {
+            document.getElementById("name").setAttribute('value', item.name);
+        }
+        fetchItem("http://localhost:5036/Locality", @Model,func);
+    </script>
+}
+@section Prescripts
+{
+    <script src="~/js/AdminRequired.js" asp-append-version="true"></script>
+}

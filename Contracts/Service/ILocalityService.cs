@@ -9,6 +9,8 @@ namespace InnoShop.Contracts.Service
 {
     public interface ILocalityService
     {
+        public void Add(Locality locality);
+        public void Edit(Locality locality);
         public List<Locality> GetAllLocalities(bool trackChanges = false);
         public Locality GetLocality(int id);
     }

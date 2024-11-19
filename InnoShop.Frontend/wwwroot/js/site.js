@@ -11,14 +11,31 @@
     // Предполагаем, что имя пользователя хранится в свойстве `sub`
     return payload.sub;
 }
-async function updateAuthButtons() {
+function getRoleFromToken(token) {
+    // Разделяем токен на части
+    const tokenParts = token.split('.');
+    if (tokenParts.length !== 3) {
+        throw new Error('Неверный формат токена');
+    }
+
+    // Декодируем полезную нагрузку (payload) из base64
+    const payload = JSON.parse(atob(tokenParts[1]));
+
+
+    return payload.role;
+}
+
+async function updateNav() {
     authButtons = document.getElementById("authButtons");
     authButtons.innerHTML = '';
+    token = localStorage.getItem("jwtToken");
     //await loadNavigation();
-    if (localStorage.getItem("jwtToken") != null)
+    if (token != null)
     {
-        appendButtonWithIcon("fas fa-user",getUsernameFromToken(localStorage.getItem('jwtToken')), redirectToProfile)
-        appendButton('Выйти',logout)
+        appendButtonWithIcon("fas fa-user",getUsernameFromToken(token), redirectToProfile)
+        appendButton('Выйти', logout)
+        if (getRoleFromToken(token) == "Admin")
+            document.getElementById("adminNav").style.display = "block";
     } else {
         // Если токена нет, показываем кнопки "Зарегистрироваться" и "Войти"
 
@@ -92,4 +109,4 @@ async function loadNavigation() {
 }
 
 // При загрузке страницы обновляем кнопки
-document.addEventListener('DOMContentLoaded', updateAuthButtons);
+document.addEventListener('DOMContentLoaded', updateNav);

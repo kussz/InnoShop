@@ -12,10 +12,11 @@ namespace InnoShop.ProdWebAPI.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var response = _httpClient.GetAsync("http://localhost:5036/Locality" + Request.Query["page"]);
-            response.Result.EnsureSuccessStatusCode();
-            var localities = response.Result.Content.ReadFromJsonAsync<List<Locality>>().Result;
-            return View(localities);
+            return View();
+        }
+        public IActionResult Details(int id)
+        {
+            return View(id);
         }
     }
 }

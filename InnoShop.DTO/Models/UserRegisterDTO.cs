@@ -19,12 +19,14 @@ namespace InnoShop.DTO.Models
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
+        [MinLength(6)]
         public string Password { get; set; }
 
         [Required]
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         [DataType(DataType.Password)]
         [Display(Name = "Подтвердить пароль")]
+        [MinLength(6)]
         public string PasswordConfirm { get; set; }
 
         [Required]

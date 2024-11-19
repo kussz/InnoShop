@@ -14,39 +14,10 @@
     </div>
     <button id="but" type="submit" class="btn btn-primary">Войти</button>
 </form>
-<div id="result"></div>
+<div id="result" class="text-danger"></div>
 @section Scripts
 {
-    <script>
-    document.getElementById('loginForm').addEventListener('submit',async function(e) {
-    e.preventDefault(); // Предотвращаем стандартное поведение формы
-
-    const username = document.getElementById('UserName').value;
-    const password = document.getElementById('Password').value;
-        try {
-            // Выполняем POST-запрос
-            const response = await fetch('http://localhost:5069/User/Login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    UserName: username,
-                    Password: password
-                })
-            })
-            if (!response.ok) {
-                throw new Error('Ошибка входа: ' + response.statusText);
-            }
-            const token = await response.text(); // Предполагаем, что сервер возвращает JSON с токеном
-            // Сохраняем токен в localStorage или sessionStorage
-            localStorage.setItem('jwtToken', token);
-            updateAuthButtons();
-            window.location.href = '/Account';
-        } catch (error) {
-                console.error('Ошибка:', error);
-                document.getElementById("result").textContent = 'Ошибка: ' + error.message; // Отображение ошибки
-        }
-});
+    <script src="~/js/Login.js" asp-append-version="true">
+    
     </script>
  }

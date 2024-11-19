@@ -17,7 +17,7 @@ namespace InnoShop.Infrastructure.Repositories
             //_cache.TryGetValue(id, out User user);
             //if (user == null)
             //{
-                var user = FindByCondition(u => u.Id == id).Include(p=>p.Locality).Include(p=>p.UserType).Single();
+                var user = FindByCondition(u => u.Id == id,true).Include(p=>p.Locality).Include(p=>p.UserType).Single();
                 _cache.Set(user.Id, user, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(294)));
                 Console.WriteLine("User извлечен из базы");
             //}

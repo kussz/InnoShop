@@ -9,6 +9,8 @@ namespace InnoShop.Contracts.Repository
 {
     public interface ILocalityRepository
     {
+        void Add(Locality locality);
+        void Edit(Locality locality);
         List<Locality> GetAllLocalities(bool trackChanges = false);
         Locality GetLocalityById(int id);
     }

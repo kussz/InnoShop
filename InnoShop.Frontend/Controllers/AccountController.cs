@@ -34,6 +34,11 @@ namespace InnoShop.Frontend.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public ActionResult Forbidden()
+        {
+            return View();
+        }
         [HttpPost]
         public ActionResult Login(UserLoginDTO userLogin)
         {

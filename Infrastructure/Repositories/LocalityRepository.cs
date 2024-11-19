@@ -12,16 +12,27 @@ namespace InnoShop.Infrastructure.Repositories
         public List<Locality> GetAllLocalities(bool trackChanges = false) => FindAll(trackChanges).ToList();
         public Locality GetLocalityById(int id)
         {
-            _cache.TryGetValue(id, out Locality locality);
+            _cache.TryGetValue("locality"+id, out Locality locality);
             if (locality == null)
             {
                 locality = FindByCondition(u => u.Id == id).Single();
-                _cache.Set(locality.Id, locality, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(294)));
+                _cache.Set("locality"+locality.Id, locality, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(294)));
                 Console.WriteLine("User извлечен из базы");
             }
             else
                 Console.WriteLine("User извлечен из кэша");
             return locality;
+        }
+        public void Edit(Locality locality)
+        {
+            Update(locality);
+            _cache.Set("locality" + locality.Id, locality, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(294)));
+            Save();
+        }
+        public void Add(Locality product)
+        {
+            Create(product);
+            Save();
         }
     }
 }

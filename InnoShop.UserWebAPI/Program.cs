@@ -37,7 +37,12 @@ namespace InnoShop.UserWebAPI
                         .AllowAnyMethod();                     // Разрешить любые методы (GET, POST, PUT, и т.д.)
                 });
             });
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                     .AddJwtBearer(options =>
                     {
                         options.RequireHttpsMetadata = false;

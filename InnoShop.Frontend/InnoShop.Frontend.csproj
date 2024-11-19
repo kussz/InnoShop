@@ -9,12 +9,18 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\css\main.css" />
+    <Content Remove="wwwroot\js\Login.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\Login.js" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="wwwroot\css\main.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="wwwroot\js\Login.js" />
   </ItemGroup>
 
   <ItemGroup>
