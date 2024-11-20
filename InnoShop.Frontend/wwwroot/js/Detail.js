@@ -6,7 +6,7 @@
         }
         const item = await response.json();
         func(item);
-        document.getElementById('loading').style.display = "none";
+        document.getElementById('loading').remove();
         document.getElementById('loadedItems').style.display = "block";
     } catch (error) {
         console.error('Ошибка при получении данных:', error);

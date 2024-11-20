@@ -32,6 +32,13 @@ namespace InnoShop.ProdWebAPI.Controllers
                 return NotFound();
         }
         [HttpPost]
+        public IActionResult Delete(LocalityEditDTO localityDTO)
+        {
+            var locality = _service.LocalityService.GetLocality(localityDTO.Id);
+            _service.LocalityService.Remove(locality);
+            return NoContent();
+        }
+        [HttpPost]
         public IActionResult Details([FromBody]LocalityEditDTO localityDTO)
         {
             var locality = new Locality() { Id = localityDTO.Id, Name = localityDTO.Name };

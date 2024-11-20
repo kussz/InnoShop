@@ -1,6 +1,6 @@
 ﻿document.getElementById('formButton').addEventListener('click', async function (e) {
     e.preventDefault(); // Предотвращаем стандартное поведение формы
-    await funch();
+    await funch(tableName);
 });
 
 async function funch() {
@@ -10,7 +10,7 @@ async function funch() {
     const name = document.getElementById('name').value;
     try {
         // Выполняем POST-запрос
-        const response = await fetch('http://localhost:5036/Locality/Details', {
+        const response = await fetch(`http://localhost:5036/${tableName}/Details`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ async function funch() {
         if (!response.ok) {
             throw new Error('Ошибка входа: ' + response.statusText);
         }
-            window.location.href = "/Locality"
+            window.location.href =`/${tableName}`
     } catch (error) {
 
     }

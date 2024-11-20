@@ -18,5 +18,10 @@ namespace InnoShop.ProdWebAPI.Controllers
         {
             return View(id);
         }
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            return View(id);
+        }
     }
 }

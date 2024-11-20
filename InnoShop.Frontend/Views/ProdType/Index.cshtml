@@ -4,39 +4,38 @@
     ViewData["Title"] = "Категории";
 }
 
-<h2>Категории товаров</h2>
+<h2>Категории</h2>
 
-<p>
-</p>
+<div id="loading" style="display: block;">Загрузка...</div>
+<div id="loadedItems" style="display: none;">
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                Id
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Название
             </th>
             <th></th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-
-            </tr>
-        }
+    <tbody id="itemsContainer">
+        
     </tbody>
 </table>
-
-@section Scripts
+</div>
+@section Prescripts
 {
     <script src="~/js/AdminRequired.js" asp-append-version="true"></script>
+}
+@section Scripts
+{
+    <script src="~/js/GetEnumerable.js" asp-append-version="true"></script>
+    <script>
+        async function func() { 
+        await fetchItems("http://localhost:5036/ProdType",'ProdType');
+        }
+        func();
+    </script>
 }

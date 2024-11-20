@@ -15,5 +15,8 @@ namespace InnoShop.Application
         {
             return Repository.ProdTypeRepository.GetProdTypeById(id);
         }
+        public void Add(ProdType product) => Repository.ProdTypeRepository.Add(product);
+        public void Edit(ProdType product) => Repository.ProdTypeRepository.Edit(product);
+        public void Remove(ProdType locality) => Repository.ProdTypeRepository.Remove(locality);
     }   
 }

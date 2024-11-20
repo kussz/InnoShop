@@ -202,3 +202,12 @@ a:hover
         color: white;
         text-decoration: none;
     }
+
+.blob.blob-add {
+    align-content: center;
+    text-align: center;
+    background-color: #131;    
+}
+.blob.blob-add:hover {
+    background-color: #242;
+}

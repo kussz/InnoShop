@@ -5,7 +5,7 @@
 
 <h1>Details</h1>
     <div>
-        <h4>Населённый пункт</h4>
+        <h4>Категория</h4>
         <hr />
 <div id="loading" style="display: block;">Загрузка...</div>
 <div id="loadedItems" style="display: none;">
@@ -13,7 +13,7 @@
             <dd class = "col-sm-10" id="nameContainer">
                 <form id="nameForm" method="post">
                     <div class="form-group">
-                        <label for="name" class="control-label">Населённый пункт:</label>
+                        <label for="name" class="control-label">Категория:</label>
                         <input type="text" id="name" name="name" class="form-control" value="N/A" required />
                     </div>
                 </form>
@@ -31,13 +31,13 @@
     
     <script src="~/js/Detail.js" asp-append-version="true"></script>
     <script>
-        tableName = 'Locality'
+        tableName='ProdType'
         async function func(item)
         {
             document.getElementById("name").setAttribute('value', item.name);
-            document.getElementById("deleteButton").setAttribute('href',`/Locality/Delete/${item.id}`)
+            document.getElementById("deleteButton").setAttribute('href',`/ProdType/Delete/${item.id}`)
         }
-        fetchItem("http://localhost:5036/Locality", @Model,func);
+        fetchItem("http://localhost:5036/ProdType", @Model,func);
     </script>
     <script src="~/js/Post.js" asp-append-version="true"></script>
 }

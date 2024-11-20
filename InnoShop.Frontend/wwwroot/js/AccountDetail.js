@@ -1,7 +1,6 @@
 ﻿getUser()
 async function getUser() {
     const token = localStorage.getItem("jwtToken");
-    if (token)
         try {
             const loadingElement = document.getElementById('loading');
             const profileElement = document.getElementById('userProfile');
@@ -23,6 +22,4 @@ async function getUser() {
         profileElement.style.display = 'block';
     }
         catch (error) { console.log(error) }
-    else
-        window.location.href = "/Account/Unauthorized"
 }

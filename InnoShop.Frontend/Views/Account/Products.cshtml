@@ -1,0 +1,38 @@
+﻿@model IEnumerable<InnoShop.Domain.Models.Product>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Продукты";
+    var page = Convert.ToInt32(Context.Request.Query["page"]);
+}
+
+<h2>Продукты</h2>
+
+<p>
+</p>
+<div id="loading" style="display: block;">Загрузка...</div>
+<div id="loadedItems" style="display: none;">
+<div class="blobparent" id="blobparent">
+    <a id="add" class="blob blob-add" href="@Url.Action("Create", "Product")">
+        <h1 class="blobtext">Добавить товар</h1>
+        <h1 class="blobtext"><i class="fas fa-plus"></i></h1>
+    </a>
+</div>
+</div>
+
+@section Prescripts
+{
+    <script src="~/js/Authorize.js" asp-append-version="true"></script>
+}
+@section Scripts
+{
+    <script src="~/js/GetUserProducts.js" asp-append-version="true"></script>
+    <script>
+        async function go()
+        {
+            user = await auth();
+            await fetchItems(`http://localhost:5036/Product/ForUser/${user.id}`, 'Product');
+        }
+        
+        go();
+    </script>
+}

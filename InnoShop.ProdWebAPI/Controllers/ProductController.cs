@@ -24,6 +24,19 @@ namespace InnoShop.ProdWebAPI.Controllers
             }
         }
         [HttpGet]
+        public IActionResult ForUser(int id)
+        {
+            try
+            {
+                var products = _service.ProductService.GetProductsByCondition(p => p.UserId == id).OrderBy(p=>p.CreationDate);
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
         public IActionResult Create()
         {
             ProductEditData data = new ProductEditData()
@@ -36,8 +49,12 @@ namespace InnoShop.ProdWebAPI.Controllers
         [HttpPost]
         public IActionResult Create([FromBody]Product product)
         {
-            _service.ProductService.Add(product);
-            return Ok(product);
+            try
+            {
+                _service.ProductService.Add(product);
+                return Ok(product);
+            }
+            catch(Exception ex) { return BadRequest(ex.Message); }
         }
         [HttpGet]
         public IActionResult GetProduct(int id)
@@ -59,8 +76,13 @@ namespace InnoShop.ProdWebAPI.Controllers
         [HttpPost]
         public IActionResult Edit([FromBody]Product product)
         {
-            _service.ProductService.Edit(product);
-            return Ok();
+            try
+            {
+                _service.ProductService.Edit(product);
+                return Ok();
+            }
+            catch (Exception ex) { return BadRequest(ex.Message); }
+
         }
     }
 }

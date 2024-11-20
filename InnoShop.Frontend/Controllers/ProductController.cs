@@ -50,14 +50,14 @@ namespace InnoShop.Frontend.Controllers
             var productString = JsonSerializer.Serialize(product);
             var content = new StringContent(productString, Encoding.UTF8, "application/json");
             var response = _httpClient.PostAsync($"http://localhost:5036/Product/Create", content);
-            Product createdProduct = response.Result.Content.ReadFromJsonAsync<Product>().Result;
             if (response.Result.IsSuccessStatusCode)
             {
+                Product createdProduct = response.Result.Content.ReadFromJsonAsync<Product>().Result;
                 return RedirectToAction("Detail", new { id = createdProduct.Id }); // Перенаправление после успешного редактирования
             }
             else
             {
-                return StatusCode((int)response.Result.StatusCode, "Ошибка при создании продукта");
+                return View();
             }
         }
 

@@ -1,0 +1,70 @@
+﻿@model int
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+<div id="loading" style="display: block;">Загрузка...</div>
+<div id="loadedItems" style="display: none;">
+    <h3>Вы уверены?</h3>
+    <div>
+        <h4>Locality</h4>
+        <hr />
+        <dl class="row">
+            <dd class = "col-sm-10 text-danger" id="name">
+                N/A
+            </dd>
+        </dl>
+    
+        <form asp-action="Delete" method="post">
+            <input id="deleteButton" type="submit" value="Удалить" class="btn btn-danger" /> |
+            <a id="cancelButton">Отмена</a>
+        </form>
+    </div>
+</div>
+@section Prescripts
+{
+    <script src="~/js/AdminRequired.js" asp-append-version="true"></script>
+}
+@section Scripts
+{
+    <script src="~/js/Detail.js" asp-append-version="true"></script>
+        
+    <script>
+        async function func(item) {
+            document.getElementById("name").textContent=`- ${item.name}`
+            document.getElementById("cancelButton").setAttribute('href', `/Locality/Details/${item.id}`)
+        }
+        fetchItem("http://localhost:5036/Locality", @Model, func);
+
+        document.getElementById('deleteButton').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            await funch();
+        });
+    async function funch() {
+    const url = window.location.href;
+    const urlParts = url.split('/'); // Разделяем URL по '/'
+    const id = urlParts[urlParts.length - 1]; // Предполагаем, что id — это последний элемент
+    try {
+        // Выполняем POST-запрос
+        const response = await fetch(`http://localhost:5036/Locality/Delete/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Id: id,
+                Name: name
+            })
+        })
+        if (!response.ok) {
+            throw new Error('Ошибка входа: ' + response.statusText);
+        }
+        window.location.href = "/Locality"
+    } catch (error) {
+
+    }
+}
+    </script>
+}

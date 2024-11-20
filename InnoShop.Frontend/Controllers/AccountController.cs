@@ -39,16 +39,10 @@ namespace InnoShop.Frontend.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public ActionResult Login(UserLoginDTO userLogin)
+        [HttpGet]
+        public ActionResult Products()
         {
-            var userString = JsonSerializer.Serialize(userLogin);
-            var content = new StringContent(userString, Encoding.UTF8, "application/json");
-            var response = _httpClient.PostAsync($"http://localhost:5069/User/Login", content).Result;
-            response.EnsureSuccessStatusCode();
-            //string resultString = response.Content.ReadAsStringAsync().Result;
-            //Response.Cookies.Append("AspNetCore.Identity.Application", resultString);
-            return RedirectToAction("Index", "Home");
+            return View();
         }
 
         public ActionResult Login()

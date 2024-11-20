@@ -13,10 +13,16 @@ namespace InnoShop.ProdWebAPI.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var response = _httpClient.GetAsync("http://localhost:5036/ProdType" + Request.Query["page"]);
-            response.Result.EnsureSuccessStatusCode();
-            var prodtypes = response.Result.Content.ReadFromJsonAsync<List<ProdType>>().Result;
-            return View(prodtypes);
+            return View();
+        }
+        public IActionResult Details(int id)
+        {
+            return View(id);
+        }
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            return View(id);
         }
     }
 }

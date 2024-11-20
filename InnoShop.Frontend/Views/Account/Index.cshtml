@@ -23,12 +23,30 @@
 
         <!-- Добавьте другие поля аналогично -->
     </dl>
+    <a class="btn btn-info" id="prodBtn">Продукты</a>
 </div>
+<br />
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+@section Prescripts
+{
+    <script src="~/js/Authorize.js" asp-append-version="true"></script>
+}
 @section Scripts
 {
-    <script src="~/js/AccountDetail.js" asp-append-version="true"></script>
+    <script>
+        async function go() { 
+        user = await auth();
+            document.getElementById('userName').innerText = user.userName || 'N/A';
+            document.getElementById('userTypeName').innerText = user.userType?.name || 'N/A';
+            document.getElementById('localityName').innerText = user.locality?.name || 'N/A';
+            document.getElementById('email').innerText = user.email || 'N/A';
+            document.getElementById('prodBtn').setAttribute('href',`Account/Products`);
+            document.getElementById('loading').remove();
+            document.getElementById('userProfile').style.display = 'block';
+        }
+        go();
+    </script>
 }

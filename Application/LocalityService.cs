@@ -17,5 +17,6 @@ namespace InnoShop.Application
         }
         public void Add(Locality product) => Repository.LocalityRepository.Add(product);
         public void Edit(Locality product) => Repository.LocalityRepository.Edit(product);
+        public void Remove(Locality locality)=>Repository.LocalityRepository.Remove(locality);
     }   
 }

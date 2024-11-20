@@ -74,7 +74,6 @@ public partial class InnoShopContext : IdentityDbContext<User,IdentityRole<int>,
 
             entity.Property(e => e.Cost).HasColumnType("decimal(7, 2)");
             entity.Property(e => e.CreationDate).HasColumnType("datetime");
-            entity.Property(e => e.Description).HasMaxLength(1000);
             entity.Property(e => e.Name).HasMaxLength(40);
 
             entity.HasOne(d => d.Buyer).WithMany(p => p.ProductsBuyer)
@@ -109,6 +108,7 @@ public partial class InnoShopContext : IdentityDbContext<User,IdentityRole<int>,
 
             entity.HasOne(d => d.Locality).WithMany(p => p.Users)
                 .HasForeignKey(d => d.LocalityId)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Users__LocalityI__056ECC6A");
 
             entity.HasOne(d => d.UserType).WithMany(p => p.Users)

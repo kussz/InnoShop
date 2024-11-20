@@ -11,5 +11,8 @@ namespace InnoShop.Contracts.Service
     {
         public List<ProdType> GetAllProdTypes(bool trackChanges = false);
         public ProdType GetProdType(int id);
+        public void Add(ProdType locality);
+        public void Edit(ProdType locality);
+        public void Remove(ProdType locality);
     }
 }

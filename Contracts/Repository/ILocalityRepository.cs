@@ -11,6 +11,7 @@ namespace InnoShop.Contracts.Repository
     {
         void Add(Locality locality);
         void Edit(Locality locality);
+        void Remove(Locality locality);
         List<Locality> GetAllLocalities(bool trackChanges = false);
         Locality GetLocalityById(int id);
     }

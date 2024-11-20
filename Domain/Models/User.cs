@@ -10,7 +10,8 @@ public partial class User : IdentityUser<int>
 
     public int UserTypeId { get; set; }
 
-    public int LocalityId { get; set; }
+
+    public int? LocalityId { get; set; }
 
     public virtual Locality Locality { get; set; } = null!;
     [JsonIgnore]

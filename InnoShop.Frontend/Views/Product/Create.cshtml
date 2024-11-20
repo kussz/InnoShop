@@ -37,17 +37,10 @@
                     <input class="form-check-input" asp-for="Public" /> @Html.DisplayNameFor(model => model.Public)
                 </label>
             </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.Users"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreationDate" class="control-label"></label>
-                <input asp-for="CreationDate" class="form-control" />
-                <span asp-validation-for="CreationDate" class="text-danger"></span>
-            </div>
             <input type="hidden" asp-for="Sold" value ="0"/> 
+            <input type="hidden" asp-for="UserId" id="user"/>
             <input type="hidden" asp-for="BuyerId" value="null"/>
+            <input type="hidden" asp-for="CreationDate" value="@DateTime.Now" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -58,4 +51,16 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+@section Scripts
+{
+    <script src="~/js/Authorize.js" asp-append-version="true"></script>
+    <script>
+        async function go() {
+            user = await auth();
+            document.getElementById('user').setAttribute('value', user.id);
+            
+        }
+        go();
+    </script>
+}
 

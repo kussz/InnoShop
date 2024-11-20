@@ -1,18 +1,18 @@
-﻿async function fetchItems(source) {
+﻿async function fetchItems(source,controller) {
     try {
         const response = await fetch(source); // Укажите правильный путь к вашему API
 if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-const items = await response.json();
-        return items;
+        const items = await response.json();
+        displayItems(items,controller)
 
     } catch (error) {
     console.error('Ошибка при получении данных:', error);
     }
 }
 
-function displayItems(items,source) {
+function displayItems(items,controller) {
     const container = document.getElementById('itemsContainer');
 container.innerHTML = ''; // Очищаем контейнер
 
@@ -20,7 +20,7 @@ container.innerHTML = ''; // Очищаем контейнер
         const row = document.createElement('tr');
         const a = document.createElement('a');
         a.setAttribute('class', 'blober');
-        a.setAttribute('href', `${source}/Details/${item.id}`);
+        a.setAttribute('href', `${controller}/Details/${item.id}`);
         const id = document.createElement('td');
         id.textContent = item.id;
         const name = document.createElement('td');

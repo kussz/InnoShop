@@ -34,5 +34,11 @@ namespace InnoShop.Infrastructure.Repositories
             Create(product);
             Save();
         }
+        public void Remove(Locality locality)
+        {
+            Delete(locality);
+            _cache.Remove("locality" + locality.Id);
+            Save();
+        }
     }
 }
