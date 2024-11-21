@@ -155,6 +155,7 @@ a:hover
 }
 .blobdesc {
     text-overflow: ellipsis;
+    text-align:justify;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 4;
@@ -210,4 +211,17 @@ a:hover
 }
 .blob.blob-add:hover {
     background-color: #242;
+}
+.detaildesc
+{
+    text-align:justify;
+    vertical-align:top;
+}
+.detailsitems
+{
+    height:10px;
+    vertical-align:top;
+}
+.lastdetailsitems {
+    vertical-align: top;
 }

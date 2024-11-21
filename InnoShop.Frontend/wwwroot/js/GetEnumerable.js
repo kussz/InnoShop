@@ -1,6 +1,11 @@
 ﻿async function fetchItems(source,controller) {
     try {
-        const response = await fetch(source); // Укажите правильный путь к вашему API
+        const response = await fetch(source, {
+            headers:
+            {
+                'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+                }
+        }); // Укажите правильный путь к вашему API
 if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -14,7 +19,6 @@ if (!response.ok) {
 
 function displayItems(items,controller) {
     const container = document.getElementById('itemsContainer');
-container.innerHTML = ''; // Очищаем контейнер
 
     items.forEach(item => {
         const row = document.createElement('tr');

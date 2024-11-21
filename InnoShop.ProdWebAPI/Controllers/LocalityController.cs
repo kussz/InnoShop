@@ -32,9 +32,9 @@ namespace InnoShop.ProdWebAPI.Controllers
                 return NotFound();
         }
         [HttpPost]
-        public IActionResult Delete(LocalityEditDTO localityDTO)
+        public IActionResult Delete(int id)
         {
-            var locality = _service.LocalityService.GetLocality(localityDTO.Id);
+            var locality = _service.LocalityService.GetLocality(id);
             _service.LocalityService.Remove(locality);
             return NoContent();
         }

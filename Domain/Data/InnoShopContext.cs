@@ -82,7 +82,7 @@ public partial class InnoShopContext : IdentityDbContext<User,IdentityRole<int>,
 
             entity.HasOne(d => d.ProdType).WithMany(p => p.Products)
                 .HasForeignKey(d => d.ProdTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK__Products__ProdTy__084B3915");
 
             entity.HasOne(d => d.User).WithMany(p => p.ProductsUser)

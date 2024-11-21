@@ -14,5 +14,7 @@ namespace InnoShop.Contracts.Service
         public List<User> GetAllUsers(bool trackChanges = false);
         public User GetUser(int id);
         public List<User> GetUsersByCondition(Expression<Func<User, bool>> expression, bool trackChanges = false);
+        User? Authorize(string? fullToken);
+        string? GetRole(string? fullToken);
     }
 }

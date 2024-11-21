@@ -12,6 +12,8 @@ namespace InnoShop.Contracts.Service
     {
         public void Add(Product product);
         public void Edit(Product product);
+        public void Remove(Product locality);
+
         public List<Product> GetAllProducts(bool trackChanges = false);
         public Product GetProduct(int id);
         public List<Product> GetCachedProducts();

@@ -1,0 +1,66 @@
+﻿@model int
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div id="loading" style="display: block;">Загрузка...</div>
+<div id="loadedItems" style="display: none;">
+    <h3>Вы уверены?</h3>
+    <div>
+        <h4>Продукт</h4>
+        <hr />
+        <dl class="row">
+            <dd class="col-sm-10 text-danger" id="name">
+                N/A
+            </dd>
+        </dl>
+
+        <button id="deleteButton" class="btn btn-danger">Удалить</button> |
+        <a id="cancelButton">Отмена</a>
+    </div>
+</div>
+@section Prescripts
+{
+    <script src="~/js/Authorize.js" asp-append-version="true"></script>
+}
+@section Scripts
+{
+    <script src="~/js/Detail.js" asp-append-version="true"></script>
+
+    <script>
+        async function func(item) {
+            user = await auth()
+            if (user.id != item.userId && getRoleFromToken() != 'Admin')
+                window.location.href = '../../Account/Forbidden';
+            document.getElementById("name").textContent = `- ${item.name}`
+            document.getElementById("cancelButton").setAttribute('href', `/Product/Detail/${item.id}`)
+        }
+        fetchItem("http://localhost:5036/Product", @Model, func);
+
+        document.getElementById('deleteButton').addEventListener('click', async function () {
+            await funch();
+        });
+        async function funch() {
+            const url = window.location.href;
+            const urlParts = url.split('/'); // Разделяем URL по '/'
+            const id = urlParts[urlParts.length - 1]; // Предполагаем, что id — это последний элемент
+            try {
+                // Выполняем POST-запрос
+                const response = await fetch(`http://localhost:5036/Product/Delete/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+                    }
+                })
+                if (!response.ok) {
+                    throw new Error('Ошибка входа: ' + response.statusText);
+                }
+                window.location.href = "/Product"
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    </script>
+}

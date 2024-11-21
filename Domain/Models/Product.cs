@@ -16,7 +16,7 @@ public partial class Product
 
     public decimal Cost { get; set; }
 
-    public int ProdTypeId { get; set; }
+    public int? ProdTypeId { get; set; }
     [DisplayName("Публичный")]
     public bool Public { get; set; }
 
@@ -32,7 +32,7 @@ public partial class Product
     [DisplayName("Теги")]
     public virtual ICollection<ProdAttrib> ProdAttribs { get; set; } = new List<ProdAttrib>();
     [DisplayName("Категория")]
-    public virtual ProdType ProdType { get; set; } = null!;
+    public virtual ProdType? ProdType { get; set; } = null!;
     [DisplayName("Продавец")]
     public virtual User User { get; set; } = null!;
 }

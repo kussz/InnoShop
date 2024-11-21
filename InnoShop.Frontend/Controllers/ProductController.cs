@@ -16,16 +16,13 @@ namespace InnoShop.Frontend.Controllers
         // GET: ProductController
         public ActionResult Index()
         {
-            var response = _httpClient.GetAsync("http://localhost:5036/Product?page=" + Request.Query["page"]);
-            response.Result.EnsureSuccessStatusCode();
-            var products = response.Result.Content.ReadFromJsonAsync<List<Product>>().Result;
-            return View(products);
+            return View();
         }
 
         // GET: ProductController/Details/5
         public ActionResult Detail(int id)
         {
-            var response = _httpClient.GetAsync($"http://localhost:5036/Product/GetProduct/{id}");
+            var response = _httpClient.GetAsync($"http://localhost:5036/Product/Details/{id}");
             response.Result.EnsureSuccessStatusCode();
             var product = response.Result.Content.ReadFromJsonAsync<Product>().Result;
             return View(product);
@@ -92,9 +89,10 @@ namespace InnoShop.Frontend.Controllers
 }
 
         // GET: ProductController/Delete/5
-        public ActionResult Delete(int id)
+        [HttpGet]
+        public IActionResult Delete(int id)
         {
-            return View();
+            return View(id);
         }
 
         // POST: ProductController/Delete/5

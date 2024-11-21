@@ -102,33 +102,13 @@ namespace InnoShop.UserWebAPI.Controllers
         //[Authorize(Roles ="User, Admin")]
         public IActionResult GetProfile()
         {
-            var user = Authorize(Request.Headers["Authorization"]);
+            var user = _service.UserService.Authorize(Request.Headers["Authorization"]);
             // Получаем токен из заголовка Authorization
             if(user!=null)
             {
                 return Ok(user);
             }
                 return Unauthorized();
-        }
-
-        private User? Authorize(string? fullToken)
-        {
-            var token = fullToken.ToString().Replace("Bearer ", "");
-            if (token != "null")
-            {
-                // Проверяем, что токен не пустой
-                if (string.IsNullOrEmpty(token))
-                {
-                    return null;
-                }
-                var handler = new JwtSecurityTokenHandler();
-                var jwtToken = handler.ReadToken(token) as JwtSecurityToken;
-
-                var userId = int.Parse(jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Id")?.Value);
-                return _service.UserService.GetUser(userId);
-            }
-            else
-                return null;
         }
         public async Task<IActionResult> Logout()
         {

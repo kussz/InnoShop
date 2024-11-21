@@ -7,24 +7,30 @@
 
 <h2>Продукты</h2>
 
-<p>
-</p>
-<div class="pagination">
 
-    <div class="page-buttons">
-        <a class="page-button" asp-controller="Product" asp-action="Index" asp-route-page=1>Первая</a>
-            <a class="page-button" asp-controller="Product" asp-action="Index" asp-route-page=@(page - 1) style=@(page > 1?null:"visibility:hidden")> &lt;&lt;</a>
-            <a class="page-button" asp-controller="Product" asp-action="Index" asp-route-page=@(page + 1) style=@(Model.Count()!=0?null:"visibility:hidden"))>
-            &gt;&gt;</a>
-    </div>
+<div id="loading" style="display: block;">Загрузка...</div>
+<div id="loadedItems" style="display: none;">
+<div class="blobparent" id="blobparent">
+
 </div>
-<div class="blobparent">
-        @foreach (var item in Model)
-        {
-        <a class="blob" href="@Url.Action("Detail", "Product", new { id = item.Id })">
-            <h1 class="blobtext">@Html.DisplayFor(modelItem => item.Name)</h1>
-            <h5 class="blobdesc">@Html.DisplayFor(model=>item.Description)</h5>
-        </a>
+</div>
+@section Scripts
+{
+    <script src="~/js/GetUserProducts.js" asp-append-version="true"></script>
+    <script>
+        var page = 1;
+        window.addEventListener('scroll', async function () {
+            // Проверяем, достигли ли мы конца страницы
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                page++;
+                await go(page);
+            };
+        });
+        async function go(paged) {
+            await fetchItems(`http://localhost:5036/Product?page=${paged}`, 'Product');
+
         }
-</div>
+        go(1);
+    </script>
+}
 

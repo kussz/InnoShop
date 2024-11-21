@@ -24,5 +24,10 @@ namespace InnoShop.ProdWebAPI.Controllers
         {
             return View(id);
         }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }

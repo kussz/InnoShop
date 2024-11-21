@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.IdentityModel.Tokens;
 using InnoShop.DTO.Models;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace InnoShop.ProdWebAPI.Controllers
 {
@@ -15,7 +16,7 @@ namespace InnoShop.ProdWebAPI.Controllers
         {
             try
             {
-                var products = _service.ProductService.GetPage(15, page);
+                var products = _service.ProductService.GetPage(30, page);
                 return Ok(products);
             }
             catch (Exception ex)
@@ -24,11 +25,12 @@ namespace InnoShop.ProdWebAPI.Controllers
             }
         }
         [HttpGet]
-        public IActionResult ForUser(int id)
+        public IActionResult ForUser()
         {
+            var user = _service.UserService.Authorize(Request.Headers["Authorization"]);
             try
             {
-                var products = _service.ProductService.GetProductsByCondition(p => p.UserId == id).OrderBy(p=>p.CreationDate);
+                var products = _service.ProductService.GetProductsByCondition(p => p.UserId == user.Id).OrderByDescending(p=>p.CreationDate);
                 return Ok(products);
             }
             catch (Exception ex)
@@ -36,6 +38,7 @@ namespace InnoShop.ProdWebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
         [HttpGet]
         public IActionResult Create()
         {
@@ -49,15 +52,21 @@ namespace InnoShop.ProdWebAPI.Controllers
         [HttpPost]
         public IActionResult Create([FromBody]Product product)
         {
+            var user = _service.UserService.Authorize(Request.Headers["Authorization"]);
             try
             {
-                _service.ProductService.Add(product);
-                return Ok(product);
+                if (product.UserId == user.Id)
+                {
+                    _service.ProductService.Add(product);
+                    return Ok(product);
+                }
+                else
+                    return BadRequest();
             }
             catch(Exception ex) { return BadRequest(ex.Message); }
         }
         [HttpGet]
-        public IActionResult GetProduct(int id)
+        public IActionResult Details(int id)
         {
             Product product = _service.ProductService.GetProduct(id);
             return Ok(product);
@@ -74,15 +83,40 @@ namespace InnoShop.ProdWebAPI.Controllers
             return Ok(data);
         }
         [HttpPost]
-        public IActionResult Edit([FromBody]Product product)
+        public IActionResult Edit(Product product)
         {
+            var user = _service.UserService.Authorize(Request.Headers["Authorization"]);
+            var role = _service.UserService.GetRole(Request.Headers["Authorization"]);
             try
             {
-                _service.ProductService.Edit(product);
-                return Ok();
+                if (user.Id == product.UserId || role == "Admin")
+                {
+                    _service.ProductService.Edit(product);
+                    return Ok(product);
+                }
+                else
+                    return BadRequest();
             }
             catch (Exception ex) { return BadRequest(ex.Message); }
 
+        }
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var user = _service.UserService.Authorize(Request.Headers["Authorization"]);
+            var role = _service.UserService.GetRole(Request.Headers["Authorization"]);
+            var product = _service.ProductService.GetProduct(id);
+            try
+            {
+                if (user.Id == product.UserId || role == "Admin")
+                {
+                    _service.ProductService.Remove(product);
+                    return NoContent();
+                }
+                else
+                    return BadRequest();
+            }
+            catch (Exception ex) { return BadRequest(ex.Message); }
         }
     }
 }

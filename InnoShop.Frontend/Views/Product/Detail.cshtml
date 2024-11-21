@@ -4,89 +4,85 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Detail";
 }
-
-<h1>Detail</h1>
-
 <div>
-    <h4>Product</h4>
+    <h1>@Html.DisplayFor(model => model.Name)</h1>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cost)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cost)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Public)
-        </dt>
-        <dd class = "col-sm-10">
-            @if (Model.Public)
-            {
-                <text>Да</text>
-            }
-            else
-            {
-                <text>Нет</text>
-            }
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreationDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreationDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProdType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProdType.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.UserName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Sold)
-        </dt>
-        <dd class="col-sm-10">
-            @if(Model.Sold)
-            {
-                <text>Да</text>
-            }
-            else
-            {
-                <text>Нет</text>
-            }
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Buyer)
-        </dt>
-        <dd class="col-sm-10">
-            @if (Model.Buyer == null)
-            {
-                <i>Отсутствует</i>
-            }
-            else
-                @Html.DisplayFor(model => model.Buyer.UserName)
-        </dd>
-    </dl>
+    <table>
+        <tr>
+            <td width="70%" rowspan="8" class="detaildesc">@Html.Raw(Model.Description.Replace("\n", "<br>"))</td>
+            <td width="6%" rowspan="8"></td>
+            <td width="12%" class="detailsitems">Пользователь: </td>
+            <td width="16%" id="user" data-value=@Model.UserId>@Html.DisplayFor(model => model.User.UserName)</td>
+        </tr>
+        <tr>
+            <td class="detailsitems">Стоимость: </td>
+            <td>@Html.DisplayFor(model => model.Cost) р.</td>
+        </tr>
+        <tr>
+            <td class="detailsitems">Категория: </td>
+            <td>@Html.DisplayFor(model => model.ProdType.Name)</td>
+        </tr>
+        <tr>
+            <td class="detailsitems">Дата создания: </td>
+            <td>@Html.DisplayFor(model => model.CreationDate)</td>
+        </tr>
+        <tr>
+            <td class="detailsitems">Публичный: </td>
+            <td>
+                @if (Model.Public)
+                {
+                    <text>Да</text>
+                }
+                else
+                {
+                    <text>Нет</text>
+                }
+            </td>
+        </tr>
+        <tr>
+            <td class="detailsitems">Куплен: </td>
+            <td>
+                @if (Model.Sold)
+                {
+                    <text>Да</text>
+                }
+                else
+                {
+                    <text>Нет</text>
+                }
+            </td>
+        </tr>
+        <tr>
+            <td class="lastdetailsitems">Покупатель: </td>
+            <td class="lastdetailsitems">
+                @if (Model.Buyer == null)
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                    @Html.DisplayFor(model => model.Buyer.UserName)
+
+            </td>
+        </tr>
+    </table>
+    
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <span id="editBtn" style="display:none"><a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Изменить</a> | <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger">Удалить</a> | </span>
+    <a asp-action="Index" class="btn btn-info">К списку</a>
 </div>
+@section Scripts
+{
+    <script src="~/js/Authorize.js" asp-append-version="true"></script>
+    <script>
+        async function go() {
+            if (localStorage.getItem('jwtToken') != null)
+            {
+                user = await auth();
+                if (document.getElementById('user').getAttribute('data-value') == user.id || getRoleFromToken() == "Admin")
+                    document.getElementById('editBtn').style.display = 'inline-block';
+            }
+        }
+        go();
+    </script>
+}

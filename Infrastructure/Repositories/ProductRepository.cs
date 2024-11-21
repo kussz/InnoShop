@@ -52,9 +52,16 @@ namespace InnoShop.Infrastructure.Repositories
             else
                 return new List<Product>();
         }
+        public void Remove(Product product)
+        {
+            Delete(product);
+            _cache.Remove("Product" + product.Id);
+            Save();
+        }
         public List<Product> GetPage(int quantity, int page)
         {
-            var products = Paginate(quantity, page).Include(p => p.ProdType).ToList();
+            var prods= Context.Set<Product>().OrderByDescending(p=>p.CreationDate).Where(p=>p.Public).Skip(quantity * (page - 1)).Take(quantity);
+            var products = prods.Include(p => p.ProdType).ToList();
             Console.WriteLine("From db");
             return products;
         }

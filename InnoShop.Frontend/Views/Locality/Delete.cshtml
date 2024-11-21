@@ -4,12 +4,11 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
 <div id="loading" style="display: block;">Загрузка...</div>
 <div id="loadedItems" style="display: none;">
     <h3>Вы уверены?</h3>
     <div>
-        <h4>Locality</h4>
+        <h4>Населённый пункт</h4>
         <hr />
         <dl class="row">
             <dd class = "col-sm-10 text-danger" id="name">
@@ -17,10 +16,8 @@
             </dd>
         </dl>
     
-        <form asp-action="Delete" method="post">
-            <input id="deleteButton" type="submit" value="Удалить" class="btn btn-danger" /> |
+            <button id="deleteButton" class="btn btn-danger">Удалить</button> |
             <a id="cancelButton">Отмена</a>
-        </form>
     </div>
 </div>
 @section Prescripts
@@ -38,8 +35,7 @@
         }
         fetchItem("http://localhost:5036/Locality", @Model, func);
 
-        document.getElementById('deleteButton').addEventListener('submit', async function (e) {
-            e.preventDefault();
+        document.getElementById('deleteButton').addEventListener('click', async function () {
             await funch();
         });
     async function funch() {
@@ -52,11 +48,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                Id: id,
-                Name: name
-            })
+            }
         })
         if (!response.ok) {
             throw new Error('Ошибка входа: ' + response.statusText);

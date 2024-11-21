@@ -42,5 +42,12 @@ namespace InnoShop.ProdWebAPI.Controllers
         {
             return Ok(new SelectList(_service.ProdTypeService.GetAllProdTypes(), "Id", "Name"));
         }
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var prodType = _service.ProdTypeService.GetProdType(id);
+            _service.ProdTypeService.Remove(prodType);
+            return NoContent();
+        }
     }
 }

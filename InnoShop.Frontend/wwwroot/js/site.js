@@ -11,7 +11,8 @@
     // Предполагаем, что имя пользователя хранится в свойстве `sub`
     return payload.sub;
 }
-function getRoleFromToken(token) {
+function getRoleFromToken() {
+    token = localStorage.getItem('jwtToken');
     // Разделяем токен на части
     const tokenParts = token.split('.');
     if (tokenParts.length !== 3) {
@@ -32,9 +33,12 @@ async function updateNav() {
     //await loadNavigation();
     if (token != null)
     {
-        appendButtonWithIcon("fas fa-user",getUsernameFromToken(token), redirectToProfile)
+        classes = "fas fa-user";
+        if (getRoleFromToken() == "Admin")
+            classes += "-cog";
+        appendButtonWithIcon(classes,getUsernameFromToken(token), redirectToProfile)
         appendButton('Выйти', logout)
-        if (getRoleFromToken(token) == "Admin")
+        if (getRoleFromToken() == "Admin")
             document.getElementById("adminNav").style.display = "block";
     } else {
         // Если токена нет, показываем кнопки "Зарегистрироваться" и "Войти"

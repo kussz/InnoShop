@@ -2,6 +2,7 @@ using InnoShop.Contracts.Service;
 using InnoShop.Domain.Data;
 using InnoShop.Domain.Models;
 using InnoShop.Frontend.Data;
+using InnoShop.Frontend.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -60,6 +61,7 @@ namespace InnoShop.Frontend
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseStaticFiles();
 
             // Configure the HTTP request pipeline.

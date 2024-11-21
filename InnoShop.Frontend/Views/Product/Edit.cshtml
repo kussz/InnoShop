@@ -1,8 +1,8 @@
 ﻿@model InnoShop.Domain.Models.Product
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Edit</h1>
@@ -11,9 +11,8 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit" method="post">
+        <form id="editForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -32,27 +31,19 @@
             <div class="form-group">
                 <label asp-for="ProdTypeId" class="control-label"></label>
                 <select asp-for="ProdTypeId" class="form-control" asp-items="ViewBag.Categories"></select>
-                <span asp-validation-for="ProdTypeId" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Public" /> @Html.DisplayNameFor(model => model.Public)
                 </label>
             </div>
+            <input type="hidden" asp-for="Sold"/>
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="UserId" id="user" />
+            <input type="hidden" asp-for="BuyerId"/>
+            <input type="hidden" asp-for="CreationDate"/>
             <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.Users"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreationDate" class="control-label"></label>
-                <input asp-for="CreationDate" class="form-control" />
-                <span asp-validation-for="CreationDate" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Sold" value="0" />
-            <input type="hidden" asp-for="BuyerId" value="null" />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <button type="button" class="btn btn-primary" id="submitBtn">Edit</button>
             </div>
         </form>
     </div>
@@ -62,3 +53,42 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section Scripts
+{
+    <script src="~/js/Authorize.js" asp-append-version="true"></script>
+    <script>
+                async function go() {
+            const user = await auth();
+            if (document.getElementById('user').getAttribute('value') != user.id && getRoleFromToken(localStorage.getItem('jwtToken')) != "Admin") {
+                window.location.href = "Account/Forbidden";
+            }
+        }
+
+        document.getElementById('submitBtn').addEventListener('click', async () => {
+            const form = document.getElementById('editForm');
+            const formData = new FormData(form);
+
+            const response = await fetch('http://localhost:5036/Product/Edit', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwtToken'), // Добавляем заголовок
+                    'Accept': 'application/json' // Другие заголовки, если нужно
+                },
+                body: formData // Отправляем данные формы
+            });
+
+            if (response.ok) {
+                // Обработка успешного ответа
+                const result = await response.json();
+                console.log('Success:', result);
+                // Например, перенаправление на другую страницу
+                window.location.href = `/Product/Detail/${@Model.Id}`; // Замените на ваш URL
+            } else {
+                // Обработка ошибок
+                console.error('Error:', response.statusText);
+            }
+        });
+
+        go();
+    </script>
+}

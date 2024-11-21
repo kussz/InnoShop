@@ -30,5 +30,6 @@ namespace InnoShop.Application
         }
         public void Add(Product product) => Repository.ProductRepository.Add(product);
         public void Edit(Product product) => Repository.ProductRepository.Edit(product);
+        public void Remove(Product product) => Repository.ProductRepository.Remove(product);
     }   
 }
