@@ -1,6 +1,6 @@
 ﻿document.getElementById('formButton').addEventListener('click', async function (e) {
     e.preventDefault(); // Предотвращаем стандартное поведение формы
-    await funch(tableName);
+    await funch(tableName,methods);
 });
 function isNumber(value) {
     return !isNaN(value) && typeof value === 'number';
@@ -14,7 +14,7 @@ async function funch() {
     const name = document.getElementById('name').value;
     try {
         // Выполняем POST-запрос
-        const response = await fetch(`http://localhost:5036/${tableName}/Details`, {
+        const response = await fetch(`http://localhost:5036/${tableName}/${methods}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

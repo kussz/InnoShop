@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" method="post">
+        <form id="createForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -30,19 +30,19 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProdTypeId" class="control-label"></label>
-                <select asp-for="ProdTypeId" class ="form-control" asp-items="ViewBag.Categories"></select>
+                <select asp-for="ProdTypeId" class="form-control" asp-items="ViewBag.Categories"></select>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Public" /> @Html.DisplayNameFor(model => model.Public)
                 </label>
             </div>
-            <input type="hidden" asp-for="Sold" value ="0"/> 
-            <input type="hidden" asp-for="UserId" id="user"/>
-            <input type="hidden" asp-for="BuyerId" value="null"/>
+            <input type="hidden" asp-for="Sold" value="0" />
+            <input type="hidden" asp-for="UserId" id="user" />
+            <input type="hidden" asp-for="BuyerId" value="null" />
             <input type="hidden" asp-for="CreationDate" value="@DateTime.Now" />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <button type="button" class="btn btn-primary" id="submitBtn">Create</button>
             </div>
         </form>
     </div>
@@ -51,16 +51,44 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
 @section Scripts
 {
     <script src="~/js/Authorize.js" asp-append-version="true"></script>
     <script>
         async function go() {
-            user = await auth();
+            const user = await auth();
             document.getElementById('user').setAttribute('value', user.id);
-            
         }
+
+        document.getElementById('submitBtn').addEventListener('click', async () => {
+            const form = document.getElementById('createForm');
+            const formData = new FormData(form);
+
+            // Получаем токен авторизации
+            const token = localStorage.getItem('jwtToken'); // Замените на ваш способ получения токена
+
+            const response = await fetch('http://localhost:5036/Product/Create', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Добавляем заголовок авторизации
+                    'Accept': 'application/json' // Другие заголовки, если нужно
+                },
+                body: formData // Отправляем данные формы
+            });
+
+            if (response.ok) {
+                // Обработка успешного ответа
+                const result = await response.json();
+                console.log('Success:', result);
+                // Перенаправление на другую страницу или отображение сообщения
+                window.location.href = `/Product/Detail/${result.id}`; // Замените на ваш URL
+            } else {
+                // Обработка ошибок
+                console.error('Error:', response.statusText);
+            }
+        });
+
         go();
     </script>
 }
-

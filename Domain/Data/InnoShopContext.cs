@@ -46,7 +46,7 @@ public partial class InnoShopContext : IdentityDbContext<User,IdentityRole<int>,
         modelBuilder.Entity<Locality>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Localiti__3214EC07601BC24A");
-
+            entity.HasIndex(e => e.Name, "UQ__Localiti__5E55825B2B853D4G").IsUnique();
             entity.Property(e => e.Name).HasMaxLength(40);
         });
 
@@ -64,7 +64,7 @@ public partial class InnoShopContext : IdentityDbContext<User,IdentityRole<int>,
         modelBuilder.Entity<ProdType>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__ProdType__3214EC070A05AE8A");
-
+            entity.HasIndex(e => e.Name, "UQ__ProdType__5E55825B2B853D4K").IsUnique();
             entity.Property(e => e.Name).HasMaxLength(40);
         });
 

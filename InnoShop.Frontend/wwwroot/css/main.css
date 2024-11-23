@@ -43,13 +43,20 @@ a:hover
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 100px;
-    padding-right: 100px;
     padding-top: 75px;
+    padding-left:75px;
+    padding-right:75px;
     background: #121212;
     color: white;
     border: 1px black solid;
     min-height: 100vh;
+    
+}
+.body-navcontent {
+    padding:75px 0px 0px 0px;
+    float: right;
+    text-align: center;
+    width: 80%;
 }
 
 
@@ -135,7 +142,8 @@ a:hover
     border-radius: 10px;
     flex: 200px;
     flex: 1;
-    max-width: 400px;
+    max-width: 350px;
+    min-width: 350px;
     flex-basis: 300px;
     height: 170px;
     margin: 20px;
@@ -224,4 +232,14 @@ a:hover
 }
 .lastdetailsitems {
     vertical-align: top;
+}
+aside {
+    position: fixed;
+    float: left;
+    background: #181818;
+    width: 20%;
+    padding: 2.5%;
+    height: 100vh;
+    color: #fff;
+    border-right: 5px solid #4d4d4d;
 }

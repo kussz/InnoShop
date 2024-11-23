@@ -10,7 +10,7 @@ namespace InnoShop.ProdWebAPI.Controllers
 {
     public class ProductController(IServiceManager service) : Controller
     {
-        IServiceManager _service = service;
+        readonly IServiceManager _service = service;
         [HttpGet]
         public IActionResult Index(int page = 1)
         {
@@ -27,10 +27,10 @@ namespace InnoShop.ProdWebAPI.Controllers
         [HttpGet]
         public IActionResult ForUser()
         {
-            var user = _service.UserService.Authorize(Request.Headers["Authorization"]);
+            var user = _service.UserService.Authorize(Request.Headers.Authorization);
             try
             {
-                var products = _service.ProductService.GetProductsByCondition(p => p.UserId == user.Id).OrderByDescending(p=>p.CreationDate);
+                var products = _service.ProductService.GetProductsByCondition(p => p.UserId == user.Id).OrderByDescending(p=>p.CreationDate).ToList();
                 return Ok(products);
             }
             catch (Exception ex)
@@ -42,7 +42,7 @@ namespace InnoShop.ProdWebAPI.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ProductEditData data = new ProductEditData()
+            ProductEditData data = new()
             {
                 Categories = _service.ProdTypeService.GetAllProdTypes().Select(p => new SelectListItem(p.Name, p.Id.ToString())),
                 Users = _service.UserService.GetAllUsers().Select(p => new SelectListItem(p.UserName, p.Id.ToString()))
@@ -50,9 +50,9 @@ namespace InnoShop.ProdWebAPI.Controllers
             return Ok(data);
         }
         [HttpPost]
-        public IActionResult Create([FromBody]Product product)
+        public IActionResult Create(Product product)
         {
-            var user = _service.UserService.Authorize(Request.Headers["Authorization"]);
+            var user = _service.UserService.Authorize(Request.Headers.Authorization);
             try
             {
                 if (product.UserId == user.Id)
@@ -74,7 +74,7 @@ namespace InnoShop.ProdWebAPI.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            ProductEditData data = new ProductEditData()
+            ProductEditData data = new()
             {
                 Product = _service.ProductService.GetProduct(id),
                 Categories = new SelectList(_service.ProdTypeService.GetAllProdTypes(),"Id","Name"),
@@ -85,10 +85,8 @@ namespace InnoShop.ProdWebAPI.Controllers
         [HttpPost]
         public IActionResult Edit(Product product)
         {
-            var user = _service.UserService.Authorize(Request.Headers["Authorization"]);
-            var role = _service.UserService.GetRole(Request.Headers["Authorization"]);
-            try
-            {
+                var role = _service.UserService.GetRole(Request.Headers.Authorization);
+                var user = _service.UserService.Authorize(Request.Headers.Authorization);
                 if (user.Id == product.UserId || role == "Admin")
                 {
                     _service.ProductService.Edit(product);
@@ -96,15 +94,17 @@ namespace InnoShop.ProdWebAPI.Controllers
                 }
                 else
                     return BadRequest();
-            }
-            catch (Exception ex) { return BadRequest(ex.Message); }
+            //try
+            //{
+            //}
+            //catch (Exception ex) { return BadRequest(ex.Message); }
 
         }
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var user = _service.UserService.Authorize(Request.Headers["Authorization"]);
-            var role = _service.UserService.GetRole(Request.Headers["Authorization"]);
+            var user = _service.UserService.Authorize(Request.Headers.Authorization);
+            var role = _service.UserService.GetRole(Request.Headers.Authorization);
             var product = _service.ProductService.GetProduct(id);
             try
             {

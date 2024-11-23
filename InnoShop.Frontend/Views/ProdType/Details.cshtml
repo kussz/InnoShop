@@ -31,7 +31,8 @@
     
     <script src="~/js/Detail.js" asp-append-version="true"></script>
     <script>
-        tableName='ProdType'
+        tableName = 'ProdType';
+        methods = "Edit";
         async function func(item)
         {
             document.getElementById("name").setAttribute('value', item.name);

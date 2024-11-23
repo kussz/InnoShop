@@ -9,7 +9,7 @@ namespace InnoShop.Infrastructure.Repositories
     {
         public ProdTypeRepository(InnoShopContext context,IMemoryCache cache) : base(context, cache)
         { }
-        public List<ProdType> GetAllProdTypes(bool trackChanges = false) => FindAll(trackChanges).ToList();
+        public List<ProdType> GetAllProdTypes(bool trackChanges = false) => FindAll(trackChanges).OrderBy(p => p.Id).ToList();
         public ProdType GetProdTypeById(int id)
         {
             _cache.TryGetValue("prodType"+id, out ProdType prodType);

@@ -1,10 +1,13 @@
-﻿@model IEnumerable<InnoShop.Domain.Models.Product>
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Продукты";
     var page = Convert.ToInt32(Context.Request.Query["page"]);
 }
+@section PageNav
+{
+<partial name ="_ProductNavPartial" />
 
+}
 <h2>Продукты</h2>
 
 
@@ -31,6 +34,39 @@
 
         }
         go(1);
+        document.getElementById('filterForm').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Отменяем стандартное поведение формы
+            page = 1;
+    const formData = new FormData(this); // Собираем данные формы
+            document.getElementById("blobparent").innerText = "";
+    // Проверка на пустые поля (если нужно)
+    if (!formData.get('CategoryId') && !formData.get('MinPrice') && !formData.get('MaxPrice')) {
+        alert('Пожалуйста, заполните хотя бы одно поле для фильтрации.');
+        return; // Прерываем выполнение, если все поля пустые
+    }
+
+    try {
+                const response = await fetch(`http://localhost:5036/Product?page=${paged}`, {
+            method: 'POST', // Или 'GET' в зависимости от вашего API
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(Object.fromEntries(formData)), // Преобразуем FormData в JSON
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const items = await response.json();
+        displayItems(items); // Обработка полученных данных
+
+    } catch (error) {
+        console.error('Ошибка при отправке данных:', error);
+    }
+});
     </script>
 }
 

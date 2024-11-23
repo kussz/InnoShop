@@ -32,10 +32,17 @@ namespace InnoShop.ProdWebAPI.Controllers
                 return NotFound();
         }
         [HttpPost]
-        public IActionResult Details([FromBody] LocalityEditDTO localityDTO)
+        public IActionResult Edit([FromBody] LocalityEditDTO localityDTO)
         {
             var locality = new ProdType() { Id = localityDTO.Id, Name = localityDTO.Name };
             _service.ProdTypeService.Edit(locality);
+            return Ok(locality);
+        }
+        [HttpPost]
+        public IActionResult Create([FromBody] LocalityEditDTO localityDTO)
+        {
+            var locality = new ProdType() { Id = localityDTO.Id, Name = localityDTO.Name };
+            _service.ProdTypeService.Add(locality);
             return Ok(locality);
         }
         public IActionResult ForSelect()

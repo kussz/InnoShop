@@ -1,4 +1,7 @@
-﻿@* @inject InnoShop.Contracts.Service.IUserService UserService *@
+﻿@{
+    bool isSectionDefined = IsSectionDefined("PageNav");
+    string classe = isSectionDefined ? "body-content body-navcontent" : "body-content";
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,7 +39,8 @@
             </div>
         </div>
     </nav>
-    <div class="body-content">
+    @RenderSection("PageNav",false)
+    <div class="@classe">
         @RenderBody()
         <hr />
         <footer>
