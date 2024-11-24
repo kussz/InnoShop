@@ -31,7 +31,7 @@ namespace InnoShop.Infrastructure.Repositories
             _cache.TryGetValue(id, out Product product);
             if (product == null)
             {
-                product = FindByCondition(u => u.Id == id).Include(p=>p.ProdType).Include(p=>p.User).Include(p=>p.Buyer).Single();
+                product = FindByCondition(u => u.Id == id,true).Include(p=>p.ProdType).Include(p=>p.User).Include(p=>p.Buyer).Single();
                 _cache.Set("Product"+product.Id, product, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(294)));
                 Console.WriteLine("Product извлечен из базы");
             }

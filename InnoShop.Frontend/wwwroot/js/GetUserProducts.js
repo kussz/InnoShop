@@ -26,7 +26,7 @@ function displayItems(items, controller) {
         const blob = document.createElement('a');
         blob.setAttribute('class', 'blob');
         blob.setAttribute('href', `../../${controller}/Detail/${item.id}`);
-        h1 = document.createElement('h1');
+        h1 = document.createElement('h3');
         h1.setAttribute('class', 'blobtext');
         h1.textContent = item.name;
         h5 = document.createElement('h5');

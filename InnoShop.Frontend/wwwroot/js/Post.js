@@ -2,14 +2,12 @@
     e.preventDefault(); // Предотвращаем стандартное поведение формы
     await funch(tableName,methods);
 });
-function isNumber(value) {
-    return !isNaN(value) && typeof value === 'number';
-}
+
 async function funch() {
     const url = window.location.href;
     const urlParts = url.split('/'); // Разделяем URL по '/'
     var id = urlParts[urlParts.length - 1];// Предполагаем, что id — это последний элемент
-    if (!isNumber(id))
+    if (!Number.isInteger(+id))
         id = 0;
     const name = document.getElementById('name').value;
     try {
