@@ -49,10 +49,10 @@ public class ProductControllerTests
             new() { Id = 1, Name = "Test Product 1" },
             new() { Id = 2, Name = "Test Product 2" }
         };
-        _mockServiceManager.Setup(service => service.ProductService.GetPage(30, 1)).Returns(products);
+        _mockServiceManager.Setup(service => service.ProductService.GetPage(30, 1,It.IsAny<ProductFilterDTO>())).Returns(products);
 
         // Act
-        var result = _controller.Index(1);
+        var result = _controller.Index(new ProductFilterDTO(),1);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -74,7 +74,7 @@ public class ProductControllerTests
         _mockServiceManager.Setup(service => service.ProductService.GetProductsByCondition(It.IsAny<Expression<Func<Product, bool>>>(), false)).Returns(products);
 
         // Act
-        var result = _controller.ForUser();
+        var result = _controller.ForUser(new ProductFilterDTO());
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);

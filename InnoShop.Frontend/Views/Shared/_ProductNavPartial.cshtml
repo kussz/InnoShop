@@ -6,7 +6,7 @@
         <div class="form-group">
             <label for="category" class="control-label">Категория:</label>
             <select id="category" name="CategoryId" class="form-control">
-                <option value="">Все категории</option>
+                <option value="0">Все категории</option>
                 @foreach (var category in Model.Categories)
                 {
                     <option value="@category.Id">@category.Name</option>

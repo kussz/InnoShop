@@ -22,8 +22,8 @@ namespace InnoShop.Frontend.Controllers
             ProductFilterDTO filterDTO = new()
             {
                 Categories = product,
-                MinPrice = null,
-                MaxPrice = null,
+                MinPrice = 0,
+                MaxPrice = 2000,
             };
 
 

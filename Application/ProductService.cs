@@ -1,6 +1,7 @@
 ﻿using InnoShop.Contracts.Repository;
 using InnoShop.Contracts.Service;
 using InnoShop.Domain.Models;
+using InnoShop.DTO.Models;
 using System.Linq.Expressions;
 
 namespace InnoShop.Application
@@ -24,9 +25,9 @@ namespace InnoShop.Application
         {
             return Repository.ProductRepository.GetCachedProducts();
         }
-        public List<Product> GetPage(int quantity, int page)
+        public List<Product> GetPage(int quantity, int page,ProductFilterDTO dto)
         {
-            return Repository.ProductRepository.GetPage(quantity, page);
+            return Repository.ProductRepository.GetPage(quantity, page,dto);
         }
         public void Add(Product product) => Repository.ProductRepository.Add(product);
         public void Edit(Product product) => Repository.ProductRepository.Edit(product);

@@ -1,10 +1,12 @@
 ﻿async function fetchItems(source, controller) {
     try {
         const response = await fetch(source, {
+            method: "POST",
             headers:
             {
                 'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
-            }
+            },
+            body: formData
             }); // Укажите правильный путь к вашему API
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -34,8 +36,6 @@ function displayItems(items, controller) {
         blob.appendChild(h5);
         container.appendChild(blob);
     });
-    document.getElementById('loading').remove();
-    document.getElementById('loadedItems').style.display = "block";
 }
 // Вызываем функцию для получения данных при загрузке страницы
 

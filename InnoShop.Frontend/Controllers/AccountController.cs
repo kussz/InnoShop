@@ -42,7 +42,18 @@ namespace InnoShop.Frontend.Controllers
         [HttpGet]
         public ActionResult Products()
         {
-            return View();
+            var response = _httpClient.GetAsync($"http://localhost:5036/ProdType/");
+            response.Result.EnsureSuccessStatusCode();
+            var product = response.Result.Content.ReadFromJsonAsync<IEnumerable<ProdType>>().Result;
+            ProductFilterDTO filterDTO = new()
+            {
+                Categories = product,
+                MinPrice = 0,
+                MaxPrice = 2000,
+            };
+
+
+            return View(filterDTO);
         }
 
         public ActionResult Login()

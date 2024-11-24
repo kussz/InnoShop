@@ -11,8 +11,7 @@
 <h2>Продукты</h2>
 
 
-<div id="loading" style="display: block;">Загрузка...</div>
-<div id="loadedItems" style="display: none;">
+<div id="loadedItems" style="display: block;">
 <div class="blobparent" id="blobparent">
 
 </div>
@@ -22,11 +21,18 @@
     <script src="~/js/GetUserProducts.js" asp-append-version="true"></script>
     <script>
         var page = 1;
+        var isGoing = true;
+        formData = new FormData(document.getElementById(`filterForm`))
         window.addEventListener('scroll', async function () {
+            prevHeight = this.document.body.scrollHeight;
+
             // Проверяем, достигли ли мы конца страницы
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+            if (window.innerHeight + window.scrollY >= document.body.scrollHeight && isGoing) {
                 page++;
+                console.log(page);
                 await go(page);
+                if (prevHeight == this.document.body.scrollHeight)
+                    isGoing = false;
             };
         });
         async function go(paged) {
@@ -34,39 +40,15 @@
 
         }
         go(1);
-        document.getElementById('filterForm').addEventListener('submit', async function(event) {
-    event.preventDefault(); // Отменяем стандартное поведение формы
+        document.getElementById('filterForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Отменяем стандартное поведение формы
             page = 1;
-    const formData = new FormData(this); // Собираем данные формы
             document.getElementById("blobparent").innerText = "";
-    // Проверка на пустые поля (если нужно)
-    if (!formData.get('CategoryId') && !formData.get('MinPrice') && !formData.get('MaxPrice')) {
-        alert('Пожалуйста, заполните хотя бы одно поле для фильтрации.');
-        return; // Прерываем выполнение, если все поля пустые
-    }
-
-    try {
-                const response = await fetch(`http://localhost:5036/Product?page=${paged}`, {
-            method: 'POST', // Или 'GET' в зависимости от вашего API
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(Object.fromEntries(formData)), // Преобразуем FormData в JSON
+            formData = new FormData(this); // Собираем данные формы
+            // Проверка на пустые поля (если нужно)
+            await go(page);
         });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const items = await response.json();
-        displayItems(items); // Обработка полученных данных
-
-    } catch (error) {
-        console.error('Ошибка при отправке данных:', error);
-    }
-});
     </script>
 }
 

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-
+using InnoShop.DTO.Models;
 namespace InnoShop.Contracts.Service
 {
     public interface IProductService
@@ -18,6 +18,6 @@ namespace InnoShop.Contracts.Service
         public Product GetProduct(int id);
         public List<Product> GetCachedProducts();
         public List<Product> GetProductsByCondition(Expression<Func<Product,bool>> expression, bool trackChanges = false);
-        public List<Product> GetPage(int quantity, int page);
+        public List<Product> GetPage(int quantity, int page,ProductFilterDTO dto);
     }
 }

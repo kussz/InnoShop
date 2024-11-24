@@ -2,6 +2,7 @@
 using InnoShop.Contracts.Repository;
 using InnoShop.Domain.Data;
 using InnoShop.Domain.Models;
+using InnoShop.DTO.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System.Linq.Expressions;
@@ -58,12 +59,11 @@ namespace InnoShop.Infrastructure.Repositories
             _cache.Remove("Product" + product.Id);
             Save();
         }
-        public List<Product> GetPage(int quantity, int page)
+        public List<Product> GetPage(int quantity, int page,ProductFilterDTO dto)
         {
-            var prods= Context.Set<Product>().OrderByDescending(p=>p.CreationDate).Where(p=>p.Public).Skip(quantity * (page - 1)).Take(quantity);
-            var products = prods.Include(p => p.ProdType).ToList();
+            var prods= Context.Set<Product>().OrderByDescending(p=>p.CreationDate).Include(p => p.ProdType).Where(p=>p.Public&&(dto.CategoryId!=0?dto.CategoryId==p.ProdTypeId:true)&&p.Cost>=dto.MinPrice&&p.Cost<=dto.MaxPrice).Skip(quantity * (page - 1)).Take(quantity).ToList();
             Console.WriteLine("From db");
-            return products;
+            return prods;
         }
     }
 }

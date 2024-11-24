@@ -11,12 +11,13 @@ namespace InnoShop.ProdWebAPI.Controllers
     public class ProductController(IServiceManager service) : Controller
     {
         readonly IServiceManager _service = service;
-        [HttpGet]
-        public IActionResult Index(int page = 1)
+        [HttpPost]
+        public IActionResult Index(ProductFilterDTO dto,int page = 1)
         {
             try
             {
-                var products = _service.ProductService.GetPage(30, page);
+                
+                var products = _service.ProductService.GetPage(30, page,dto);
                 return Ok(products);
             }
             catch (Exception ex)
@@ -24,13 +25,13 @@ namespace InnoShop.ProdWebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
-        public IActionResult ForUser()
+        [HttpPost]
+        public IActionResult ForUser(ProductFilterDTO dto)
         {
             var user = _service.UserService.Authorize(Request.Headers.Authorization);
             try
             {
-                var products = _service.ProductService.GetProductsByCondition(p => p.UserId == user.Id).OrderByDescending(p=>p.CreationDate).ToList();
+                var products = _service.ProductService.GetProductsByCondition(p => p.UserId == user.Id&& (dto.CategoryId != 0 ? dto.CategoryId == p.ProdTypeId : true) && p.Cost >= dto.MinPrice && p.Cost <= dto.MaxPrice).OrderByDescending(p=>p.CreationDate).ToList();
                 return Ok(products);
             }
             catch (Exception ex)
