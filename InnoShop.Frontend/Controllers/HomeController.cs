@@ -1,5 +1,4 @@
 using InnoShop.Domain.Models;
-using InnoShop.Frontend.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Net.Http;

@@ -1,7 +1,6 @@
 using InnoShop.Contracts.Service;
 using InnoShop.Domain.Data;
 using InnoShop.Domain.Models;
-using InnoShop.Frontend.Data;
 using InnoShop.Frontend.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;

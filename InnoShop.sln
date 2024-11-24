@@ -28,7 +28,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnoShop.Frontend", "InnoSh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnoShop.DTO", "InnoShop.DTO\InnoShop.DTO.csproj", "{62101A09-3292-480E-B484-AD3805158C73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{E40D8278-7037-4BC9-8999-A33B3959EC04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{E40D8278-7037-4BC9-8999-A33B3959EC04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diagram", "Diagram\Diagram.csproj", "{9D79F276-AB4C-4554-BEBA-A452445975AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,6 +74,10 @@ Global
 		{E40D8278-7037-4BC9-8999-A33B3959EC04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E40D8278-7037-4BC9-8999-A33B3959EC04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E40D8278-7037-4BC9-8999-A33B3959EC04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D79F276-AB4C-4554-BEBA-A452445975AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D79F276-AB4C-4554-BEBA-A452445975AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D79F276-AB4C-4554-BEBA-A452445975AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D79F276-AB4C-4554-BEBA-A452445975AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

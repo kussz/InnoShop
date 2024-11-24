@@ -1,0 +1,334 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="InnoShop.Application.LocalityService" Collapsed="true">
+    <Position X="10" Y="1.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Application.ProdAttribService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10" Y="4.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Application.ProdTypeService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Application.ProductService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10" Y="2.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Application.ServiceManager" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.25" Y="4.5" Width="1.5" />
+    <AssociationLine Name="LocalityService" Type="InnoShop.Contracts.Service.ILocalityService" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="14.25" Y="4.75" />
+        <Point X="13.875" Y="4.75" />
+        <Point X="13.875" Y="1.562" />
+        <Point X="13.25" Y="1.562" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="ProdAttribService" Type="InnoShop.Contracts.Service.IProdAttribService" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="14.25" Y="4.75" />
+        <Point X="13.875" Y="4.75" />
+        <Point X="13.875" Y="4.562" />
+        <Point X="13.25" Y="4.562" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="ProdTypeService" Type="InnoShop.Contracts.Service.IProdTypeService" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="14.25" Y="4.75" />
+        <Point X="13.875" Y="4.75" />
+        <Point X="13.875" Y="5.5" />
+        <Point X="13.25" Y="5.5" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="ProductService" Type="InnoShop.Contracts.Service.IProductService" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="14.25" Y="4.75" />
+        <Point X="13.875" Y="4.75" />
+        <Point X="13.875" Y="2.5" />
+        <Point X="13.25" Y="2.5" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="UserService" Type="InnoShop.Contracts.Service.IUserService" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="14.25" Y="4.75" />
+        <Point X="13.875" Y="4.75" />
+        <Point X="13.875" Y="6.5" />
+        <Point X="13.25" Y="6.5" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="UserTypeService" Type="InnoShop.Contracts.Service.IUserTypeService" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="14.25" Y="4.75" />
+        <Point X="13.875" Y="4.75" />
+        <Point X="13.875" Y="3.562" />
+        <Point X="13.25" Y="3.562" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="LocalityService" />
+      <Property Name="ProdAttribService" />
+      <Property Name="ProdTypeService" />
+      <Property Name="ProductService" />
+      <Property Name="UserService" />
+      <Property Name="UserTypeService" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Application.UserService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Application.UserTypeService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10" Y="3.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Infrastructure.Repositories.LocalityRepository" Collapsed="true">
+    <Position X="2.75" Y="1.25" Width="1.5" />
+    <InheritanceLine Type="InnoShop.Infrastructure.Repositories.RepositoryBase&lt;T&gt;" FixedFromPoint="true">
+      <Path>
+        <Point X="2" Y="4.75" />
+        <Point X="2.375" Y="4.75" />
+        <Point X="2.375" Y="1.596" />
+        <Point X="2.75" Y="1.596" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Infrastructure.Repositories.ProdAttribRepository" Collapsed="true">
+    <Position X="2.75" Y="4.25" Width="1.5" />
+    <InheritanceLine Type="InnoShop.Infrastructure.Repositories.RepositoryBase&lt;T&gt;" FixedFromPoint="true">
+      <Path>
+        <Point X="1.75" Y="4.75" />
+        <Point X="2.375" Y="4.75" />
+        <Point X="2.375" Y="4.5" />
+        <Point X="2.75" Y="4.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Infrastructure.Repositories.ProdTypeRepository" Collapsed="true">
+    <Position X="2.75" Y="5.25" Width="1.5" />
+    <InheritanceLine Type="InnoShop.Infrastructure.Repositories.RepositoryBase&lt;T&gt;" FixedFromPoint="true">
+      <Path>
+        <Point X="2" Y="4.75" />
+        <Point X="2.375" Y="4.75" />
+        <Point X="2.375" Y="5.596" />
+        <Point X="2.75" Y="5.596" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Infrastructure.Repositories.ProductRepository" Collapsed="true">
+    <Position X="2.75" Y="2.25" Width="1.5" />
+    <InheritanceLine Type="InnoShop.Infrastructure.Repositories.RepositoryBase&lt;T&gt;" FixedFromPoint="true">
+      <Path>
+        <Point X="2" Y="4.75" />
+        <Point X="2.375" Y="4.75" />
+        <Point X="2.375" Y="2.596" />
+        <Point X="2.75" Y="2.596" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Infrastructure.Repositories.RepositoryBase&lt;T&gt;" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Infrastructure.Repositories.UserRepository" Collapsed="true">
+    <Position X="2.75" Y="6.25" Width="1.5" />
+    <InheritanceLine Type="InnoShop.Infrastructure.Repositories.RepositoryBase&lt;T&gt;" FixedFromPoint="true">
+      <Path>
+        <Point X="2" Y="4.75" />
+        <Point X="2.375" Y="4.75" />
+        <Point X="2.375" Y="6.596" />
+        <Point X="2.75" Y="6.596" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Infrastructure.Repositories.UserTypeRepository" Collapsed="true">
+    <Position X="2.75" Y="3.25" Width="1.5" />
+    <InheritanceLine Type="InnoShop.Infrastructure.Repositories.RepositoryBase&lt;T&gt;" FixedFromPoint="true">
+      <Path>
+        <Point X="2" Y="4.75" />
+        <Point X="2.375" Y="4.75" />
+        <Point X="2.375" Y="3.596" />
+        <Point X="2.75" Y="3.596" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Infrastructure.RepositoryManager" Collapsed="true">
+    <Position X="8" Y="4.5" Width="1.5" />
+    <AssociationLine Name="UserRepository" Type="InnoShop.Contracts.Repository.IUserRepository" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8" Y="4.813" />
+        <Point X="7.625" Y="4.813" />
+        <Point X="7.625" Y="6.5" />
+        <Point X="6" Y="6.5" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="UserTypeRepository" Type="InnoShop.Contracts.Repository.IUserTypeRepository" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8" Y="4.812" />
+        <Point X="7.625" Y="4.812" />
+        <Point X="7.625" Y="3.562" />
+        <Point X="6" Y="3.562" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="ProductRepository" Type="InnoShop.Contracts.Repository.IProductRepository" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8" Y="4.812" />
+        <Point X="7.625" Y="4.812" />
+        <Point X="7.625" Y="2.562" />
+        <Point X="6" Y="2.562" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="ProdTypeRepository" Type="InnoShop.Contracts.Repository.IProdTypeRepository" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8" Y="4.812" />
+        <Point X="7.625" Y="4.812" />
+        <Point X="7.625" Y="5.5" />
+        <Point X="6" Y="5.5" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="ProdAttribRepository" Type="InnoShop.Contracts.Repository.IProdAttribRepository" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8" Y="4.812" />
+        <Point X="7.625" Y="4.812" />
+        <Point X="7.625" Y="4.5" />
+        <Point X="6" Y="4.5" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="LocalityRepository" Type="InnoShop.Contracts.Repository.ILocalityRepository" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8" Y="4.812" />
+        <Point X="7.628" Y="4.812" />
+        <Point X="7.628" Y="1.562" />
+        <Point X="6" Y="1.562" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="UserRepository" />
+      <Property Name="UserTypeRepository" />
+      <Property Name="ProductRepository" />
+      <Property Name="LocalityRepository" />
+      <Property Name="ProdTypeRepository" />
+      <Property Name="ProdAttribRepository" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InnoShop.Domain.Models.Locality" Collapsed="true">
+    <Position X="16" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="InnoShop.Domain.Models.ProdAttrib" Collapsed="true">
+    <Position X="16" Y="2.25" Width="1.5" />
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="Prod" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="InnoShop.Domain.Models.ProdType" Collapsed="true">
+    <Position X="16" Y="1.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="InnoShop.Domain.Models.Product" Collapsed="true">
+    <Position X="16" Y="3.25" Width="1.5" />
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="ProdType" />
+      <Property Name="User" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="InnoShop.Domain.Models.User" Collapsed="true">
+    <Position X="16" Y="4.25" Width="1.5" />
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="Locality" />
+      <Property Name="UserType" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="InnoShop.Domain.Models.UserType" Collapsed="true">
+    <Position X="16" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Interface Name="InnoShop.Contracts.Repository.ILocalityRepository" Collapsed="true">
+    <Position X="4.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="InnoShop.Contracts.Repository.IProdAttribRepository" Collapsed="true">
+    <Position X="4.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="InnoShop.Contracts.Repository.IProdTypeRepository" Collapsed="true">
+    <Position X="4.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="InnoShop.Contracts.Repository.IProductRepository" Collapsed="true">
+    <Position X="4.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="InnoShop.Contracts.Repository.IRepositoryBase&lt;T&gt;" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="InnoShop.Contracts.Repository.IRepositoryManager" Collapsed="true">
+    <Position X="8" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="InnoShop.Contracts.Repository.IUserRepository" Collapsed="true">
+    <Position X="4.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="InnoShop.Contracts.Repository.IUserTypeRepository" Collapsed="true">
+    <Position X="4.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="InnoShop.Contracts.Service.ILocalityService" Collapsed="true">
+    <Position X="11.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="InnoShop.Contracts.Service.IProdAttribService" Collapsed="true">
+    <Position X="11.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="InnoShop.Contracts.Service.IProdTypeService" Collapsed="true">
+    <Position X="11.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="InnoShop.Contracts.Service.IProductService" Collapsed="true">
+    <Position X="11.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="InnoShop.Contracts.Service.IServiceManager" Collapsed="true">
+    <Position X="14.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="InnoShop.Contracts.Service.IUserService" Collapsed="true">
+    <Position X="11.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="InnoShop.Contracts.Service.IUserTypeService" Collapsed="true">
+    <Position X="11.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
