@@ -32,7 +32,9 @@ namespace InnoShop.ProdWebAPI.Controllers
             var user = _service.UserService.Authorize(Request.Headers.Authorization);
             try
             {
-                var products = _service.UserService.GetUser(user.Id).ProductsUser.Where(p=>(dto.CategoryId != 0 ? dto.CategoryId == p.ProdTypeId : true) && p.Cost >= dto.MinPrice && p.Cost <= dto.MaxPrice).OrderByDescending(p => p.CreationDate).ToList();
+                if (dto.Search == null)
+                    dto.Search = "";
+                var products = _service.UserService.GetUser(user.Id).ProductsUser.Where(p=>(dto.CategoryId != 0 ? dto.CategoryId == p.ProdTypeId : true) && p.Cost >= dto.MinPrice && p.Cost <= dto.MaxPrice&& (p.Description.ToUpper().Contains(dto.Search.ToUpper()) || p.Name.ToUpper().Contains(dto.Search.ToUpper()) || p.ProdAttribs.Any(t => t.Name.ToUpper().Contains(dto.Search.ToUpper())))).OrderByDescending(p => p.CreationDate).ToList();
                 //var products = _service.ProductService.GetProductsByCondition(p => p.UserId == user.Id&& (dto.CategoryId != 0 ? dto.CategoryId == p.ProdTypeId : true) && p.Cost >= dto.MinPrice && p.Cost <= dto.MaxPrice).OrderByDescending(p=>p.CreationDate).ToList();
                 return Ok(products);
             }

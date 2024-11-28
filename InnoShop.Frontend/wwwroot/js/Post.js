@@ -10,9 +10,10 @@ async function funch() {
     if (!Number.isInteger(+id))
         id = 0;
     const name = document.getElementById('name').value;
+    console.log(`${productHost}/${tableName}/${methods}`);
     try {
         // Выполняем POST-запрос
-        const response = await fetch(`${host}/${tableName}/${methods}`, {
+        const response = await fetch(`${productHost}/${tableName}/${methods}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
