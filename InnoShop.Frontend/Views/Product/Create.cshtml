@@ -5,9 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
-
-<h4>Product</h4>
+<h1>Создание продукта</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -41,8 +39,14 @@
             <input type="hidden" asp-for="UserId" id="user" />
             <input type="hidden" asp-for="BuyerId" value="null" />
             <input type="hidden" asp-for="CreationDate" value="@DateTime.Now" />
+            <div id="tags-container">
+                <div id="tags-list">
+                </div>
+
+                <input class="form-control" id="tag-input" type="text" placeholder="Добавить тег" onkeydown="checkTagInput(event)" />
+            </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary" id="submitBtn">Create</button>
+                <button type="button" class="btn btn-primary" id="submitBtn">Создать</button>
             </div>
         </form>
     </div>
@@ -57,18 +61,23 @@
     <script src="~/js/Authorize.js" asp-append-version="true"></script>
     <script>
         async function go() {
-            const user = await auth();
+            const user = await auth("@ViewBag.Host.User");
             document.getElementById('user').setAttribute('value', user.id);
         }
 
         document.getElementById('submitBtn').addEventListener('click', async () => {
             const form = document.getElementById('createForm');
             const formData = new FormData(form);
-
+            tagsSend = tags.map((tagname, index) => ({
+                id: 0,
+                name: tagname
+            }))
+            console.log(tagsSend);
+            formData.append("ProdAttribs", JSON.stringify(tagsSend));
             // Получаем токен авторизации
             const token = localStorage.getItem('jwtToken'); // Замените на ваш способ получения токена
 
-            const response = await fetch('http://localhost:5036/Product/Create', {
+            const response = await fetch(`@ViewBag.Host.Product/Product/Create`, {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + token, // Добавляем заголовок авторизации
@@ -90,5 +99,48 @@
         });
 
         go();
+        let tags = [];
+        // Проверяем ввод в текстовом поле
+        function checkTagInput(event) {
+            const input = document.getElementById('tag-input');
+            const value = input.value.trim();
+
+            // Если пользователь нажал Enter или запятую
+            if ((event.key === 'Enter' || event.key === ',') && value) {
+                addTag(value);
+                input.value = ''; // Очищаем поле ввода
+                event.preventDefault(); // Предотвращаем стандартное поведение Enter
+            }
+        }
+
+        // Добавляем новый тег
+        function addTag(tag) {
+            if (!tags.includes(tag)) { // Проверка на уникальность
+                tags.push(tag);
+                renderTags();
+            } else {
+                alert('Этот тег уже добавлен!');
+            }
+        }
+
+        // Удаляем тег
+        function removeTag(button) {
+            const tagText = button.parentElement.id
+            tags = tags.filter(t => t !== tagText); // Удаляем из массива
+            renderTags();
+        }
+
+        // Рендеринг тегов
+        function renderTags() {
+            const tagsList = document.getElementById('tags-list');
+            tagsList.innerHTML = ''; // Очищаем старые теги
+            tags.forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag';
+                tagElement.id = tag
+                tagElement.innerHTML = `${tag} <button type="button" class="remove-tag" onclick="removeTag(this)">×</button>`;
+                tagsList.appendChild(tagElement);
+            });
+        }
     </script>
 }

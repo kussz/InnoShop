@@ -37,7 +37,7 @@
     <script src="~/js/GetEnumerable.js" asp-append-version="true"></script>
     <script>
         async function func() { 
-        await fetchItems("http://localhost:5036/Locality",'Locality');
+            await fetchItems(`${productHost}/Locality`, 'Locality');
         }
         func();
     </script>

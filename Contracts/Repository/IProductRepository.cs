@@ -11,8 +11,8 @@ namespace InnoShop.Contracts.Repository
 {
     public interface IProductRepository
     {
-        void Add(Product product);
         void Edit(Product product);
+        void Add(Product product);
         void Remove(Product locality);
         List<Product> GetAllProducts(bool trackChanges = false);
         Product GetProductById(int id);

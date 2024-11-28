@@ -1,9 +1,0 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    string formattedText = ((string)@ViewData["log"]).Replace("\n", "<br />");
-    ViewData["Title"] = "Инициализация";
-}
-<h2>База данных успешно заполнена</h2>
-<h4>@Html.Raw(formattedText)</h4>
-
-<partial name="_AdminRequired" />

@@ -5,9 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1>Редактирование продукта</h1>
 
-<h4>Product</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -42,8 +41,14 @@
             <input type="hidden" asp-for="UserId" id="user" />
             <input type="hidden" asp-for="BuyerId"/>
             <input type="hidden" asp-for="CreationDate"/>
+            <div id="tags-container">
+                <div id="tags-list">
+                </div>
+
+                <input class="form-control" id="tag-input" type="text" placeholder="Добавить тег" onkeydown="checkTagInput(event)" />
+            </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary" id="submitBtn">Edit</button>
+                <button type="button" class="btn btn-primary" id="submitBtn">Подтвердить</button>
             </div>
         </form>
     </div>
@@ -58,7 +63,7 @@
     <script src="~/js/Authorize.js" asp-append-version="true"></script>
     <script>
                 async function go() {
-            const user = await auth();
+            const user = await auth(`@ViewBag.Host.User`);
             if (document.getElementById('user').getAttribute('value') != user.id && getRoleFromToken(localStorage.getItem('jwtToken')) != "Admin") {
                 window.location.href = "Account/Forbidden";
             }
@@ -67,8 +72,17 @@
         document.getElementById('submitBtn').addEventListener('click', async () => {
             const form = document.getElementById('editForm');
             const formData = new FormData(form);
-
-            const response = await fetch('http://localhost:5036/Product/Edit', {
+            tagsSend = tags.map((tagname,index)=>({
+                id:0,
+                prodId:@Model.Id,
+                name: tagname
+            }))
+            console.log(tagsSend);
+            formData.append("ProdAttribs", JSON.stringify(tagsSend));
+            for (const [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+            const response = await fetch('@ViewBag.Host.Product/Product/Edit', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('jwtToken'), // Добавляем заголовок
@@ -90,5 +104,57 @@
         });
 
         go();
+
+        let tags = [];
+        var prodAttribs = @Html.Raw(Json.Serialize(Model.ProdAttribs));
+        let tagsraw = prodAttribs.map(function (attrib) {
+            return attrib.name;  // Возвращаем только имя
+        });
+        console.log(tagsraw);
+        tagsraw.forEach(tag=>{
+            addTag(tag);
+        })
+        // Проверяем ввод в текстовом поле
+        function checkTagInput(event) {
+            const input = document.getElementById('tag-input');
+            const value = input.value.trim();
+
+            // Если пользователь нажал Enter или запятую
+            if ((event.key === 'Enter' || event.key === ',') && value) {
+                addTag(value);
+                input.value = ''; // Очищаем поле ввода
+                event.preventDefault(); // Предотвращаем стандартное поведение Enter
+            }
+        }
+
+        // Добавляем новый тег
+        function addTag(tag) {
+            if (!tags.includes(tag)) { // Проверка на уникальность
+                tags.push(tag);
+                renderTags();
+            } else {
+                alert('Этот тег уже добавлен!');
+            }
+        }
+
+        // Удаляем тег
+        function removeTag(button) {
+            const tagText = button.parentElement.id
+            tags = tags.filter(t => t !== tagText); // Удаляем из массива
+            renderTags();
+        }
+
+        // Рендеринг тегов
+        function renderTags() {
+            const tagsList = document.getElementById('tags-list');
+            tagsList.innerHTML = ''; // Очищаем старые теги
+            tags.forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag';
+                tagElement.id = tag
+                tagElement.innerHTML = `${tag} <button type="button" class="remove-tag" onclick="removeTag(this)">×</button>`;
+                tagsList.appendChild(tagElement);
+            });
+        }
     </script>
 }

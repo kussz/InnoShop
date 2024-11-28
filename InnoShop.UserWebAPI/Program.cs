@@ -28,10 +28,10 @@ namespace InnoShop.UserWebAPI
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowLocalhost5030", builder =>
+                options.AddPolicy("AllowLocalhost5030", builde =>
                 {
-                    builder
-                        .WithOrigins("http://localhost:5030")  // Укажите источник фронтенда
+                    builde
+                        .WithOrigins(builder.Configuration.GetSection("HostSettings")["Frontend"])  // Укажите источник фронтенда
                         .AllowCredentials()                    // Разрешить передачу учетных данных
                         .AllowAnyHeader()                      // Разрешить любые заголовки
                         .AllowAnyMethod();                     // Разрешить любые методы (GET, POST, PUT, и т.д.)
@@ -83,12 +83,15 @@ namespace InnoShop.UserWebAPI
                 options.Password.RequireLowercase = false;
             });
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllers();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWTSettings"));
+            builder.Services.Configure<HostSettings>(builder.Configuration.GetSection("HostSettings"));
             builder.Services.AddScoped<DBInitializer>();
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddMemoryCache();
             builder.WebHost.UseStaticWebAssets();
             var app = builder.Build();
 

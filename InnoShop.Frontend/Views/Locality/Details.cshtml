@@ -38,7 +38,7 @@
             document.getElementById("name").setAttribute('value', item.name);
             document.getElementById("deleteButton").setAttribute('href',`/Locality/Delete/${item.id}`)
         }
-        fetchItem("http://localhost:5036/Locality", @Model,func);
+        fetchItem(`${productHost}/Locality`, @Model, func);
     </script>
     <script src="~/js/Post.js" asp-append-version="true"></script>
 }

@@ -109,7 +109,7 @@ public class ProductControllerTests
     {
         // Arrange
         var user = new User { Id = _actualId };
-        var product = new Product { UserId = _actualId, Name = "New Product" };
+        var product = new ProductEditDTO { UserId = _actualId, Name = "New Product" };
         _output.WriteLine(user.ToString());
         SetAuth(_token);
         _mockServiceManager.Setup(service => service.UserService.Authorize(It.IsAny<string>())).Returns(user);
@@ -128,7 +128,7 @@ public class ProductControllerTests
     {
         // Arrange
         var user = new User { Id = _actualId };
-        var product = new Product { UserId = _actualId+1 }; // UserId не совпадает
+        var product = new ProductEditDTO { UserId = _actualId+1 }; // UserId не совпадает
         SetAuth(_token);
         _mockServiceManager.Setup(service => service.UserService.Authorize(It.IsAny<string>())).Returns(user);
 
@@ -183,7 +183,7 @@ public class ProductControllerTests
         // Arrange
         var user = new User { Id = _actualId };
         string role = "Admin";
-        var product = new Product { Id=1, UserId = _actualId, Name = "Edited Product" };
+        var product = new ProductEditDTO { Id=1, UserId = _actualId, Name = "Edited Product" };
         SetAuth(_token);
         _mockServiceManager.Setup(service => service.UserService.GetRole($"Bearer {_token}")).Returns(role);
         _mockServiceManager.Setup(service => service.UserService.Authorize($"Bearer {_token}")).Returns(user) ;
@@ -201,7 +201,7 @@ public class ProductControllerTests
     {
         // Arrange
         var user = new User { Id = _actualId };
-        var product = new Product { UserId = _actualId+1 }; // UserId не совпадает
+        var product = new ProductEditDTO { UserId = _actualId+1 }; // UserId не совпадает
         SetAuth(_token);
         _mockServiceManager.Setup(service => service.UserService.Authorize($"Bearer {_token}")).Returns(user);
 

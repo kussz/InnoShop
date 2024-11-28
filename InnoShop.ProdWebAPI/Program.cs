@@ -3,6 +3,7 @@ using InnoShop.Contracts.Repository;
 using InnoShop.Contracts.Service;
 using InnoShop.Domain.Data;
 using InnoShop.Domain.Models;
+using InnoShop.DTO.Models;
 using InnoShop.Infrastructure;
 using InnoShop.Infrastructure.Initialize;
 using Microsoft.AspNetCore.Identity;
@@ -20,10 +21,10 @@ namespace InnoShop.ProdWebAPI
                 options.UseSqlServer(connectionString,b => b.MigrationsAssembly("InnoShop.Domain")));
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowLocalhost5030", builder =>
+                options.AddPolicy("AllowLocalhost5030", builde =>
                 {
-                    builder
-                        .WithOrigins("http://localhost:5030")  // Укажите источник фронтенда
+                    builde
+                        .WithOrigins(builder.Configuration.GetSection("HostSettings")["Frontend"])  // Укажите источник фронтенда
                         .AllowCredentials()                    // Разрешить передачу учетных данных
                         .AllowAnyHeader()                      // Разрешить любые заголовки
                         .AllowAnyMethod();                     // Разрешить любые методы (GET, POST, PUT, и т.д.)
@@ -36,6 +37,7 @@ namespace InnoShop.ProdWebAPI
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
+            builder.Services.Configure<HostSettings>(builder.Configuration.GetSection("HostSettings"));
             builder.Services.AddScoped<DBInitializer>();
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddMemoryCache();

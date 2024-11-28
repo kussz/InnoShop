@@ -19,5 +19,8 @@ namespace InnoShop.Application
         {
             return Repository.ProdAttribRepository.GetProdAttribsFromProduct(id,trackChanges);
         }
+        public void Add(ProdAttrib product) => Repository.ProdAttribRepository.Add(product);
+        public void Remove(ProdAttrib product) => Repository.ProdAttribRepository.Remove(product);
+        public void Clear(int prodId) => Repository.ProdAttribRepository.Clear(prodId);
     }   
 }

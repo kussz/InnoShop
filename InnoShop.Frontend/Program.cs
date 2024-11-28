@@ -1,6 +1,7 @@
 using InnoShop.Contracts.Service;
 using InnoShop.Domain.Data;
 using InnoShop.Domain.Models;
+using InnoShop.DTO.Models;
 using InnoShop.Frontend.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -47,16 +48,22 @@ namespace InnoShop.Frontend
                     });
             builder.Services.AddAuthorization();
 
-            
             builder.Services.AddHttpClient("WithCookies", client =>
             {
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new HostSettingsFilter(builder.Configuration.GetSection("HostSettings").Get<HostSettings>()));
+            }).AddSessionStateTempDataProvider();
+            builder.Services.AddSession();
             builder.Services.AddHttpContextAccessor();
+            builder.Services.Configure<HostSettings>(builder.Configuration.GetSection("HostSettings"));
             builder.WebHost.UseStaticWebAssets();
             
             var app = builder.Build();
+            app.UseSession();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

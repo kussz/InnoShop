@@ -5,7 +5,7 @@
     const password = document.getElementById('Password').value;
     try {
         // Выполняем POST-запрос
-        const response = await fetch('http://localhost:5069/User/Login', {
+        const response = await fetch(`${userHost}/User/Login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

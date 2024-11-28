@@ -14,7 +14,7 @@ async function registerUser(user) {
     const userString = JSON.stringify(user);
 
     try {
-        const response = await fetch("http://localhost:5069/User/Register", {
+        const response = await fetch(`${userHost}/User/Register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -34,16 +34,6 @@ async function registerUser(user) {
         } else {
             const errorResponse = await response.json();
             displayErrors(errorResponse.errors);
-            // Обработка ошибок
-            //const localitiesResponse = await fetch("http://localhost:5036/Locality/ForSelect");
-            //const localities = await localitiesResponse.json();
-
-            //const userTypesResponse = await fetch("http://localhost:5036/UserType/ForSelect");
-            //const userTypes = await userTypesResponse.json();
-
-            // Передайте данные о локалях и типах пользователей в ваше представление
-            // Возможно, вам нужно будет вызвать функцию для обновления UI
-            //updateUIWithLocalitiesAndTypes(localities, userTypes);
         }
     } catch (error) {
         console.error("Ошибка при регистрации:", error);

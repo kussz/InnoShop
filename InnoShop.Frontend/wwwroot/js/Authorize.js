@@ -1,10 +1,10 @@
-﻿async function auth() {
+﻿async function auth(userAddress) {
     const token = localStorage.getItem("jwtToken");
     if (token)
         try {
             const loadingElement = document.getElementById('loading');
             const profileElement = document.getElementById('userProfile');
-            const response = await fetch('http://localhost:5069/User/GetProfile', {
+            const response = await fetch(`${userAddress}/User/GetProfile`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`

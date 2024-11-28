@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Security.Claims;
@@ -16,10 +17,12 @@ namespace InnoShop.Frontend.Controllers
     public class AccountController(HttpClient httpClient) : Controller
     {
         private readonly HttpClient _httpClient = httpClient;
+
         // GET: Account
         
         public ActionResult Index()
         {
+
             return View();
             //var response = _httpClient.GetAsync($"http://localhost:5069/User/GetProfile/");
             //var user = response.Result.Content.ReadFromJsonAsync<User>().Result;
@@ -42,7 +45,7 @@ namespace InnoShop.Frontend.Controllers
         [HttpGet]
         public ActionResult Products()
         {
-            var response = _httpClient.GetAsync($"http://localhost:5036/ProdType/");
+            var response = _httpClient.GetAsync($"{ViewBag.Host.Product}/ProdType/");
             response.Result.EnsureSuccessStatusCode();
             var product = response.Result.Content.ReadFromJsonAsync<IEnumerable<ProdType>>().Result;
             ProductFilterDTO filterDTO = new()
@@ -64,9 +67,9 @@ namespace InnoShop.Frontend.Controllers
         // GET: Account/Register
         public ActionResult Register()
         {
-            var response = _httpClient.GetAsync($"http://localhost:5036/Locality/ForSelect");
+            var response = _httpClient.GetAsync($"{ViewBag.Host.Product}/Locality/ForSelect");
             List<SelectListItem> localities = response.Result.Content.ReadFromJsonAsync<List<SelectListItem>>().Result;
-            response = _httpClient.GetAsync($"http://localhost:5036/UserType/ForSelect");
+            response = _httpClient.GetAsync($"{ViewBag.Host.Product}/UserType/ForSelect");
             List<SelectListItem> userTypes = response.Result.Content.ReadFromJsonAsync<List<SelectListItem>>().Result;
             ViewBag.Localities = localities;
             ViewBag.Types= userTypes;
@@ -105,40 +108,10 @@ namespace InnoShop.Frontend.Controllers
             return View();
         }
 
-        // POST: Account/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
         // GET: Account/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
-        }
-
-        // POST: Account/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }

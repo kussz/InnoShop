@@ -30,13 +30,13 @@
 
     <script>
         async function func(item) {
-            user = await auth()
+            user = await auth("@ViewBag.Host.User")
             if (user.id != item.userId && getRoleFromToken() != 'Admin')
                 window.location.href = '../../Account/Forbidden';
             document.getElementById("name").textContent = `- ${item.name}`
             document.getElementById("cancelButton").setAttribute('href', `/Product/Detail/${item.id}`)
         }
-        fetchItem("http://localhost:5036/Product", @Model, func);
+        fetchItem(`@ViewBag.Host.Product/Product`, @Model, func);
 
         document.getElementById('deleteButton').addEventListener('click', async function () {
             await funch();
@@ -47,7 +47,7 @@
             const id = urlParts[urlParts.length - 1]; // Предполагаем, что id — это последний элемент
             try {
                 // Выполняем POST-запрос
-                const response = await fetch(`http://localhost:5036/Product/Delete/${id}`, {
+                const response = await fetch(`@ViewBag.Host.Product/Product/Delete/${id}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

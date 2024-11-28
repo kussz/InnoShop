@@ -34,19 +34,21 @@ namespace InnoShop.UserWebAPI.Controllers
             var user = await _userManager.FindByNameAsync(model.UserName);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                var token = GenerateToken(user);
+                var token = await GenerateToken(user);
 
                 return Ok(token);
             }
 
             return Unauthorized();
         }
-        private string GenerateToken(User user)
+        private async Task<string> GenerateToken(User user)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             Claim[] claims;
-
+            List<Claim> lis = new List<Claim>();
+            if(_userManager.GetRolesAsync(user).Result.Count==0)
+                await SetRole(new UserAddRoleDTO() { Id = user.Id, RoleName="User" });
             claims =
             [
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
@@ -82,10 +84,16 @@ namespace InnoShop.UserWebAPI.Controllers
         public async Task<IActionResult> SetRole([FromBody] UserAddRoleDTO userAddRole)
         {
             var roleExists = await _roleManager.RoleExistsAsync(userAddRole.RoleName);
-            var user = _service.UserService.GetUser(userAddRole.Id);
+            try
+            {
+            var user = await _userManager.FindByIdAsync(userAddRole.Id.ToString());
+
             if (roleExists)
                 await _userManager.AddToRoleAsync(user, userAddRole.RoleName);
             return Ok(user);
+            }
+            catch(Exception ex) { Console.WriteLine(ex.Message); }
+            return BadRequest();
         }
         //[Authorize(Roles ="User, Admin")]
         public IActionResult GetProfile()

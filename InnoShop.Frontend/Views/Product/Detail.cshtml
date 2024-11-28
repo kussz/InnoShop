@@ -9,7 +9,8 @@
     <hr />
     <table>
         <tr>
-            <td width="70%" rowspan="8" class="detaildesc">@Html.Raw(Model.Description.Replace("\n", "<br>"))</td>
+            <td width="70%" rowspan="8" class="detaildesc" id="desc">@Html.Raw(Model.Description.Replace("\n", "<br>"))
+            </td>
             <td width="6%" rowspan="8"></td>
             <td width="12%" class="detailsitems">Пользователь: </td>
             <td width="16%" id="user" data-value=@Model.UserId>@Html.DisplayFor(model => model.User.UserName)</td>
@@ -69,20 +70,35 @@
 </div>
 <div>
     <span id="editBtn" style="display:none"><a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Изменить</a> | <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger">Удалить</a> | </span>
+    <span id="buyBtn" style="display:none"><a class="btn btn-success">Купить</a> | </span>
     <a asp-action="Index" class="btn btn-info">К списку</a>
+    <div id="buyerDiv" style="display:none"><br />Покупатель: @if (Model.Buyer != null)
+            @Model.Buyer.UserName
+<br /><a id="acceptBtn" class="btn btn-success">Подтвердить</a>  <a id="declineBtn" class="btn btn-danger">Отклонить</a> </>
+
 </div>
 @section Scripts
 {
     <script src="~/js/Authorize.js" asp-append-version="true"></script>
+    <script src="~/js/BuyerAction.js" asp-append-version="true"></script>
     <script>
+        const id = @Model.Id;
         async function go() {
             if (localStorage.getItem('jwtToken') != null)
             {
-                user = await auth();
+                user = await auth("@ViewBag.Host.User");
                 if (document.getElementById('user').getAttribute('data-value') == user.id || getRoleFromToken() == "Admin")
                     document.getElementById('editBtn').style.display = 'inline-block';
+                if (document.getElementById('user').getAttribute('data-value') != user.id && ("@Model.BuyerId" == ""))
+                    document.getElementById('buyBtn').style.display = 'inline-block';
+                if (document.getElementById('user').getAttribute('data-value') == user.id && ("@Model.BuyerId" != "") && "@Model.Sold"=="False")
+                    document.getElementById('buyerDiv').style.display = 'block';
+
             }
         }
+        bindButton("acceptBtn", "ConfirmBought");
+        bindButton("buyBtn", "Buy");
+        bindButton("declineBtn", "RejectBought");
         go();
     </script>
 }

@@ -12,7 +12,7 @@ async function funch() {
     const name = document.getElementById('name').value;
     try {
         // Выполняем POST-запрос
-        const response = await fetch(`http://localhost:5036/${tableName}/${methods}`, {
+        const response = await fetch(`${host}/${tableName}/${methods}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

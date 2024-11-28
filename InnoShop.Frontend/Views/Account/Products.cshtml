@@ -4,16 +4,17 @@
     var page = Convert.ToInt32(Context.Request.Query["page"]);
 }
 
-<h2>Продукты пользователя</h2>
 
-<p>
-</p>
+
+
+<div class="prodNavig">
+    <a id="myProds">Мои продукты</a> 
+    <a id="pendingProds">Требующие подтверждения</a> 
+    <a id="boughtProds">Купленные продукты</a> 
+</div>
 <div id="loadedItems" style="display: block;">
 <div class="blobparent" id="blobparent">
-    <a id="add" class="blob blob-add" href="@Url.Action("Create", "Product")">
-        <h1 class="blobtext">Добавить товар</h1>
-        <h1 class="blobtext"><i class="fas fa-plus"></i></h1>
-    </a>
+    
 </div>
 </div>
 @section PageNav
@@ -27,22 +28,23 @@
 }
 @section Scripts
 {
+    <script>
+        user = auth(userHost);
+    </script>
     <script src="~/js/GetUserProducts.js" asp-append-version="true"></script>
+    <script src="~/js/ProductSections.js" asp-append-version="true"></script>
     <script>
         formData = new FormData(document.getElementById(`filterForm`))
-        async function go()
-        {
-            user = await auth();
-            await fetchItems(`http://localhost:5036/Product/ForUser/${user.id}`, 'Product');
-        }
-        
-        go();
+
+        addCreateBtn();
+        mainFunc();
         document.getElementById('filterForm').addEventListener('submit', async function (event) {
             event.preventDefault(); // Отменяем стандартное поведение формы
             document.getElementById("blobparent").innerText = "";
+            addCreateBtn();
             formData = new FormData(this); // Собираем данные формы
             // Проверка на пустые поля (если нужно)
-            await go();
+            await mainFunc();
         });
     </script>
 }

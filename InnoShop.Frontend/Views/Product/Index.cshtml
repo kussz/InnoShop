@@ -36,7 +36,7 @@
             };
         });
         async function go(paged) {
-            await fetchItems(`http://localhost:5036/Product?page=${paged}`, 'Product');
+            await fetchItems(`@ViewBag.Host.Product/Product?page=${paged}`, 'Product');
 
         }
         go(1);

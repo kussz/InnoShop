@@ -33,7 +33,7 @@
             document.getElementById("name").textContent=`- ${item.name}`
             document.getElementById("cancelButton").setAttribute('href', `/Locality/Details/${item.id}`)
         }
-        fetchItem("http://localhost:5036/Locality", @Model, func);
+        fetchItem(`${productHost}/Locality`, @Model, func);
 
         document.getElementById('deleteButton').addEventListener('click', async function () {
             await funch();
@@ -44,7 +44,7 @@
     const id = urlParts[urlParts.length - 1]; // Предполагаем, что id — это последний элемент
     try {
         // Выполняем POST-запрос
-        const response = await fetch(`http://localhost:5036/Locality/Delete/${id}`, {
+                const response = await fetch(`${productHost}/Locality/Delete/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

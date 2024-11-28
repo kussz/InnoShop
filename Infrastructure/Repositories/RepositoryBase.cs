@@ -26,6 +26,7 @@ namespace InnoShop.Infrastructure.Repositories
         public void Create(T entity) => Context.Set<T>().Add(entity);
         public void Update(T entity) => Context.Set<T>().Update(entity);
         public void Delete(T entity) => Context.Set<T>().Remove(entity);
+        public void Delete(IQueryable<T> entities) => Context.RemoveRange(entities);
 
     }
 }

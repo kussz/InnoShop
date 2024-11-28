@@ -14,7 +14,8 @@ namespace InnoShop.Domain.Migrations
                 name: "UQ__ProdType__5E55825B2B853D4K",
                 table: "ProdTypes",
                 column: "Name",
-                unique: true);
+                unique: true 
+                );
 
             migrationBuilder.CreateIndex(
                 name: "UQ__Localiti__5E55825B2B853D4G",

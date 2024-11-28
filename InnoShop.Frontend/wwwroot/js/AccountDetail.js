@@ -4,7 +4,7 @@ async function getUser() {
         try {
             const loadingElement = document.getElementById('loading');
             const profileElement = document.getElementById('userProfile');
-        const response = await fetch('http://localhost:5069/User/GetProfile', {
+        const response = await fetch(`${userHost}/User/GetProfile`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`

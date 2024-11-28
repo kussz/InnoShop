@@ -12,5 +12,8 @@ namespace InnoShop.Contracts.Repository
         List<ProdAttrib> GetAllProdAttribs(bool trackChanges = false);
         List<ProdAttrib> GetProdAttribsFromProduct(int id,bool trackChanges = false);
         ProdAttrib GetProdAttribById(int id);
+        void Add(ProdAttrib product);
+        void Remove(ProdAttrib product);
+        void Clear(int prodId);
     }
 }

@@ -16,7 +16,7 @@ namespace InnoShop.Frontend.Controllers
         // GET: ProductController
         public ActionResult Index()
         {
-            var response = _httpClient.GetAsync($"http://localhost:5036/ProdType/");
+            var response = _httpClient.GetAsync($"{ViewBag.Host.Product}/ProdType/");
             response.Result.EnsureSuccessStatusCode();
             var product = response.Result.Content.ReadFromJsonAsync<IEnumerable<ProdType>>().Result;
             ProductFilterDTO filterDTO = new()
@@ -33,7 +33,7 @@ namespace InnoShop.Frontend.Controllers
         // GET: ProductController/Details/5
         public ActionResult Detail(int id)
         {
-            var response = _httpClient.GetAsync($"http://localhost:5036/Product/Details/{id}");
+            var response = _httpClient.GetAsync($"{ViewBag.Host.Product}/Product/Details/{id}");
             response.Result.EnsureSuccessStatusCode();
             var product = response.Result.Content.ReadFromJsonAsync<Product>().Result;
             return View(product);
@@ -42,7 +42,7 @@ namespace InnoShop.Frontend.Controllers
         // GET: ProductController/Create
         public ActionResult Create()
         {
-            var response = _httpClient.GetAsync($"http://localhost:5036/Product/Create/");
+            var response = _httpClient.GetAsync($"{ViewBag.Host.Product}/Product/Create/");
             response.Result.EnsureSuccessStatusCode();
             var data = response.Result.Content.ReadFromJsonAsync<ProductEditData>().Result;
             ViewBag.Categories = data.Categories;
@@ -57,7 +57,7 @@ namespace InnoShop.Frontend.Controllers
         {
             var productString = JsonSerializer.Serialize(product);
             var content = new StringContent(productString, Encoding.UTF8, "application/json");
-            var response = _httpClient.PostAsync($"http://localhost:5036/Product/Create", content);
+            var response = _httpClient.PostAsync($"{ViewBag.Host.Product}/Product/Create", content);
             if (response.Result.IsSuccessStatusCode)
             {
                 Product createdProduct = response.Result.Content.ReadFromJsonAsync<Product>().Result;
@@ -72,7 +72,7 @@ namespace InnoShop.Frontend.Controllers
         // GET: ProductController/Edit/5
         public ActionResult Edit(int id)
         {
-            var response = _httpClient.GetAsync($"http://localhost:5036/Product/Edit/{id}");
+            var response = _httpClient.GetAsync($"{ViewBag.Host.Product}/Product/Edit/{id}");
             response.Result.EnsureSuccessStatusCode();
             var data = response.Result.Content.ReadFromJsonAsync<ProductEditData>().Result;
             var product = data.Product;
@@ -81,23 +81,7 @@ namespace InnoShop.Frontend.Controllers
             return View(product);
         }
 
-        // POST: ProductController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Product product)
-        {
-            var productString = JsonSerializer.Serialize(product);
-            var content = new StringContent(productString, Encoding.UTF8, "application/json");
-            var response = _httpClient.PostAsync($"http://localhost:5036/Product/Edit", content);
-            if (response.Result.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Detail",new { id = product.Id }); // Перенаправление после успешного редактирования
-            }
-            else
-            {
-                return StatusCode((int) response.Result.StatusCode, "Ошибка при редактировании продукта");
-            }
-}
+
 
         // GET: ProductController/Delete/5
         [HttpGet]
@@ -106,19 +90,6 @@ namespace InnoShop.Frontend.Controllers
             return View(id);
         }
 
-        // POST: ProductController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+
     }
 }

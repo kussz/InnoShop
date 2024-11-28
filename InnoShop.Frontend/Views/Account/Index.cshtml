@@ -34,7 +34,7 @@
 {
     <script>
         async function go() { 
-        user = await auth();
+        user = await auth("@ViewBag.Host.User");
             document.getElementById('userName').innerText = user.userName || 'N/A';
             document.getElementById('userTypeName').innerText = user.userType?.name || 'N/A';
             document.getElementById('localityName').innerText = user.locality?.name || 'N/A';

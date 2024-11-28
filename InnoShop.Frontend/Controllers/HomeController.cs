@@ -29,10 +29,18 @@ namespace InnoShop.Frontend.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error(string exception)
+        public IActionResult Error()
         {
-            return View(exception);
+            // Получаем сообщение об ошибке из TempData
+            var errorMessage = TempData["Exception"] as string;
+
+            // Если сообщение отсутствует, можно вернуть общее сообщение об ошибке
+            if (string.IsNullOrEmpty(errorMessage))
+            {
+                errorMessage = "Произошла неизвестная ошибка.";
+            }
+
+            return View("Error", errorMessage); // Передаем сообщение в представление
         }
     }
 }

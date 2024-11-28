@@ -12,5 +12,8 @@ namespace InnoShop.Contracts.Service
         public List<ProdAttrib> GetAllProdAttribs(bool trackChanges = false);
         public ProdAttrib GetProdAttrib(int id);
         public List<ProdAttrib> GetAttribsFromProduct(int id, bool trackChanges = false);
+        public void Add(ProdAttrib product);
+        public void Remove(ProdAttrib product);
+        public void Clear(int prodId);
     }
 }

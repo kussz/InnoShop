@@ -1,6 +1,7 @@
 ﻿﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    
 }
 .info
 {
@@ -145,7 +146,7 @@ a:hover
     max-width: 350px;
     min-width: 350px;
     flex-basis: 300px;
-    height: 170px;
+    height: 180px;
     margin: 20px;
     align-items: center;
     justify-content: space-around;
@@ -164,9 +165,10 @@ a:hover
 .blobdesc {
     text-overflow: ellipsis;
     text-align:justify;
+    height:30px;
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
 .blob:focus {
@@ -247,3 +249,77 @@ aside h3
 {
     margin-top:50px;
 }
+.prodNavig {
+    background: #181818;
+    min-height:100px;
+    align-items:center;
+    justify-content:center;
+    margin-top:-15px;
+    display:flex;
+}
+
+    .prodNavig a {
+        color: white;
+        padding:20px;
+        background: #181818;
+        margin: 5px;
+        border-radius: 5px;
+        transition: 0.2s;
+    }
+
+.prodNavig a:hover {
+    background: #101010;
+    text-decoration:none;
+}
+
+.prodNavig a:active {
+    background: #080808;
+    transform: scale(1.1,1.1);
+    text-decoration:none;
+}
+
+.pendingItem
+{
+    background: #332;
+}
+.boughtItem {
+    background: #232;
+}
+.pendingItem:hover {
+    background: #443;
+}
+
+.boughtItem:hover {
+    background: #343;
+}
+
+#tags-container {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 400px;
+}
+
+#tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.tag {
+    display: inline-block;
+    background: #eee;
+    color:#000;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+    .tag button.remove-tag {
+        background: transparent;
+        border: none;
+        color: red;
+        font-size: 14px;
+        cursor: pointer;
+    }
