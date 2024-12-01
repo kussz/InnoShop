@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using InnoShop.DTO.Models;
 using System.IdentityModel.Tokens.Jwt;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InnoShop.ProdWebAPI.Controllers
 {
@@ -27,9 +28,10 @@ namespace InnoShop.ProdWebAPI.Controllers
             }
         }
         [HttpPost]
+        [Authorize]
         public IActionResult ForUser(ProductFilterDTO dto)
         {
-            var user = _service.UserService.Authorize(Request.Headers.Authorization);
+            var user = _service.UserService.GetUserFromIdentity(User);
             try
             {
                 if (dto.Search == null)
@@ -44,9 +46,10 @@ namespace InnoShop.ProdWebAPI.Controllers
             }
         }
         [HttpPost]
+        [Authorize]
         public IActionResult BoughtForUser(ProductFilterDTO dto)
         {
-            var user = _service.UserService.Authorize(Request.Headers.Authorization);
+            var user = _service.UserService.GetUserFromIdentity(User);
             try
             {
                 var products = _service.UserService.GetUser(user.Id).ProductsBuyer.Where(p => (dto.CategoryId != 0 ? dto.CategoryId == p.ProdTypeId : true) && p.Cost >= dto.MinPrice && p.Cost <= dto.MaxPrice).OrderByDescending(p => p.CreationDate).ToList();
@@ -59,9 +62,10 @@ namespace InnoShop.ProdWebAPI.Controllers
             }
         }
         [HttpPost]
+        [Authorize]
         public IActionResult PendingForUser(ProductFilterDTO dto)
         {
-            var user = _service.UserService.Authorize(Request.Headers.Authorization);
+            var user = _service.UserService.GetUserFromIdentity(User);
             try
             {
                 var products = _service.UserService.GetUser(user.Id).ProductsUser.Where(p => (dto.CategoryId != 0 ? dto.CategoryId == p.ProdTypeId : true) && p.Cost >= dto.MinPrice && p.Cost <= dto.MaxPrice&&!p.Sold&&p.BuyerId!=null).OrderByDescending(p => p.CreationDate).ToList();
@@ -74,9 +78,10 @@ namespace InnoShop.ProdWebAPI.Controllers
             }
         }
         [HttpPost]
+        [Authorize]
         public IActionResult Buy([FromBody] int id)
         {
-            var user = _service.UserService.Authorize(Request.Headers.Authorization);
+            var user = _service.UserService.GetUserFromIdentity(User);
             if (user == null)
                 return Unauthorized();
             var product = _service.ProductService.GetProduct(id);
@@ -96,9 +101,10 @@ namespace InnoShop.ProdWebAPI.Controllers
             }
         }
         [HttpPost]
+        [Authorize]
         public IActionResult ConfirmBought([FromBody]int id)
         {
-            var user = _service.UserService.Authorize(Request.Headers.Authorization);
+            var user = _service.UserService.GetUserFromIdentity(User);
             if (user == null)
                 return Unauthorized();
             var product = _service.ProductService.GetProduct(id);
@@ -118,9 +124,10 @@ namespace InnoShop.ProdWebAPI.Controllers
             }
         }
         [HttpPost]
+        [Authorize]
         public IActionResult RejectBought([FromBody] int id)
         {
-            var user = _service.UserService.Authorize(Request.Headers.Authorization);
+            var user = _service.UserService.GetUserFromIdentity(User);
             if (user == null)
                 return Unauthorized();
             var product = _service.ProductService.GetProduct(id);
@@ -151,9 +158,10 @@ namespace InnoShop.ProdWebAPI.Controllers
             return Ok(data);
         }
         [HttpPost]
+        [Authorize]
         public IActionResult Create(ProductEditDTO productForCreate)
         {
-            var user = _service.UserService.Authorize(Request.Headers.Authorization);
+            var user = _service.UserService.GetUserFromIdentity(User);
             try
             {
                 if (productForCreate.UserId == user.Id)
@@ -202,45 +210,47 @@ namespace InnoShop.ProdWebAPI.Controllers
             return Ok(data);
         }
         [HttpPost]
+        [Authorize]
         public IActionResult Edit(ProductEditDTO productForEdit)
         {
-                var role = _service.UserService.GetRole(Request.Headers.Authorization);
-                var user = _service.UserService.Authorize(Request.Headers.Authorization);
-                if (user.Id == productForEdit.UserId || role == "Admin")
-                {
-                var product = _service.ProductService.GetProduct(productForEdit.Id);
+            
+            var user = _service.UserService.GetUserFromIdentity(User);
+            var role = _service.UserService.GetRole(User);
+            if (user.Id == productForEdit.UserId || role == "Admin")
+            {
+            var product = _service.ProductService.GetProduct(productForEdit.Id);
 
-                product.Name = productForEdit.Name;
-                product.Description = productForEdit.Description;
-                product.Cost = productForEdit.Cost;
-                product.ProdTypeId = productForEdit.ProdTypeId;
-                product.CreationDate = productForEdit.CreationDate;
-                product.Public = productForEdit.Public;
-                product.UserId = productForEdit.UserId;
-                product.Sold = productForEdit.Sold;
-                product.BuyerId = productForEdit.BuyerId;
+            product.Name = productForEdit.Name;
+            product.Description = productForEdit.Description;
+            product.Cost = productForEdit.Cost;
+            product.ProdTypeId = productForEdit.ProdTypeId;
+            product.CreationDate = productForEdit.CreationDate;
+            product.Public = productForEdit.Public;
+            product.UserId = productForEdit.UserId;
+            product.Sold = productForEdit.Sold;
+            product.BuyerId = productForEdit.BuyerId;
 
-                var existingTags = product.ProdAttribs.ToList();
-                var tags = JsonConvert.DeserializeObject<List<ProdAttrib>>(productForEdit.ProdAttribs);
-                var tagsToAdd = tags.Where(nt => !existingTags.Any(et => et.Name == nt.Name)).ToList();
+            var existingTags = product.ProdAttribs.ToList();
+            var tags = JsonConvert.DeserializeObject<List<ProdAttrib>>(productForEdit.ProdAttribs);
+            var tagsToAdd = tags.Where(nt => !existingTags.Any(et => et.Name == nt.Name)).ToList();
 
-                // Теги, которые нужно удалить
-                var tagsToRemove = existingTags.Where(et => !tags.Any(nt => nt.Name == et.Name)).ToList();
-                foreach (var tagToRemove in tagsToRemove)
-                {
-                    product.ProdAttribs.Remove(tagToRemove);
-                }
+            // Теги, которые нужно удалить
+            var tagsToRemove = existingTags.Where(et => !tags.Any(nt => nt.Name == et.Name)).ToList();
+            foreach (var tagToRemove in tagsToRemove)
+            {
+                product.ProdAttribs.Remove(tagToRemove);
+            }
 
-                // Добавляем новые теги
-                foreach (var tagToAdd in tagsToAdd)
-                {
-                    product.ProdAttribs.Add(tagToAdd);
-                }
-                _service.ProductService.Edit(product);
-                    return Ok(product);
-                }
-                else
-                    return BadRequest();
+            // Добавляем новые теги
+            foreach (var tagToAdd in tagsToAdd)
+            {
+                product.ProdAttribs.Add(tagToAdd);
+            }
+            _service.ProductService.Edit(product);
+                return Ok(product);
+            }
+            else
+                return BadRequest();
             //try
             //{
             //}
@@ -250,8 +260,8 @@ namespace InnoShop.ProdWebAPI.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var user = _service.UserService.Authorize(Request.Headers.Authorization);
-            var role = _service.UserService.GetRole(Request.Headers.Authorization);
+            var user = _service.UserService.GetUserFromIdentity(User);
+            var role = _service.UserService.GetRole(User);
             var product = _service.ProductService.GetProduct(id);
             try
             {

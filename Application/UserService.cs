@@ -22,47 +22,30 @@ namespace InnoShop.Application
         {
             return Repository.UserRepository.GetUsersByCondition(expression, trackChanges);
         }
-        public User? Authorize(string? fullToken)
+        public User? GetUserFromIdentity(ClaimsPrincipal user)
         {
-            string token = "null";
-            if (fullToken != null)
-                token = fullToken.ToString().Replace("Bearer ", "");
-            if (token != "null")
+            if (user.Identity.IsAuthenticated)
             {
-                // Проверяем, что токен не пустой
-                if (string.IsNullOrEmpty(token))
+                var userIdClaim = user.FindFirst("Id");
+                if(userIdClaim != null)
                 {
-                    return null;
+                    return GetUser(int.Parse(userIdClaim.Value));
                 }
-                var handler = new JwtSecurityTokenHandler();
-                var jwtToken = handler.ReadToken(token) as JwtSecurityToken;
-
-                var userId = int.Parse(jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Id")?.Value);
-                return GetUser(userId);
             }
-            else
-                return null;
+            return null;
+            
         }
-        public string? GetRole(string? fullToken)
+        public string? GetRole(ClaimsPrincipal user)
         {
-            string token = "null";
-            if (fullToken != null)
-                token = fullToken.ToString().Replace("Bearer ", "");
-            if (token != "null")
+            if (user.Identity.IsAuthenticated)
             {
-                // Проверяем, что токен не пустой
-                if (string.IsNullOrEmpty(token))
+                var userRoleClaim = user.FindFirst("role");
+                if (userRoleClaim != null)
                 {
-                    return null;
+                    return userRoleClaim.Value;
                 }
-                var handler = new JwtSecurityTokenHandler();
-                var jwtToken = handler.ReadToken(token) as JwtSecurityToken;
-
-                var role = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "role")?.Value;
-                return role;
             }
-            else
-                return null;
+            return null;
         }
     }   
 }

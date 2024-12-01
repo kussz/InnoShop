@@ -6,8 +6,11 @@ using InnoShop.Domain.Models;
 using InnoShop.DTO.Models;
 using InnoShop.Infrastructure;
 using InnoShop.Infrastructure.Initialize;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace InnoShop.ProdWebAPI
 {
@@ -33,6 +36,40 @@ namespace InnoShop.ProdWebAPI
             builder.Services.AddIdentity<User, IdentityRole<int>>()
             .AddEntityFrameworkStores<InnoShopContext>()
             .AddDefaultTokenProviders();
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                    .AddJwtBearer(options =>
+                    {
+                        options.RequireHttpsMetadata = false;
+                        options.SaveToken = true;
+                        var JWTSettings = builder.Configuration.GetSection("JWTSettings");
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            // укзывает, будет ли валидироваться издатель при валидации токена
+                            ValidateIssuer = true,
+                            // строка, представляющая издателя
+                            ValidIssuer = JWTSettings["Issuer"],
+
+                            // будет ли валидироваться потребитель токена
+                            ValidateAudience = true,
+                            // установка потребителя токена
+                            ValidAudience = JWTSettings["Audience"],
+                            // будет ли валидироваться время существования
+                            ValidateLifetime = true,
+
+                            // установка ключа безопасности
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JWTSettings["SecretKey"])),
+                            // валидация ключа безопасности
+                            ValidateIssuerSigningKey = true,
+                        };
+                    });
+
+
+            builder.Services.AddAuthorization();
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
@@ -47,6 +84,8 @@ namespace InnoShop.ProdWebAPI
             app.UseStaticFiles();
             app.UseRouting();
             app.UseCors("AllowLocalhost5030");
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");

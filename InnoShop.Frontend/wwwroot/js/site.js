@@ -11,6 +11,24 @@
     // Предполагаем, что имя пользователя хранится в свойстве `sub`
     return payload.sub;
 }
+function isExpired(token) {
+    // Разделяем токен на части
+    if (token != null) {
+        const tokenParts = token.split('.');
+        if (tokenParts.length !== 3) {
+            throw new Error('Неверный формат токена');
+        }
+
+        // Декодируем полезную нагрузку (payload) из base64
+        const payload = JSON.parse(atob(tokenParts[1]));
+
+        // Предполагаем, что имя пользователя хранится в свойстве `sub`
+        const exp = payload.exp;
+        const currentTime = Math.floor(Date.now() / 1000); // Время в секундах
+        return exp < currentTime;
+    }
+    return false;
+}
 function getRoleFromToken() {
     token = localStorage.getItem('jwtToken');
     // Разделяем токен на части
@@ -27,9 +45,11 @@ function getRoleFromToken() {
 }
 
 async function updateNav() {
+    token = localStorage.getItem("jwtToken");
+    if (isExpired(token))
+        localStorage.removeItem('jwtToken'); // Удаляем токен
     authButtons = document.getElementById("authButtons");
     authButtons.innerHTML = '';
-    token = localStorage.getItem("jwtToken");
     //await loadNavigation();
     if (token != null)
     {

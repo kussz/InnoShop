@@ -20,10 +20,6 @@
             <a id="cancelButton">Отмена</a>
     </div>
 </div>
-@section Prescripts
-{
-    <script src="~/js/AdminRequired.js" asp-append-version="true"></script>
-}
 @section Scripts
 {
     <script src="~/js/Detail.js" asp-append-version="true"></script>
@@ -48,9 +44,14 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
             }
         })
         if (!response.ok) {
+                    if (response.status == 401)
+                        window.location.href = '/Account/Unauthorized'
+                    if (response.status == 403)
+                        window.location.href = '/Account/Forbidden'
             throw new Error('Ошибка входа: ' + response.statusText);
         }
         window.location.href = "/Locality"

@@ -17,6 +17,7 @@ async function funch() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
             },
             body: JSON.stringify({
                 Id: id,
@@ -24,6 +25,10 @@ async function funch() {
             })
         })
         if (!response.ok) {
+            if (response.status == 401)
+                window.location.href = '/Account/Unauthorized'
+            if (response.status == 403)
+                window.location.href = '/Account/Forbidden'
             throw new Error('Ошибка входа: ' + response.statusText);
         }
             window.location.href =`/${tableName}`

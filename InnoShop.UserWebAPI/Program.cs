@@ -37,6 +37,9 @@ namespace InnoShop.UserWebAPI
                         .AllowAnyMethod();                     // Разрешить любые методы (GET, POST, PUT, и т.д.)
                 });
             });
+            builder.Services.AddIdentity<User, IdentityRole<int>>()
+            .AddEntityFrameworkStores<InnoShopContext>()
+            .AddDefaultTokenProviders();
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -71,9 +74,7 @@ namespace InnoShop.UserWebAPI
 
 
             builder.Services.AddAuthorization();
-            builder.Services.AddIdentity<User, IdentityRole<int>>()
-            .AddEntityFrameworkStores<InnoShopContext>()
-            .AddDefaultTokenProviders();
+            
             builder.Services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;

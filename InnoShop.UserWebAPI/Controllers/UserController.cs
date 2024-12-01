@@ -46,7 +46,6 @@ namespace InnoShop.UserWebAPI.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             Claim[] claims;
-            List<Claim> lis = new List<Claim>();
             if(_userManager.GetRolesAsync(user).Result.Count==0)
                 await SetRole(new UserAddRoleDTO() { Id = user.Id, RoleName="User" });
             claims =
@@ -95,10 +94,10 @@ namespace InnoShop.UserWebAPI.Controllers
             catch(Exception ex) { Console.WriteLine(ex.Message); }
             return BadRequest();
         }
-        //[Authorize(Roles ="User, Admin")]
+        [Authorize]
         public IActionResult GetProfile()
         {
-            var user = _service.UserService.Authorize(Request.Headers.Authorization);
+            var user = _service.UserService.GetUserFromIdentity(User);
             // Получаем токен из заголовка Authorization
             if(user!=null)
             {

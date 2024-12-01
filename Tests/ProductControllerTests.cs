@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Xunit.Abstractions;
 using NuGet.Common;
 using Azure.Core;
+using System.Security.Claims;
 namespace Tests;
 
 public class ProductControllerTests
@@ -70,7 +71,7 @@ public class ProductControllerTests
             new (){ Id = 1, UserId = _actualId, Name = "User Product" }
         };
         SetAuth(_token);
-        _mockServiceManager.Setup(service => service.UserService.Authorize(It.IsAny<string>())).Returns(user);
+        _mockServiceManager.Setup(service => service.UserService.GetUserFromIdentity(It.IsAny<ClaimsPrincipal>())).Returns(user);
         _mockServiceManager.Setup(service => service.ProductService.GetProductsByCondition(It.IsAny<Expression<Func<Product, bool>>>(), false)).Returns(products);
 
         // Act
@@ -112,7 +113,7 @@ public class ProductControllerTests
         var product = new ProductEditDTO { UserId = _actualId, Name = "New Product" };
         _output.WriteLine(user.ToString());
         SetAuth(_token);
-        _mockServiceManager.Setup(service => service.UserService.Authorize(It.IsAny<string>())).Returns(user);
+        _mockServiceManager.Setup(service => service.UserService.GetUserFromIdentity(It.IsAny<ClaimsPrincipal>())).Returns(user);
 
         // Act
         var result = _controller.Create(product);
@@ -130,7 +131,7 @@ public class ProductControllerTests
         var user = new User { Id = _actualId };
         var product = new ProductEditDTO { UserId = _actualId+1 }; // UserId не совпадает
         SetAuth(_token);
-        _mockServiceManager.Setup(service => service.UserService.Authorize(It.IsAny<string>())).Returns(user);
+        _mockServiceManager.Setup(service => service.UserService.GetUserFromIdentity(It.IsAny<ClaimsPrincipal>())).Returns(user);
 
         // Act
         var result = _controller.Create(product);
@@ -185,8 +186,8 @@ public class ProductControllerTests
         string role = "Admin";
         var product = new ProductEditDTO { Id=1, UserId = _actualId, Name = "Edited Product" };
         SetAuth(_token);
-        _mockServiceManager.Setup(service => service.UserService.GetRole($"Bearer {_token}")).Returns(role);
-        _mockServiceManager.Setup(service => service.UserService.Authorize($"Bearer {_token}")).Returns(user) ;
+        _mockServiceManager.Setup(service => service.UserService.GetRole(It.IsAny<ClaimsPrincipal>())).Returns(role);
+        _mockServiceManager.Setup(service => service.UserService.GetUserFromIdentity(It.IsAny<ClaimsPrincipal>())).Returns(user) ;
         // Act
         var result = _controller.Edit(product);
         Console.Write(result.ToString());
@@ -203,7 +204,7 @@ public class ProductControllerTests
         var user = new User { Id = _actualId };
         var product = new ProductEditDTO { UserId = _actualId+1 }; // UserId не совпадает
         SetAuth(_token);
-        _mockServiceManager.Setup(service => service.UserService.Authorize($"Bearer {_token}")).Returns(user);
+        _mockServiceManager.Setup(service => service.UserService.GetUserFromIdentity(It.IsAny<ClaimsPrincipal>())).Returns(user);
 
         // Act
         var result = _controller.Edit(product);
@@ -219,7 +220,7 @@ public class ProductControllerTests
         var user = new User { Id = _actualId };
         var product = new Product { Id = 1, UserId = _actualId };
         SetAuth(_token);
-        _mockServiceManager.Setup(service => service.UserService.Authorize(It.IsAny<string>())).Returns(user);
+        _mockServiceManager.Setup(service => service.UserService.GetUserFromIdentity(It.IsAny<ClaimsPrincipal>())).Returns(user);
         _mockServiceManager.Setup(service => service.ProductService.GetProduct(1)).Returns(product);
 
         // Act
@@ -236,7 +237,7 @@ public class ProductControllerTests
         var user = new User { Id = _actualId };
         var product = new Product { Id = 1, UserId = _actualId + 1 }; // UserId не совпадает
         SetAuth(_token);
-        _mockServiceManager.Setup(service => service.UserService.Authorize(It.IsAny<string>())).Returns(user);
+        _mockServiceManager.Setup(service => service.UserService.GetUserFromIdentity(It.IsAny<ClaimsPrincipal>())).Returns(user);
         _mockServiceManager.Setup(service => service.ProductService.GetProduct(1)).Returns(product);
 
         // Act

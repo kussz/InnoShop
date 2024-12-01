@@ -6,8 +6,12 @@
                 'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
                 }
         }); // Укажите правильный путь к вашему API
-if (!response.ok) {
-            throw new Error('Network response was not ok');
+        if (!response.ok) {
+            //throw new Error('Network response was not ok');
+            if (response.status == 401)
+                window.location.href = '/Account/Unauthorized'
+            if (response.status == 403)
+                window.location.href='/Account/Forbidden'
         }
         const items = await response.json();
         displayItems(items,controller)
