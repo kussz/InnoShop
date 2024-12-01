@@ -12,13 +12,15 @@ namespace InnoShop.Domain.Data;
 
 public partial class InnoShopContext : IdentityDbContext<User,IdentityRole<int>,int>
 {
+    private readonly IConfiguration _configuration;
     public InnoShopContext()
     {
     }
 
-    public InnoShopContext(DbContextOptions<InnoShopContext> options)
+    public InnoShopContext(DbContextOptions<InnoShopContext> options,IConfiguration configuration)
         : base(options)
     {
+        _configuration = configuration;
     }
 
     public virtual DbSet<Locality> Localities { get; set; }
@@ -35,9 +37,7 @@ public partial class InnoShopContext : IdentityDbContext<User,IdentityRole<int>,
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
     {
-        string getStringFrom = "newDBConnection";
-        string connectionString = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build().GetConnectionString(getStringFrom);
-        optionsBuilder.UseSqlServer(connectionString);
+
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
