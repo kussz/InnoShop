@@ -68,14 +68,14 @@ public class ProductControllerTests
         var user = new User { Id = _actualId };
         var products = new List<Product>
         {
-            new (){ Id = 1, UserId = _actualId, Name = "User Product" }
+            new (){ Id = 1, UserId = _actualId, Name = "User Product",Cost=15,Description="15" }
         };
         SetAuth(_token);
         _mockServiceManager.Setup(service => service.UserService.GetUserFromIdentity(It.IsAny<ClaimsPrincipal>())).Returns(user);
-        _mockServiceManager.Setup(service => service.ProductService.GetProductsByCondition(It.IsAny<Expression<Func<Product, bool>>>(), false)).Returns(products);
+        _mockServiceManager.Setup(service => service.UserService.GetUser(_actualId).ProductsUser).Returns(products);
 
         // Act
-        var result = _controller.ForUser(new ProductFilterDTO());
+        var result = _controller.ForUser(new ProductFilterDTO() { CategoryId=0,MinPrice=0,MaxPrice=2000,Search=""});
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -110,7 +110,7 @@ public class ProductControllerTests
     {
         // Arrange
         var user = new User { Id = _actualId };
-        var product = new ProductEditDTO { UserId = _actualId, Name = "New Product" };
+        var product = new ProductEditDTO { UserId = _actualId, Name = "New Product",ProdAttribs="[]" };
         _output.WriteLine(user.ToString());
         SetAuth(_token);
         _mockServiceManager.Setup(service => service.UserService.GetUserFromIdentity(It.IsAny<ClaimsPrincipal>())).Returns(user);
@@ -184,9 +184,10 @@ public class ProductControllerTests
         // Arrange
         var user = new User { Id = _actualId };
         string role = "Admin";
-        var product = new ProductEditDTO { Id=1, UserId = _actualId, Name = "Edited Product" };
+        var product = new ProductEditDTO { Id=1, UserId = _actualId, Name = "Edited Product",ProdAttribs="[]" };
         SetAuth(_token);
         _mockServiceManager.Setup(service => service.UserService.GetRole(It.IsAny<ClaimsPrincipal>())).Returns(role);
+        _mockServiceManager.Setup(service => service.ProductService.GetProduct(product.Id)).Returns(new Product() { Id =product.Id,UserId=product.UserId,Name=product.Name});
         _mockServiceManager.Setup(service => service.UserService.GetUserFromIdentity(It.IsAny<ClaimsPrincipal>())).Returns(user) ;
         // Act
         var result = _controller.Edit(product);
@@ -205,6 +206,7 @@ public class ProductControllerTests
         var product = new ProductEditDTO { UserId = _actualId+1 }; // UserId не совпадает
         SetAuth(_token);
         _mockServiceManager.Setup(service => service.UserService.GetUserFromIdentity(It.IsAny<ClaimsPrincipal>())).Returns(user);
+        _mockServiceManager.Setup(service => service.ProductService.GetProduct(product.Id)).Returns(new Product() { Id = product.Id, UserId = product.UserId, Name = product.Name });
 
         // Act
         var result = _controller.Edit(product);

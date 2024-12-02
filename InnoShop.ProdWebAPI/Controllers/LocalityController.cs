@@ -12,6 +12,7 @@ namespace InnoShop.ProdWebAPI.Controllers
     {
         IServiceManager _service = service;
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             try

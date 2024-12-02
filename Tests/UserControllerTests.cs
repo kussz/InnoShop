@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
 using System.Data;
+using System.Security.Claims;
 
 namespace Tests;
 public class UserControllerTests
@@ -160,7 +161,7 @@ public class UserControllerTests
         // Arrange
         var user = new User { Id = _actualId, UserName = "testuser" };
         SetAuth(_token);
-        _mockServiceManager.Setup(service => service.UserService.Authorize(It.IsAny<string>())).Returns(user);
+        _mockServiceManager.Setup(service => service.UserService.GetUserFromIdentity(It.IsAny<ClaimsPrincipal>())).Returns(user);
         // Act
         var result = _controller.GetProfile();
 
@@ -174,7 +175,7 @@ public class UserControllerTests
     {
         SetAuth("");
         // Arrange
-        _mockServiceManager.Setup(service => service.UserService.Authorize(It.IsAny<string>())).Returns((User)null);
+        _mockServiceManager.Setup(service => service.UserService.GetUserFromIdentity(It.IsAny<ClaimsPrincipal>())).Returns((User)null);
 
         // Act
         var result = _controller.GetProfile();

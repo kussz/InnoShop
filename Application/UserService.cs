@@ -39,7 +39,7 @@ namespace InnoShop.Application
         {
             if (user.Identity.IsAuthenticated)
             {
-                var userRoleClaim = user.FindFirst("role");
+                var userRoleClaim = user.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
                 if (userRoleClaim != null)
                 {
                     return userRoleClaim.Value;

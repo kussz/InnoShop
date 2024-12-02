@@ -45,9 +45,9 @@ function getRoleFromToken() {
 }
 
 async function updateNav() {
-    token = localStorage.getItem("jwtToken");
-    if (isExpired(token))
+    if (isExpired(localStorage.getItem("jwtToken")))
         localStorage.removeItem('jwtToken'); // Удаляем токен
+    token = localStorage.getItem("jwtToken");
     authButtons = document.getElementById("authButtons");
     authButtons.innerHTML = '';
     //await loadNavigation();

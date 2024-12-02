@@ -127,6 +127,7 @@ namespace InnoShop.ProdWebAPI.Controllers
         [Authorize]
         public IActionResult RejectBought([FromBody] int id)
         {
+            Console.WriteLine(id);
             var user = _service.UserService.GetUserFromIdentity(User);
             if (user == null)
                 return Unauthorized();
@@ -136,6 +137,7 @@ namespace InnoShop.ProdWebAPI.Controllers
                 if (product.UserId == user.Id && product.BuyerId != null)
                 {
                     product.BuyerId = null;
+                    product.Buyer = null;
                     _service.ProductService.Edit(product);
                     return Ok(product);
                 }

@@ -15,7 +15,7 @@ public partial class Product
     [DisplayName("Стоимость")]
 
     public decimal Cost { get; set; }
-
+    [DisplayName("Категория")]
     public int? ProdTypeId { get; set; }
     [DisplayName("Публичный")]
     public bool Public { get; set; }

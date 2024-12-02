@@ -16,9 +16,9 @@ namespace InnoShop.Frontend.Controllers
         // GET: ProductController
         public ActionResult Index()
         {
-            var response = _httpClient.GetAsync($"{ViewBag.Host.Product}/ProdType/");
+            var response = _httpClient.GetAsync($"{ViewBag.Host.Product}/ProdType/ForSelect");
             response.Result.EnsureSuccessStatusCode();
-            var product = response.Result.Content.ReadFromJsonAsync<IEnumerable<ProdType>>().Result;
+            var product = response.Result.Content.ReadFromJsonAsync<IEnumerable<SelectListItem>>().Result.Select(item => new ProdType() { Id = int.Parse(item.Value), Name = item.Text });
             ProductFilterDTO filterDTO = new()
             {
                 Categories = product,
