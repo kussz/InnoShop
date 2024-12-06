@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Net.Http;
 
-namespace InnoShop.ProdWebAPI.Controllers
+namespace InnoShop.Frontend.Controllers
 {
     public class ProdTypeController(HttpClient client) : Controller
     {

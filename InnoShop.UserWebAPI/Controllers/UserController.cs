@@ -120,7 +120,7 @@ namespace InnoShop.UserWebAPI.Controllers
                     // установка куки
                     await _signInManager.SignInAsync(user, false);
                     await SetRole(new UserAddRoleDTO() { Id = user.Id, RoleName = "User" });
-                    var token = GenerateToken(user);
+                    var token = await GenerateToken(user);
                     return Ok(token);
                 }
                 else

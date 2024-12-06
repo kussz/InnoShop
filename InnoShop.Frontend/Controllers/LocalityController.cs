@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace InnoShop.ProdWebAPI.Controllers
+namespace InnoShop.Frontend.Controllers
 {
     public class LocalityController(HttpClient client) : Controller
     {

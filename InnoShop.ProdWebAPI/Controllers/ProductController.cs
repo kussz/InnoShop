@@ -18,7 +18,12 @@ namespace InnoShop.ProdWebAPI.Controllers
         {
             try
             {
-                
+                if (dto.Search == null)
+                    dto.Search = "";
+                if (dto.MinPrice == null)
+                    dto.MinPrice = 0;
+                if (dto.MaxPrice == null)
+                    dto.MaxPrice = 0;
                 var products = _service.ProductService.GetPage(30, page,dto);
                 return Ok(products);
             }
@@ -36,6 +41,10 @@ namespace InnoShop.ProdWebAPI.Controllers
             {
                 if (dto.Search == null)
                     dto.Search = "";
+                if (dto.MinPrice == null)
+                    dto.MinPrice = 0;
+                if (dto.MaxPrice == null)
+                    dto.MaxPrice = 0;
                 var products = _service.UserService.GetUser(user.Id).ProductsUser.Where(p=>(dto.CategoryId != 0 ? dto.CategoryId == p.ProdTypeId : true) && p.Cost >= dto.MinPrice && p.Cost <= dto.MaxPrice&& (p.Description.ToUpper().Contains(dto.Search.ToUpper()) || p.Name.ToUpper().Contains(dto.Search.ToUpper()) || p.ProdAttribs.Any(t => t.Name.ToUpper().Contains(dto.Search.ToUpper())))).OrderByDescending(p => p.CreationDate).ToList();
                 //var products = _service.ProductService.GetProductsByCondition(p => p.UserId == user.Id&& (dto.CategoryId != 0 ? dto.CategoryId == p.ProdTypeId : true) && p.Cost >= dto.MinPrice && p.Cost <= dto.MaxPrice).OrderByDescending(p=>p.CreationDate).ToList();
                 return Ok(products);
