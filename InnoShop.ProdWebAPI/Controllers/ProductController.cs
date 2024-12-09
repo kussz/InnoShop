@@ -10,10 +10,15 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace InnoShop.ProdWebAPI.Controllers
 {
+    [Route("[controller]")]
     public class ProductController(IServiceManager service) : Controller
     {
         readonly IServiceManager _service = service;
-        [HttpPost]
+        /// <summary>
+        /// Получить все продукты.
+        /// </summary>
+        /// <returns>Список продуктов</returns>
+        [HttpPost("Index")]
         public IActionResult Index(ProductFilterDTO dto,int page = 1)
         {
             try
@@ -32,7 +37,7 @@ namespace InnoShop.ProdWebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
+        [HttpPost("ForUser")]
         [Authorize]
         public IActionResult ForUser(ProductFilterDTO dto)
         {
@@ -54,7 +59,7 @@ namespace InnoShop.ProdWebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
+        [HttpPost("BoughtForUser")]
         [Authorize]
         public IActionResult BoughtForUser(ProductFilterDTO dto)
         {
@@ -70,7 +75,7 @@ namespace InnoShop.ProdWebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
+        [HttpPost("PendingForUser")]
         [Authorize]
         public IActionResult PendingForUser(ProductFilterDTO dto)
         {
@@ -86,7 +91,7 @@ namespace InnoShop.ProdWebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
+        [HttpPost("Buy")]
         [Authorize]
         public IActionResult Buy([FromBody] int id)
         {
@@ -109,7 +114,7 @@ namespace InnoShop.ProdWebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
+        [HttpPost("ConfirmBought")]
         [Authorize]
         public IActionResult ConfirmBought([FromBody]int id)
         {
@@ -132,7 +137,7 @@ namespace InnoShop.ProdWebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
+        [HttpPost("RejectBought")]
         [Authorize]
         public IActionResult RejectBought([FromBody] int id)
         {
@@ -158,7 +163,7 @@ namespace InnoShop.ProdWebAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("Create")]
         public IActionResult Create()
         {
             ProductEditData data = new()
@@ -168,7 +173,7 @@ namespace InnoShop.ProdWebAPI.Controllers
             };
             return Ok(data);
         }
-        [HttpPost]
+        [HttpPost("Create")]
         [Authorize]
         public IActionResult Create(ProductEditDTO productForCreate)
         {
@@ -203,13 +208,13 @@ namespace InnoShop.ProdWebAPI.Controllers
             }
             catch(Exception ex) { return BadRequest(ex.Message); }
         }
-        [HttpGet]
+        [HttpGet("Details")]
         public IActionResult Details(int id)
         {
             Product product = _service.ProductService.GetProduct(id);
             return Ok(product);
         }
-        [HttpGet]
+        [HttpGet("Edit")]
         public IActionResult Edit(int id)
         {
             ProductEditData data = new()
@@ -220,7 +225,7 @@ namespace InnoShop.ProdWebAPI.Controllers
             };
             return Ok(data);
         }
-        [HttpPost]
+        [HttpPost("Edit")]
         [Authorize]
         public IActionResult Edit(ProductEditDTO productForEdit)
         {
@@ -268,7 +273,7 @@ namespace InnoShop.ProdWebAPI.Controllers
             //catch (Exception ex) { return BadRequest(ex.Message); }
 
         }
-        [HttpPost]
+        [HttpPost("Delete")]
         public IActionResult Delete(int id)
         {
             var user = _service.UserService.GetUserFromIdentity(User);

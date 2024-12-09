@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 namespace InnoShop.ProdWebAPI
@@ -70,7 +71,11 @@ namespace InnoShop.ProdWebAPI
 
 
             builder.Services.AddAuthorization();
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllers();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            });
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
@@ -83,12 +88,21 @@ namespace InnoShop.ProdWebAPI
             var app = builder.Build();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseSwagger();
+
+            // Включаем Swagger UI
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty; // Для доступа по корневому адресу
+            });
             app.UseCors("AllowLocalhost5030");
             app.UseAuthentication();
             app.UseAuthorization();
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
             app.Run();
         }
     }
