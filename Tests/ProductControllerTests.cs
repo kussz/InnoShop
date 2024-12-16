@@ -137,7 +137,7 @@ public class ProductControllerTests
         var result = _controller.Create(product);
 
         // Assert
-        Assert.IsType<BadRequestResult>(result);
+        Assert.IsType<BadRequestObjectResult>(result);
     }
 
     [Fact]
@@ -212,7 +212,7 @@ public class ProductControllerTests
         var result = _controller.Edit(product);
 
         // Assert
-        Assert.IsType<BadRequestResult>(result);
+        Assert.IsType<BadRequestObjectResult>(result);
     }
 
     [Fact]
