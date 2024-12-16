@@ -35,16 +35,17 @@
                     <input class="form-check-input" asp-for="Public" /> @Html.DisplayNameFor(model => model.Public)
                 </label>
             </div>
-            <input type="hidden" asp-for="Sold" value="0" />
+            <input type="hidden" asp-for="Sold" value=false />
             <input type="hidden" asp-for="UserId" id="user" />
-            <input type="hidden" asp-for="BuyerId" value="null" />
+            <input type="hidden" asp-for="BuyerId"/>
             <input type="hidden" asp-for="CreationDate" value="@DateTime.Now" />
             <div id="tags-container">
                 <div id="tags-list">
                 </div>
 
-                <input class="form-control" id="tag-input" type="text" placeholder="Добавить тег" onkeydown="checkTagInput(event)" />
+                <input class="form-control" id="tag-input" maxlength="40" type="text" placeholder="Добавить тег" onkeydown="checkTagInput(event)" />
             </div>
+            <div id="errors" class="text-danger"></div>
             <div class="form-group">
                 <button type="button" class="btn btn-primary" id="submitBtn">Создать</button>
             </div>
@@ -93,8 +94,8 @@
                 // Перенаправление на другую страницу или отображение сообщения
                 window.location.href = `/Product/Detail/${result.id}`; // Замените на ваш URL
             } else {
-                // Обработка ошибок
-                console.error('Error:', response.statusText);
+                const errorResponse = await response.json();
+                displayErrors(errorResponse.errors);
             }
         });
 

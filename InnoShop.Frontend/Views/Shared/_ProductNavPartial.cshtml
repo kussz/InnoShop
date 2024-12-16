@@ -16,12 +16,12 @@
 
         <div class="form-group">
             <label for="minPrice" class="control-label">Минимальная цена:</label>
-            <input type="number" id="minPrice" name="MinPrice" min="0" value="@Model.MinPrice" class="form-control" />
+            <input type="number" id="minPrice" name="MinPrice" min="0" max="@Model.MaxPrice" value="@Model.MinPrice" class="form-control" />
         </div>
 
         <div class="form-group">
             <label for="maxPrice" class="control-label" >Максимальная цена:</label>
-            <input type="number" id="maxPrice" name="MaxPrice" min="0" value="@Model.MaxPrice" class="form-control" />
+            <input type="number" id="maxPrice" name="MaxPrice" min="0" max="@Model.MaxPrice" value="@Model.MaxPrice" class="form-control" />
         </div>
 
         <div class="form-group">

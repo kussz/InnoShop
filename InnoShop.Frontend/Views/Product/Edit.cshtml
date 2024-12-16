@@ -45,8 +45,9 @@
                 <div id="tags-list">
                 </div>
 
-                <input class="form-control" id="tag-input" type="text" placeholder="Добавить тег" onkeydown="checkTagInput(event)" />
+                <input class="form-control" id="tag-input" type="text" maxlength="40" placeholder="Добавить тег" onkeydown="checkTagInput(event)" />
             </div>
+            <div id="errors" class="text-danger"></div>
             <div class="form-group">
                 <button type="button" class="btn btn-primary" id="submitBtn">Подтвердить</button>
             </div>
@@ -98,8 +99,8 @@
                 // Например, перенаправление на другую страницу
                 window.location.href = `/Product/Detail/${@Model.Id}`; // Замените на ваш URL
             } else {
-                // Обработка ошибок
-                console.error('Error:', response.statusText);
+                const errorResponse = await response.json();
+                displayErrors(errorResponse.errors);
             }
         });
 

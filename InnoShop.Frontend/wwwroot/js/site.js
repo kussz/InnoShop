@@ -131,6 +131,16 @@ async function loadNavigation() {
             console.error('Ошибка:', error);
         });
 }
+function displayErrors(errors) {
+    // Логика для отображения ошибок пользователю
+    const errorContainer = document.getElementById("errors");
+    errorContainer.innerHTML = ""; // Очищаем предыдущие ошибки
+    errors.forEach(error => {
+        const errorElement = document.createElement("div");
+        errorElement.textContent = error; // Добавляем текст ошибки
+        errorContainer.appendChild(errorElement); // Добавляем ошибку в контейнер
+    });
+}
 
 // При загрузке страницы обновляем кнопки
 document.addEventListener('DOMContentLoaded', updateNav);

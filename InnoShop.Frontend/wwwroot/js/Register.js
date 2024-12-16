@@ -46,13 +46,3 @@ function updateUIWithLocalitiesAndTypes(localities, userTypes) {
     console.log(localities, userTypes);
     // Например, можно заполнить выпадающие списки или другие элементы
 }
-function displayErrors(errors) {
-    // Логика для отображения ошибок пользователю
-    const errorContainer = document.getElementById("errors");
-    errorContainer.innerHTML = ""; // Очищаем предыдущие ошибки
-    errors.forEach(error => {
-        const errorElement = document.createElement("div");
-        errorElement.textContent = error; // Добавляем текст ошибки
-        errorContainer.appendChild(errorElement); // Добавляем ошибку в контейнер
-    });
-}

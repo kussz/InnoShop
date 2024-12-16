@@ -2,9 +2,10 @@
 using InnoShop.Domain.Models;
 using InnoShop.DTO.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace InnoShop.ProdWebAPI.Controllers
 {
@@ -18,7 +19,7 @@ namespace InnoShop.ProdWebAPI.Controllers
             try
             {
 
-            return Ok(_service.ProdTypeService.GetAllProdTypes());
+                return Ok(_service.ProdTypeService.GetAllProdTypes());
             }
             catch (Exception ex)
             {
@@ -38,16 +39,64 @@ namespace InnoShop.ProdWebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Edit([FromBody] LocalityEditDTO localityDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Where(ms => ms.Value.Errors.Count > 0)
+    .SelectMany(ms => ms.Value.Errors.Select(e => e.ErrorMessage))
+    .ToList();
+                return BadRequest(new { Errors = errors });
+            }
             var locality = new ProdType() { Id = localityDTO.Id, Name = localityDTO.Name };
-            _service.ProdTypeService.Edit(locality);
+            try
+            {
+                _service.ProdTypeService.Edit(locality);
+
+            }
+            catch (DbUpdateException dbEx)
+            {
+                var sqlException = dbEx.InnerException as SqlException;
+                if (sqlException != null && sqlException.Number == 2601) // Код ошибки для уникального ключа
+                {
+                    return BadRequest(new { Errors = new[] { $"Ошибка: категория с именем '{localityDTO.Name}' уже существует. Пожалуйста, выберите другое имя." } });
+                }
+                return BadRequest(new { Errors = new[] { $"Ошибка при сохранении данных: {dbEx.Message}" } });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Errors = new[] { $"Произошла ошибка: {ex.Message}" } });
+            }
             return Ok(locality);
         }
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult Create([FromBody] LocalityEditDTO localityDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Where(ms => ms.Value.Errors.Count > 0)
+    .SelectMany(ms => ms.Value.Errors.Select(e => e.ErrorMessage))
+    .ToList();
+                return BadRequest(new { Errors = errors });
+            }
             var locality = new ProdType() { Id = localityDTO.Id, Name = localityDTO.Name };
-            _service.ProdTypeService.Add(locality);
+            try
+            {
+
+                _service.ProdTypeService.Add(locality);
+            }
+            catch (DbUpdateException dbEx)
+            {
+                var sqlException = dbEx.InnerException as SqlException;
+                if (sqlException != null && sqlException.Number == 2601) // Код ошибки для уникального ключа
+                {
+                    return BadRequest(new { Errors = new[] { $"Ошибка: категория с именем '{localityDTO.Name}' уже существует. Пожалуйста, выберите другое имя." } });
+                }
+                return BadRequest(new { Errors = new[] { $"Ошибка при сохранении данных: {dbEx.Message}" } });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Errors = new[] { $"Произошла ошибка: {ex.Message}" } });
+            }
             return Ok(locality);
         }
         public IActionResult ForSelect()

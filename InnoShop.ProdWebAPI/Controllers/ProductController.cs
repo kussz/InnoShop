@@ -7,6 +7,7 @@ using InnoShop.DTO.Models;
 using System.IdentityModel.Tokens.Jwt;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
+using Azure;
 
 namespace InnoShop.ProdWebAPI.Controllers
 {
@@ -173,6 +174,13 @@ namespace InnoShop.ProdWebAPI.Controllers
         public IActionResult Create(ProductEditDTO productForCreate)
         {
             var user = _service.UserService.GetUserFromIdentity(User);
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Where(ms => ms.Value.Errors.Count > 0)
+    .SelectMany(ms => ms.Value.Errors.Select(e => e.ErrorMessage))
+    .ToList();
+                return BadRequest(new { Errors = errors });
+            }    
             try
             {
                 if (productForCreate.UserId == user.Id)
@@ -190,18 +198,30 @@ namespace InnoShop.ProdWebAPI.Controllers
                         Sold = productForCreate.Sold,
                         BuyerId = productForCreate.BuyerId
                     };
+                    
                     var tags = JsonConvert.DeserializeObject<List<ProdAttrib>>(productForCreate.ProdAttribs);
                     foreach (var tag in tags)
                     {
+                        if (string.IsNullOrWhiteSpace(tag.Name))
+                        {
+                            return BadRequest(new { Errors = new[] { "Название тега не может быть пустым." } });
+                        }
+
+                        if (tag.Name.Length > 40)
+                        {
+                            return BadRequest(new { Errors = new[] { $"Название тега '{tag.Name}' превышает 40 символов." } });
+                        }
                         product.ProdAttribs.Add(tag);
                     }
                     _service.ProductService.Add(product);
                     return Ok(product);
                 }
                 else
-                    return BadRequest();
+                {
+                    return BadRequest(new { Errors =new[] { "Пользователь не имеет прав на создание продукта." } });
+                }    
             }
-            catch(Exception ex) { return BadRequest(ex.Message); }
+            catch(Exception ex) { return BadRequest(new { Errors = new[] {ex.Message}}); }
         }
         [HttpGet]
         public IActionResult Details(int id)
@@ -224,7 +244,14 @@ namespace InnoShop.ProdWebAPI.Controllers
         [Authorize]
         public IActionResult Edit(ProductEditDTO productForEdit)
         {
-            
+         
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Where(ms => ms.Value.Errors.Count > 0)
+    .SelectMany(ms => ms.Value.Errors.Select(e => e.ErrorMessage))
+    .ToList();
+                return BadRequest(new { Errors = errors });
+            }  
             var user = _service.UserService.GetUserFromIdentity(User);
             var role = _service.UserService.GetRole(User);
             if (user.Id == productForEdit.UserId || role == "Admin")
@@ -253,15 +280,24 @@ namespace InnoShop.ProdWebAPI.Controllers
             }
 
             // Добавляем новые теги
-            foreach (var tagToAdd in tagsToAdd)
+            foreach (var tag in tagsToAdd)
             {
-                product.ProdAttribs.Add(tagToAdd);
+                if (string.IsNullOrWhiteSpace(tag.Name))
+                {
+                    return BadRequest(new { Errors = new[] { "Название тега не может быть пустым." } });
+                }
+
+                if (tag.Name.Length > 40)
+                {
+                    return BadRequest(new { Errors = new[] { $"Название тега '{tag.Name}' превышает 40 символов." } });
+                }
+                product.ProdAttribs.Add(tag);
             }
             _service.ProductService.Edit(product);
                 return Ok(product);
             }
             else
-                return BadRequest();
+                return BadRequest(new { Errors = new[] { "Пользователь не имеет прав на редактирование продукта." } });
             //try
             //{
             //}

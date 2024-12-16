@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace InnoShop.Domain.Models;
 
@@ -8,6 +9,8 @@ public partial class Product
 {
     public int Id { get; set; }
     [DisplayName("Название")]
+    [Required]
+    [MaxLength(40)]
     public string Name { get; set; } = null!;
     [DisplayName("Описание")]
 

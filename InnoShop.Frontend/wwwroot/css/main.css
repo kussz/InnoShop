@@ -59,7 +59,10 @@ a:hover
     text-align: center;
     width: 80%;
 }
-
+textarea
+{
+    resize:vertical;
+}
 
 /* Carousel */
 .carousel-caption p {

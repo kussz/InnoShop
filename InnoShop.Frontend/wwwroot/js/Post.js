@@ -27,10 +27,14 @@ async function funch() {
         if (!response.ok) {
             if (response.status == 401)
                 window.location.href = '/Account/Unauthorized'
-            if (response.status == 403)
+            else if (response.status == 403)
                 window.location.href = '/Account/Forbidden'
-            throw new Error('Ошибка входа: ' + response.statusText);
+            else {
+                const errorResponse = await response.json();
+                displayErrors(errorResponse.errors);
+            }
         }
+        else
             window.location.href =`/${tableName}`
     } catch (error) {
 

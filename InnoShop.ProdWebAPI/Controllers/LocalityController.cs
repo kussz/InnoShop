@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace InnoShop.ProdWebAPI.Controllers
 {
@@ -46,25 +48,63 @@ namespace InnoShop.ProdWebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Edit([FromBody]LocalityEditDTO localityDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Where(ms => ms.Value.Errors.Count > 0)
+    .SelectMany(ms => ms.Value.Errors.Select(e => e.ErrorMessage))
+    .ToList();
+                return BadRequest(new { Errors = errors });
+            }
             try
             {
                 var locality = new Locality() { Id = localityDTO.Id, Name = localityDTO.Name };
                 _service.LocalityService.Edit(locality);
                 return Ok(locality);
             }
-            catch (Exception ex) { return BadRequest(ex.Message); }
+            catch (DbUpdateException dbEx)
+            {
+                var sqlException = dbEx.InnerException as SqlException;
+                if (sqlException != null && sqlException.Number == 2601) // Код ошибки для уникального ключа
+                {
+                    return BadRequest(new { Errors = new[] { $"Ошибка: населённый пункт с именем '{localityDTO.Name}' уже существует. Пожалуйста, выберите другое имя." } });
+                }
+                return BadRequest(new { Errors = new[] { $"Ошибка при сохранении данных: {dbEx.Message}" } });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Errors = new[] { $"Произошла ошибка: {ex.Message}" } });
+            }
         }
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult Create([FromBody] LocalityEditDTO localityDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Where(ms => ms.Value.Errors.Count > 0)
+    .SelectMany(ms => ms.Value.Errors.Select(e => e.ErrorMessage))
+    .ToList();
+                return BadRequest(new { Errors = errors });
+            }
             try
             {
                 var locality = new Locality() { Id = localityDTO.Id, Name = localityDTO.Name };
                 _service.LocalityService.Add(locality);
                 return Ok(locality);
             }
-            catch (Exception ex) { return BadRequest(ex.Message); }
+            catch (DbUpdateException dbEx)
+            {
+                var sqlException = dbEx.InnerException as SqlException;
+                if (sqlException != null && sqlException.Number == 2601) // Код ошибки для уникального ключа
+                {
+                    return BadRequest(new { Errors = new[] { $"Ошибка: населённый пункт с именем '{localityDTO.Name}' уже существует. Пожалуйста, выберите другое имя." } });
+                }
+                return BadRequest(new { Errors = new[] { $"Ошибка при сохранении данных: {dbEx.Message}" } });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Errors = new[] { $"Произошла ошибка: {ex.Message}" } });
+            }
         }
         public IActionResult ForSelect()
         {
