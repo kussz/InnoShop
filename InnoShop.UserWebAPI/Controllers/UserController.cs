@@ -27,7 +27,6 @@ namespace InnoShop.UserWebAPI.Controllers
         readonly RoleManager<IdentityRole<int>> _roleManager = roleManager;
         readonly IServiceManager _service = service;
         readonly JwtSettings _jwtSettings = jwtSettings.Value;
-
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO model)
         {

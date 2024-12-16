@@ -16,12 +16,15 @@
 
         <div class="form-group">
             <label for="minPrice" class="control-label">Минимальная цена:</label>
-            <input type="number" id="minPrice" name="MinPrice" min="0" max="@Model.MaxPrice" value="@Model.MinPrice" class="form-control" />
+            @* <input type="number" id="minPrice" name="MinPrice" min="0" max="@Model.MaxPrice" value="@Model.MinPrice" class="form-control" /> *@
+            <input class="form-control" type="range" id="minPriceSlider" name="minPrice" min="0" max="@Model.MaxPrice" value="0" class="slider" oninput="updateMinValue(this.value)">
+            <input class="form-control" type="number" id="minPrice" value="0" min="0" max="@Model.MaxPrice" oninput="updateMinSlider(this.value)">
         </div>
 
         <div class="form-group">
             <label for="maxPrice" class="control-label" >Максимальная цена:</label>
-            <input type="number" id="maxPrice" name="MaxPrice" min="0" max="@Model.MaxPrice" value="@Model.MaxPrice" class="form-control" />
+            <input class="form-control" type="range" id="maxPriceSlider" name="maxPrice" min="0" max="@Model.MaxPrice" value="@Model.MaxPrice" class="slider" oninput="updateMaxValue(this.value)">
+            <input class="form-control" type="number" id="maxPrice" value="@Model.MaxPrice" min="0" max="@Model.MaxPrice" oninput="updateMaxSlider(this.value)">
         </div>
 
         <div class="form-group">
@@ -31,3 +34,63 @@
         <button type="submit" class="btn btn-info">Применить фильтр</button>
     </form>
 </aside>
+<script>
+    function updateMinValue(value) {
+        maxer = document.getElementById('maxPrice').value;
+        if (+maxer < +value) { 
+            value = maxer;
+            document.getElementById('minPriceSlider').value = value;
+        }
+        document.getElementById('minPrice').value = value; // Обновляем текстовое поле
+        console.log(value);
+    }
+
+    function updateMinSlider(value) {
+        const slider = document.getElementById('minPriceSlider');
+        const maxslider = document.getElementById('maxPriceSlider');
+        if (+value > +maxslider.value) { 
+            value = maxslider.value;
+            document.getElementById('minPrice').value = value;
+        }
+        if (+value >= +slider.min && +value <= +slider.max) {
+            console.log(slider.min);
+            console.log(slider.max);
+        console.log(value)
+            slider.value = value; // Обновляем ползунок
+        }
+        if (value == "")
+            slider.value = 0;
+    }
+
+    function updateMaxValue(value) {
+        maxer = document.getElementById('minPrice').value;
+        if (+maxer > +value) {
+            value = maxer;
+            document.getElementById('maxPriceSlider').value = value;
+        }
+        document.getElementById('maxPrice').value = value; // Обновляем текстовое поле
+        console.log(value);
+    }
+
+    function updateMaxSlider(value) {
+        const slider = document.getElementById('maxPriceSlider');
+        const maxslider = document.getElementById('minPriceSlider');
+        if (+value < +maxslider.value) {
+            value = maxslider.value;
+        }
+        else if (+value > +slider.max)
+            value = 2000;
+        console.log(value);
+
+        if (+value >= +slider.min && +value <= +slider.max) {
+            console.log(slider.min);
+            console.log(slider.max);
+            console.log(value)
+            slider.value = value; // Обновляем ползунок
+        }
+        if (value == "")
+            slider.value = 0;
+        document.getElementById('maxPrice').value = value;
+    }
+
+</script>
