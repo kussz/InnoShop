@@ -34,14 +34,13 @@
     <script src="~/js/GetUserProducts.js" asp-append-version="true"></script>
     <script src="~/js/ProductSections.js" asp-append-version="true"></script>
     <script>
+        var section = 1;
         formData = new FormData(document.getElementById(`filterForm`))
-
-        addCreateBtn();
         mainFunc();
         document.getElementById('filterForm').addEventListener('submit', async function (event) {
             event.preventDefault(); // Отменяем стандартное поведение формы
             document.getElementById("blobparent").innerText = "";
-            addCreateBtn();
+                
             formData = new FormData(this); // Собираем данные формы
             // Проверка на пустые поля (если нужно)
             await mainFunc();

@@ -1,6 +1,7 @@
 ﻿
 mainFunc = myProducts;
 async function myProducts() {
+    addCreateBtn();
     await fetchItems(`${productHost}/Product/ForUser/${user.id}`, 'Product');
 }
 async function pendingProducts() {
@@ -13,17 +14,19 @@ myBtn = document.getElementById("myProds");
 pendingBtn = document.getElementById("pendingProds");
 boughtBtn = document.getElementById("boughtProds");
 myBtn.addEventListener("click", async function (e) {
+    section = 1;
     mainFunc = myProducts;
     document.getElementById("blobparent").innerText = "";
-    addCreateBtn();
     mainFunc();
 })
 pendingBtn.addEventListener("click", async function (e) {
+    section = 2;
     mainFunc = pendingProducts;
     document.getElementById("blobparent").innerText = "";
     mainFunc();
 })
 boughtBtn.addEventListener("click", async function (e) {
+    section = 3;
     mainFunc = boughtProducts;
     document.getElementById("blobparent").innerText = "";
     mainFunc();
